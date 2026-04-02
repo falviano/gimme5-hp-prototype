@@ -1,0 +1,6 @@
+{
+  "name": "gimme5-scelta",
+  "scripts": {
+    "start": "npx serve . -p 3001"
+  }
+}

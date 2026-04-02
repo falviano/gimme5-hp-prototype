@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, sans-serif; padding: 16px; margin: 0; }
+    h3 { margin: 0 0 4px; font-size: 14px; }
+    p { font-size: 12px; color: #666; margin: 0 0 14px; }
+    button { width: 100%; padding: 12px; background: #f55a27; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    #status { margin-top: 12px; font-size: 12px; color: #444; min-height: 36px; }
+    .error { color: #c0392b; }
+  </style>
+</head>
+<body>
+  <h3>Gimme5 Screens Import</h3>
+  <p>Importa tutte le schermate organizzate per fase del flusso.</p>
+  <button id="btn" onclick="run()">Importa tutto il flusso</button>
+  <div id="status"></div>
+
+  <script>
+    var STATUS = document.getElementById('status')
+    var BTN = document.getElementById('btn')
+
+    function log(msg, err) {
+      STATUS.innerHTML = '<span class="' + (err ? 'error' : '') + '">' + msg + '</span>'
+    }
+
+    function delay(ms) { return new Promise(function(r) { setTimeout(r, ms) }) }
+
+    async function run() {
+      BTN.disabled = true
+      log('Connessione al server locale...')
+
+      var manifest
+      try {
+        var res = await fetch('http://localhost:3456/manifest.json')
+        if (!res.ok) throw new Error('HTTP ' + res.status)
+        manifest = await res.json()
+      } catch(e) {
+        log('Server non raggiungibile. Lancia: node serve-screens.cjs', true)
+        BTN.disabled = false
+        return
+      }
+
+      log('Trovate ' + manifest.length + ' schermate. Conversione...')
+
+      var screens = []
+      for (var i = 0; i < manifest.length; i++) {
+        var s = manifest[i]
+        log('Conversione ' + (i + 1) + '/' + manifest.length + ': ' + s.label)
+        await delay(0)
+        var binary = atob(s.base64)
+        var bytes = new Uint8Array(binary.length)
+        for (var j = 0; j < binary.length; j++) bytes[j] = binary.charCodeAt(j)
+        screens.push({
+          id: s.id,
+          group: s.group,
+          label: s.label,
+          type: s.type,
+          width: s.width,
+          height: s.height,
+          bytes: Array.from(bytes)
+        })
+      }
+
+      log('Invio a Figma (' + screens.length + ' schermate)...')
+      parent.postMessage({ pluginMessage: { type: 'import', screens: screens } }, '*')
+    }
+
+    window.onmessage = function(e) {
+      var msg = e.data.pluginMessage
+      if (!msg) return
+      if (msg.type === 'progress') log(msg.text)
+      if (msg.type === 'done') { log('Importate ' + msg.count + ' schermate nel flusso!'); BTN.disabled = false }
+      if (msg.type === 'error') { log(msg.text, true); BTN.disabled = false }
+    }
+  </script>
+</body>
+</html>

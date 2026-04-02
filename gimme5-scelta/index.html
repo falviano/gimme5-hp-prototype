@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scelta Piano – Gimme5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #c8c8c8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Phone frame */
+    .phone {
+      width: 375px;
+      height: 812px;
+      background: #ebebeb;
+      border-radius: 44px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 32px 80px rgba(0,0,0,.3), 0 0 0 10px #b8b8b8;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status bar */
+    .status-bar {
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 24px 6px;
+      flex-shrink: 0;
+    }
+    .status-time {
+      font-size: 15px;
+      font-weight: 600;
+      color: #000;
+      font-family: -apple-system, sans-serif;
+      letter-spacing: -0.3px;
+    }
+    .status-icons { display: flex; gap: 7px; align-items: center; }
+
+    /* Screen */
+    .screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    /* Top header row: title+sub left, logo right */
+    .top-header {
+      padding: 20px 20px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .top-header-text {
+      flex: 1;
+      min-width: 0;
+    }
+    .screen-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #000000;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .screen-sub {
+      font-size: 15px;
+      color: #5c5c5c;
+      line-height: 1.5;
+    }
+    .logo-wrap {
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .logo-wrap svg {
+      display: block;
+    }
+
+    /* Cards container */
+    .cards {
+      padding: 0 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Card */
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .card:hover { background: #f8f8f8; }
+    .card:active { background: #f0f0f0; }
+
+    /* Icon box — square rounded, like the example */
+    .card-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-text { flex: 1; min-width: 0; }
+    .card-title {
+      font-family: 'Archivo', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1.25;
+      margin-bottom: 3px;
+    }
+    .card-sub {
+      font-size: 13px;
+      color: #888888;
+      line-height: 1.4;
+    }
+
+    .card-chevron {
+      flex-shrink: 0;
+      color: #b0b0b0;
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1;
+      margin-left: 4px;
+    }
+
+    /* Spacer */
+    .spacer { flex: 1; }
+
+    /* Bottom area */
+    .bottom-area {
+      padding: 0 20px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .bottom-note {
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .cta-btn {
+      width: 100%;
+      height: 50px;
+      border-radius: 999px;
+      background: #f55a27;
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Home indicator */
+    .home-indicator {
+      height: 34px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      flex-shrink: 0;
+    }
+    .home-bar {
+      width: 134px;
+      height: 5px;
+      border-radius: 999px;
+      background: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <div class="status-time">9:41</div>
+      <div class="status-icons">
+        <!-- Signal bars -->
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+          <rect x="0" y="8" width="3" height="4" rx="0.6" fill="#000"/>
+          <rect x="4.5" y="5.5" width="3" height="6.5" rx="0.6" fill="#000"/>
+          <rect x="9" y="3" width="3" height="9" rx="0.6" fill="#000"/>
+          <rect x="13.5" y="0" width="3" height="12" rx="0.6" fill="#000"/>
+        </svg>
+        <!-- WiFi -->
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <path d="M8 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="#000"/>
+          <path d="M4.5 7.8C5.4 6.9 6.6 6.4 8 6.4s2.6.5 3.5 1.4" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M1.8 5.1C3.3 3.6 5.5 2.7 8 2.7s4.7.9 6.2 2.4" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M0 2.3C1.9.9 4.8 0 8 0s6.1.9 8 2.3" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <!-- Battery -->
+        <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
+          <rect x="0.5" y="0.5" width="22" height="12" rx="2.5" stroke="#000" stroke-opacity="0.4"/>
+          <rect x="2" y="2" width="18" height="9" rx="1.5" fill="#000"/>
+          <path d="M23.5 4.5v4c.8-.4 1.3-1.1 1.3-2s-.5-1.6-1.3-2Z" fill="#000" fill-opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Screen content -->
+    <div class="screen">
+
+      <!-- Header: text left, logo right -->
+      <div class="top-header">
+        <div class="top-header-text">
+          <div class="screen-title">Da dove iniziamo?</div>
+          <div class="screen-sub">Scegli una soluzione, potrai aggiungerne altre in qualsiasi momento.</div>
+        </div>
+        <div class="logo-wrap">
+          <!-- Gimme5 "G5" wordmark -->
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect width="44" height="44" rx="12" fill="#f55a27"/>
+            <text x="22" y="30" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="20" fill="#fff">G5</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="cards">
+
+        <!-- Card 1 -->
+        <a class="card" href="#">
+          <div class="card-icon-box">
+            <!-- Trend/chart up icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <div class="card-text">
+            <div class="card-title">Investi con l'aiuto di esperti</div>
+            <div class="card-sub">Gestiamo per te un portafoglio in linea coi tuoi obiettivi</div>
+          </div>
+          <div class="card-chevron">›</div>
+        </a>
+
+        <!-- Card 2 -->
+        <a class="card" href="#">
+          <div class="card-icon-box">
+            <!-- Piggy bank / savings icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 11c0-3.87-3.13-7-7-7S5 7.13 5 11c0 1.7.6 3.26 1.6 4.48L6 19h12l-.6-3.52C18.4 14.26 19 12.7 19 11Z"/>
+              <path d="M9 11h6M12 8v6"/>
+            </svg>
+          </div>
+          <div class="card-text">
+            <div class="card-title">Crea il piano di accumulo</div>
+            <div class="card-sub">Automatizza i risparmi con versamenti regolari nel tempo</div>
+          </div>
+          <div class="card-chevron">›</div>
+        </a>
+
+        <!-- Card 3 -->
+        <a class="card" href="#">
+          <div class="card-icon-box">
+            <!-- Compass / help icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </div>
+          <div class="card-text">
+            <div class="card-title">Non sai da dove iniziare?</div>
+            <div class="card-sub">Rispondi a qualche domanda e scopri il prodotto più adatto a te</div>
+          </div>
+          <div class="card-chevron">›</div>
+        </a>
+
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- Bottom -->
+      <div class="bottom-area">
+        <div class="bottom-note">Puoi aggiungere altri prodotti in qualsiasi momento dalla tua area personale.</div>
+        <button class="cta-btn">Continua</button>
+      </div>
+
+    </div>
+
+    <!-- Home indicator -->
+    <div class="home-indicator">
+      <div class="home-bar"></div>
+    </div>
+  </div>
+
+</body>
+</html>
