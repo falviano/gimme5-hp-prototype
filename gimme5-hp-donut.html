@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HP Semicircle – Gimme5</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #111;
+      display: flex; align-items: flex-start; justify-content: center;
+      min-height: 100vh; font-family: 'Inter', sans-serif;
+      padding: 40px 24px; gap: 40px; flex-wrap: wrap;
+    }
+    .phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .phone-label { font-size: 11px; color: #555; letter-spacing: 0.8px; text-transform: uppercase; }
+    .phone {
+      width: 375px; min-height: 812px; background: #efefef;
+      border-radius: 44px; overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.7), 0 0 0 10px #222;
+      display: flex; flex-direction: column; flex-shrink: 0;
+    }
+    .sb {
+      height: 44px; background: #efefef;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      padding: 0 22px 6px; flex-shrink: 0;
+    }
+    .sb-time { font-size: 15px; font-weight: 600; color: #000; }
+    .sb-icons { display: flex; align-items: center; gap: 6px; }
+    .scroll { flex: 1; overflow-y: auto; scrollbar-width: none; padding-bottom: 90px; }
+    .scroll::-webkit-scrollbar { display: none; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px 0; }
+    .topbar-title { font-family: 'Archivo', sans-serif; font-size: 24px; font-weight: 800; color: #0f0f0f; letter-spacing: -0.5px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #3a3a3a; }
+
+    /* ─── Semicircle section ─── */
+    .semi-section {
+      position: relative;
+      width: 100%;
+      background: #efefef;
+      overflow: hidden;
+    }
+    .semi-arc-svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+    .semi-overlay {
+      position: relative;
+      z-index: 1;
+      padding: 90px 24px 28px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .semi-eyebrow {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 500; color: #5c5c5c;
+      margin-bottom: 6px;
+    }
+    .semi-value {
+      font-family: 'Archivo', sans-serif;
+      font-size: 44px; font-weight: 800; color: #0f0f0f; letter-spacing: -2px; line-height: 1.05;
+    }
+    .semi-gain {
+      font-size: 14px; font-weight: 600; color: #16a34a; margin-top: 8px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .semi-stats {
+      display: flex; gap: 10px; width: 100%; margin-top: 22px;
+    }
+    .ss-card {
+      flex: 1; background: #fff; border-radius: 14px; padding: 14px 14px;
+    }
+    .ss-lbl { font-size: 12px; color: #767676; margin-bottom: 5px; }
+    .ss-val { font-size: 17px; font-weight: 700; color: #0f0f0f; font-family: 'Archivo', sans-serif; }
+
+    /* Legend pills (Case B) */
+    .legend-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+    .lp { display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.06); border-radius: 20px; padding: 5px 10px; cursor: pointer; transition: background 0.15s; user-select: none; }
+    .lp:hover, .lp.active { background: rgba(0,0,0,0.12); }
+    .lp-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .lp-text { font-size: 11px; color: #3a3a3a; font-weight: 500; }
+
+    /* Arc */
+    .arc-segment { transition: opacity 0.2s; }
+
+    .divider { height: 1px; background: #e0e0e0; margin: 0 20px; }
+    .sh { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 10px; }
+    .sh-title { font-family: 'Archivo', sans-serif; font-size: 18px; font-weight: 800; color: #0f0f0f; }
+
+    /* Fund card */
+    .fund-card { margin: 0 16px 8px; background: #fff; border-radius: 18px; overflow: hidden; }
+    .fc-top { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; }
+    .fc-icon { width: 40px; height: 40px; border-radius: 12px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .fc-name { font-size: 16px; font-weight: 700; color: #0f0f0f; flex: 1; }
+    .fc-bottom { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 16px 14px; }
+    .fc-tot-label { font-size: 11px; color: #767676; margin-bottom: 2px; }
+    .fc-tot-val { font-size: 20px; font-weight: 700; color: #0f0f0f; letter-spacing: -0.5px; font-family: 'Archivo', sans-serif; }
+    .gain-pill { background: #f0fdf4; border-radius: 20px; padding: 4px 10px; font-size: 13px; font-weight: 700; color: #16a34a; }
+    .gain-pill.neg { background: #fff1f1; color: #dc2626; }
+
+    /* Quick actions */
+    .quick-actions { display: flex; justify-content: center; gap: 32px; padding: 20px 0 4px; }
+    .qa { display: flex; flex-direction: column; align-items: center; gap: 7px; cursor: pointer; }
+    .qa-btn { width: 52px; height: 52px; border-radius: 50%; background: #fff; border: 1.5px solid #e0e0e0; display: flex; align-items: center; justify-content: center; }
+    .qa-lbl { font-size: 12px; font-weight: 500; color: #0f0f0f; }
+
+    /* Greeting topbar */
+    .greeting { display: flex; align-items: flex-start; justify-content: space-between; padding: 12px 20px 0; }
+    .greeting-title { font-family: 'Archivo', sans-serif; font-size: 22px; font-weight: 800; color: #0f0f0f; line-height: 1.25; max-width: 280px; }
+
+    /* Gain pill (green background) */
+    .gain-tag { display: inline-flex; align-items: center; gap: 5px; background: #dcfce7; border-radius: 20px; padding: 4px 10px; font-size: 13px; font-weight: 600; color: #16a34a; margin-top: 8px; }
+
+    /* Fund+objective nested card */
+    .fobj-card { margin: 0 16px 8px; background: #fff; border-radius: 18px; overflow: hidden; }
+    .fobj-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 12px; }
+    .fobj-name { font-size: 16px; font-weight: 700; color: #0f0f0f; }
+    .fobj-inner { background: #f9f9f9; margin: 0 10px 10px; border-radius: 12px; padding: 12px 14px; }
+
+    /* Come stai andando */
+    .progress-card { margin: 0 16px 8px; background: #f97c55; border-radius: 18px; padding: 20px 20px 18px; display: flex; align-items: flex-end; justify-content: space-between; min-height: 130px; position: relative; overflow: hidden; }
+    .progress-card-text { flex: 1; }
+    .progress-card-title { font-family: 'Archivo', sans-serif; font-size: 20px; font-weight: 800; color: #0f0f0f; line-height: 1.25; margin-bottom: 18px; }
+    .progress-card-badge { display: inline-flex; flex-direction: column; }
+    .progress-card-badge span { font-size: 9px; color: rgba(0,0,0,0.5); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+    .progress-card-badge strong { font-family: 'Archivo', sans-serif; font-size: 16px; font-weight: 800; color: #0f0f0f; }
+
+    /* Obiettivo */
+    .obj-card { margin: 0 16px 8px; background: #fff; border-radius: 18px; padding: 14px 16px; }
+    .oc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .oc-name { font-size: 15px; font-weight: 700; color: #0f0f0f; }
+    .oc-lbl { font-size: 11px; color: #767676; margin-bottom: 2px; }
+    .oc-bar-wrap { height: 6px; background: #e4e4e4; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+    .oc-bar { height: 100%; border-radius: 3px; }
+    .oc-foot { display: flex; justify-content: space-between; font-size: 12px; color: #767676; }
+    .oc-foot-val { font-weight: 700; color: #0f0f0f; }
+
+    /* Regola */
+    .rule-card { margin: 0 16px 8px; background: #fff; border-radius: 18px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+    .rule-icon { width: 40px; height: 40px; border-radius: 12px; background: #f5f5f5; border: 1.5px solid #e4e4e4; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .rule-right { margin-left: auto; text-align: right; }
+    .rule-val { font-size: 16px; font-weight: 700; color: #0f0f0f; font-family: 'Archivo', sans-serif; }
+    .rule-freq { font-size: 11px; color: #767676; }
+
+    /* Tx */
+    .tx-card { margin: 0 16px 8px; background: #fff; border-radius: 18px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+    .tx-icon { width: 36px; height: 36px; border-radius: 10px; background: #dcfce7; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tx-amount { margin-left: auto; font-size: 14px; font-weight: 700; color: #16a34a; white-space: nowrap; }
+
+    /* Tabbar */
+    .tabbar { position: sticky; bottom: 0; background: rgba(239,239,239,0.96); backdrop-filter: blur(12px); border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 8px 0 20px; flex-shrink: 0; }
+    .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+    .tab-lbl { font-size: 10px; color: #767676; font-weight: 500; }
+    .tab.active .tab-lbl { color: #f55a27; }
+  </style>
+</head>
+<body>
+
+
+<!-- ══════════════════════════════════
+     CASE A — 1 FONDO · 1 OBIETTIVO
+     Semicircle: progresso verso target (64%)
+══════════════════════════════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">1 Fondo · 1 Obiettivo</div>
+  <div class="phone">
+    <div class="sb">
+      <span class="sb-time">10:06</span>
+      <div class="sb-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+        <svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M1 6.5C4.5 3 8.5 1 12 1s7.5 2 11 5.5"/><path d="M4 10c2-2 5-3.5 8-3.5"/><path d="M7.5 13.5C9 12 10.5 11 12 11s3 1 4.5 2.5"/><circle cx="12" cy="17" r="1.5" fill="#000"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#000"/><path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="topbar">
+        <div class="topbar-title">Investimenti</div>
+        <div class="avatar">FA</div>
+      </div>
+
+      <!-- SEMICIRCLE A -->
+      <div class="semi-section">
+        <!--
+          Arc: M 32.5 250 A 155 155 0 0 1 342.5 250
+          Total length: π × 155 ≈ 487
+          64% = 312 units
+        -->
+        <svg class="semi-arc-svg" viewBox="0 0 375 260" preserveAspectRatio="none">
+          <!-- track gray -->
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#d0d0d0" stroke-width="22" stroke-linecap="round"/>
+          <!-- purple arc: 37% progress (180/487) -->
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#7c3aed" stroke-width="22" stroke-linecap="round"
+            stroke-dasharray="180 487"/>
+        </svg>
+        <div class="semi-overlay">
+          <div class="semi-eyebrow">
+            Il tuo portafoglio
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="semi-value">€ 187,50</div>
+          <div class="semi-gain">
+            +€36,33 (+24,0%)
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="semi-stats">
+            <div class="ss-card">
+              <div class="ss-lbl">Guadagno totale</div>
+              <div class="ss-val">+ 36,33 €</div>
+            </div>
+            <div class="ss-card">
+              <div class="ss-lbl">Mese scorso</div>
+              <div class="ss-val">+ 4,20 €</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <div class="qa">
+          <div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          <div class="qa-lbl">Versa</div>
+        </div>
+        <div class="qa">
+          <div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="qa-lbl">Obiettivo</div>
+        </div>
+        <div class="qa">
+          <div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+          <div class="qa-lbl">Regole</div>
+        </div>
+      </div>
+
+      <div class="sh" style="padding-top:20px"><div class="sh-title">I tuoi obiettivi</div></div>
+      <div class="obj-card">
+        <div class="oc-top">
+          <div><div class="oc-lbl">Obiettivo</div><div class="oc-name">Viaggio in Grecia</div></div>
+          <div style="text-align:right"><div class="oc-lbl">da raggiungere</div><div style="font-size:14px;font-weight:700;color:#0f0f0f">€ 500,00</div></div>
+        </div>
+        <div class="oc-bar-wrap"><div class="oc-bar" style="width:37%;background:#7c3aed;"></div></div>
+        <div class="oc-foot"><span>Raggiunto il 37%</span><span><span class="oc-foot-val">€187</span> <span style="color:#16a34a;font-weight:600">+3,96%</span></span></div>
+      </div>
+
+      <div class="sh" style="padding-top:20px"><div class="sh-title">Le tue regole</div></div>
+      <div class="rule-card">
+        <div class="rule-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+        <div><div style="font-size:14px;font-weight:700;color:#0f0f0f">Addebito automatico</div><div style="font-size:11px;color:#767676;margin-top:1px">1° mag · Eurizon Bilanciato</div></div>
+        <div class="rule-right"><div class="rule-val">€10</div><div class="rule-freq">mese</div></div>
+      </div>
+
+      <div class="sh" style="padding-top:20px"><div class="sh-title">Il tuo fondo</div></div>
+      <div class="fund-card">
+        <div class="fc-top">
+          <div class="fc-icon" style="background:#7c3aed"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+          <div class="fc-name">Eurizon Bilanciato</div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="fc-bottom">
+          <div><div class="fc-tot-label">Totale</div><div class="fc-tot-val">187,50 €</div></div>
+          <div style="text-align:right"><div class="fc-tot-label">Guadagno totale</div><div class="gain-pill">+ 36,33 €</div></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sh"><div class="sh-title">Transazioni</div></div>
+      <div class="tx-card">
+        <div class="tx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div><div style="font-size:13px;font-weight:600;color:#0f0f0f">Regola automatica</div><div style="font-size:11px;color:#767676;margin-top:1px">Fondo Prudente · Oggi, 08:30</div></div>
+        <div class="tx-amount">+ €25</div>
+      </div>
+      <div class="tx-card">
+        <div class="tx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div><div style="font-size:13px;font-weight:600;color:#0f0f0f">Versamento manuale</div><div style="font-size:11px;color:#767676;margin-top:1px">Fondo Prudente · Ieri, 14:12</div></div>
+        <div class="tx-amount">+ €50</div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="tab-lbl">Home</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><div class="tab-lbl">Conti</div></div>
+      <div class="tab active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg><div class="tab-lbl" style="color:#f55a27">Investimenti</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="tab-lbl">Profilo</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     CASE B — 2 FONDI · 2 OBIETTIVI
+     Semicircle interattivo: tap arco → focus
+     Arc: M 32.5 250 A 155 155 0 0 1 342.5 250
+     Total: π × 155 ≈ 487
+     Prudente  59.4% = 289 units
+     Aggressivo 40.6% = 198 units
+══════════════════════════════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">2 Fondi · 2 Obiettivi · Interattivo</div>
+  <div class="phone">
+    <div class="sb">
+      <span class="sb-time">10:06</span>
+      <div class="sb-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+        <svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M1 6.5C4.5 3 8.5 1 12 1s7.5 2 11 5.5"/><path d="M4 10c2-2 5-3.5 8-3.5"/><path d="M7.5 13.5C9 12 10.5 11 12 11s3 1 4.5 2.5"/><circle cx="12" cy="17" r="1.5" fill="#000"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#000"/><path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="topbar">
+        <div class="topbar-title">Investimenti</div>
+        <div class="avatar">FA</div>
+      </div>
+
+      <!-- SEMICIRCLE B — interattivo -->
+      <div class="semi-section">
+        <svg class="semi-arc-svg" id="semi-svg-b" viewBox="0 0 375 260" preserveAspectRatio="none" style="pointer-events: auto;">
+          <!-- track gray -->
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#d0d0d0" stroke-width="22" stroke-linecap="round"
+            pointer-events="none"/>
+
+          <!-- Prudente arc visivo (orange, 289/487) -->
+          <path id="b-arc-A" class="arc-segment"
+            d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#f55a27" stroke-width="22" stroke-linecap="round"
+            stroke-dasharray="289 487" pointer-events="none"/>
+
+          <!-- Aggressivo arc visivo (dark, 198/487 starting at 289) -->
+          <!-- dasharray: skip 289, draw 198 -->
+          <path id="b-arc-B" class="arc-segment"
+            d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#1a1a1a" stroke-width="22" stroke-linecap="butt"
+            stroke-dasharray="0 289 198 9999" pointer-events="none"/>
+
+          <!-- Hit areas (transparent wide stroke) -->
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="44" stroke-linecap="butt"
+            stroke-dasharray="289 487"
+            pointer-events="all" style="cursor:pointer" onclick="selectFund('A')"/>
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="44" stroke-linecap="butt"
+            stroke-dasharray="0 289 198 9999"
+            pointer-events="all" style="cursor:pointer" onclick="selectFund('B')"/>
+        </svg>
+
+        <div class="semi-overlay">
+          <div class="semi-eyebrow">
+            Il tuo portafoglio
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="semi-value" id="b-val">€ 8.420,00</div>
+          <div class="semi-gain" id="b-gain">
+            +620,00 € (+8,1%)
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="semi-stats">
+            <div class="ss-card">
+              <div class="ss-lbl">Guadagno totale</div>
+              <div class="ss-val" id="b-stat1">+ 620,00 €</div>
+            </div>
+            <div class="ss-card">
+              <div class="ss-lbl">Mese scorso</div>
+              <div class="ss-val" id="b-stat2">+ 95,00 €</div>
+            </div>
+          </div>
+          <!-- legend pills -->
+          <div class="legend-pills">
+            <div class="lp" id="b-pill-A" onclick="selectFund('A')">
+              <div class="lp-dot" style="background:#f55a27"></div>
+              <div class="lp-text">Prudente · €5.000 (59%)</div>
+            </div>
+            <div class="lp" id="b-pill-B" onclick="selectFund('B')">
+              <div class="lp-dot" style="background:#1a1a1a"></div>
+              <div class="lp-text">Aggressivo · €3.420 (41%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sh"><div class="sh-title">I tuoi fondi</div></div>
+
+      <div class="fund-card">
+        <div class="fc-top">
+          <div class="fc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F55A27"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5L12 1z"/></svg></div>
+          <div class="fc-name">Prudente</div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="fc-bottom">
+          <div><div class="fc-tot-label">Totale</div><div class="fc-tot-val">5.000,00 €</div></div>
+          <div style="text-align:right"><div class="fc-tot-label">Guadagno totale</div><div class="gain-pill">+ 360,00 €</div></div>
+        </div>
+      </div>
+
+      <div class="fund-card">
+        <div class="fc-top">
+          <div class="fc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F55A27"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></div>
+          <div class="fc-name">Aggressivo</div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="fc-bottom">
+          <div><div class="fc-tot-label">Totale</div><div class="fc-tot-val">3.420,00 €</div></div>
+          <div style="text-align:right"><div class="fc-tot-label">Guadagno totale</div><div class="gain-pill">+ 260,00 €</div></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sh"><div class="sh-title">I tuoi obiettivi</div></div>
+
+      <div class="obj-card">
+        <div class="oc-top">
+          <div><div class="oc-lbl">Obiettivo</div><div class="oc-name">Anticipo per la Casa</div></div>
+          <div style="text-align:right"><div class="oc-lbl">da raggiungere</div><div style="font-size:14px;font-weight:700;color:#0f0f0f">€ 10.000,00</div></div>
+        </div>
+        <div class="oc-bar-wrap"><div class="oc-bar" style="width:50%;background:#f55a27;"></div></div>
+        <div class="oc-foot"><span>Raggiunto il 50%</span><span><span class="oc-foot-val">€5.000,00</span> <span style="color:#16a34a;font-weight:600">+7,2%</span></span></div>
+      </div>
+
+      <div class="obj-card">
+        <div class="oc-top">
+          <div><div class="oc-lbl">Obiettivo</div><div class="oc-name">Università figlio</div></div>
+          <div style="text-align:right"><div class="oc-lbl">da raggiungere</div><div style="font-size:14px;font-weight:700;color:#0f0f0f">€ 5.000,00</div></div>
+        </div>
+        <div class="oc-bar-wrap"><div class="oc-bar" style="width:68%;background:#1a1a1a;"></div></div>
+        <div class="oc-foot"><span>Raggiunto il 68%</span><span><span class="oc-foot-val">€3.420,00</span> <span style="color:#16a34a;font-weight:600">+9,8%</span></span></div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sh"><div class="sh-title">Le tue regole</div></div>
+      <div class="rule-card">
+        <div class="rule-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+        <div><div style="font-size:14px;font-weight:700;color:#0f0f0f">Addebito automatico</div><div style="font-size:11px;color:#767676;margin-top:1px">1° mag · Fondo Prudente</div></div>
+        <div class="rule-right"><div class="rule-val">€25</div><div class="rule-freq">mese</div></div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+        <div><div style="font-size:14px;font-weight:700;color:#0f0f0f">Addebito automatico</div><div style="font-size:11px;color:#767676;margin-top:1px">1° mag · Fondo Aggressivo</div></div>
+        <div class="rule-right"><div class="rule-val">€10</div><div class="rule-freq">mese</div></div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sh"><div class="sh-title">Transazioni</div></div>
+      <div class="tx-card">
+        <div class="tx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div><div style="font-size:13px;font-weight:600;color:#0f0f0f">Regola automatica</div><div style="font-size:11px;color:#767676;margin-top:1px">Fondo Prudente · Oggi, 08:30</div></div>
+        <div class="tx-amount">+ €25</div>
+      </div>
+      <div class="tx-card">
+        <div class="tx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div><div style="font-size:13px;font-weight:600;color:#0f0f0f">Regola automatica</div><div style="font-size:11px;color:#767676;margin-top:1px">Fondo Aggressivo · Ieri, 14:12</div></div>
+        <div class="tx-amount">+ €10</div>
+      </div>
+      <div class="tx-card">
+        <div class="tx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div><div style="font-size:13px;font-weight:600;color:#0f0f0f">Versamento manuale</div><div style="font-size:11px;color:#767676;margin-top:1px">Fondo Aggressivo · 02/04/26</div></div>
+        <div class="tx-amount">+ €25</div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="tab-lbl">Home</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><div class="tab-lbl">Conti</div></div>
+      <div class="tab active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg><div class="tab-lbl" style="color:#f55a27">Investimenti</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="tab-lbl">Profilo</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     CASE E — BENTORNATO · DATI REALI
+     1 fondo · €1.840 · 15% obiettivo
+     "Come stai andando" card
+══════════════════════════════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">Bentornato · 1 Fondo · 15% obiettivo</div>
+  <div class="phone">
+    <div class="sb">
+      <span class="sb-time">10:06</span>
+      <div class="sb-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+        <svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M1 6.5C4.5 3 8.5 1 12 1s7.5 2 11 5.5"/><path d="M4 10c2-2 5-3.5 8-3.5"/><path d="M7.5 13.5C9 12 10.5 11 12 11s3 1 4.5 2.5"/><circle cx="12" cy="17" r="1.5" fill="#000"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#000"/><path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="scroll">
+      <!-- Greeting -->
+      <div class="greeting">
+        <div class="greeting-title">Bentornato Filippo, stai andando alla grande!</div>
+        <div class="avatar">FA</div>
+      </div>
+
+      <!-- SEMICIRCLE E — 15% orange -->
+      <div class="semi-section">
+        <svg class="semi-arc-svg" viewBox="0 0 375 260" preserveAspectRatio="none">
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#d0d0d0" stroke-width="22" stroke-linecap="round"/>
+          <!-- orange arc: 15% (73/487) -->
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#f55a27" stroke-width="22" stroke-linecap="round"
+            stroke-dasharray="73 487"/>
+        </svg>
+        <div class="semi-overlay">
+          <div class="semi-eyebrow">
+            Il tuo portafoglio
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="semi-value">€ 1.840,00</div>
+          <div class="gain-tag">
+            +€124 quest'anno · (+7,2%)
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="semi-stats">
+            <div class="ss-card">
+              <div class="ss-lbl">Guadagno totale</div>
+              <div class="ss-val">+ 124,00 €</div>
+            </div>
+            <div class="ss-card">
+              <div class="ss-lbl">Mese scorso</div>
+              <div class="ss-val">+ 12,40 €</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div class="qa-lbl">Versa</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div class="qa-lbl">Obiettivo</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div><div class="qa-lbl">Regole</div></div>
+      </div>
+
+      <!-- I tuoi obiettivi — nested card -->
+      <div class="sh" style="padding-top:20px"><div class="sh-title">I tuoi obiettivi</div></div>
+      <div class="fobj-card">
+        <div class="fobj-header">
+          <div class="fobj-name">Eurizon Bilanciato</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:#dcfce7;color:#16a34a;font-size:12px;font-weight:700;border-radius:20px;padding:3px 9px;">+7,2%</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </div>
+        </div>
+        <div class="fobj-inner">
+          <div class="oc-top">
+            <div><div class="oc-lbl">Obiettivo</div><div class="oc-name">Anticipo per la Casa</div></div>
+            <div style="text-align:right"><div class="oc-lbl">da raggiungere</div><div style="font-size:14px;font-weight:700;color:#0f0f0f">€ 10.000,00</div></div>
+          </div>
+          <div class="oc-bar-wrap"><div class="oc-bar" style="width:15%;background:#f55a27;border-radius:3px;"></div></div>
+          <div class="oc-foot"><span>Raggiunto il 15%</span><span><span class="oc-foot-val">€1.840,00</span></span></div>
+        </div>
+      </div>
+
+      <!-- Come stai andando -->
+      <div class="sh" style="padding-top:16px"><div class="sh-title">Come stai andando</div></div>
+      <div class="progress-card">
+        <div class="progress-card-text">
+          <div class="progress-card-title">Sei al 15%! Con €10 al mese ci arrivi nel 2028</div>
+          <div class="progress-card-badge">
+            <span>power by</span>
+            <strong>GIMME5</strong>
+          </div>
+        </div>
+        <!-- Coins illustration -->
+        <svg width="88" height="88" viewBox="0 0 88 88" style="flex-shrink:0;margin-left:12px;">
+          <ellipse cx="44" cy="72" rx="28" ry="10" fill="rgba(0,0,0,0.12)"/>
+          <ellipse cx="60" cy="52" rx="18" ry="18" fill="#fff" stroke="#0f0f0f" stroke-width="2.5"/>
+          <ellipse cx="60" cy="48" rx="18" ry="18" fill="#fff" stroke="#0f0f0f" stroke-width="2.5"/>
+          <ellipse cx="60" cy="44" rx="18" ry="18" fill="#fff" stroke="#0f0f0f" stroke-width="2.5"/>
+          <ellipse cx="60" cy="44" rx="18" ry="6" fill="#f0f0f0" stroke="#0f0f0f" stroke-width="2"/>
+          <ellipse cx="44" cy="62" rx="18" ry="18" fill="#fff" stroke="#0f0f0f" stroke-width="2.5"/>
+          <ellipse cx="44" cy="58" rx="18" ry="18" fill="#fff" stroke="#0f0f0f" stroke-width="2.5"/>
+          <ellipse cx="44" cy="54" rx="18" ry="18" fill="#fff" stroke="#0f0f0f" stroke-width="2.5"/>
+          <ellipse cx="44" cy="54" rx="18" ry="6" fill="#f0f0f0" stroke="#0f0f0f" stroke-width="2"/>
+        </svg>
+      </div>
+
+      <!-- Le tue regole -->
+      <div class="sh" style="padding-top:16px"><div class="sh-title">Le tue regole</div></div>
+      <div class="rule-card">
+        <div class="rule-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+        <div><div style="font-size:14px;font-weight:700;color:#0f0f0f">Addebito automatico</div><div style="font-size:11px;color:#767676;margin-top:1px">1° mag · Eurizon Bilanciato</div></div>
+        <div class="rule-right"><div class="rule-val">€10</div><div class="rule-freq">mese</div></div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="tab-lbl">Home</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><div class="tab-lbl">Conti</div></div>
+      <div class="tab active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg><div class="tab-lbl" style="color:#f55a27">Investimenti</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="tab-lbl">Profilo</div></div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const DATA = {
+    total: {
+      val: '€ 8.420,00',
+      gainText: '+620,00 € (+8,1%)',
+      gainColor: '#16a34a',
+      stat1: '+ 620,00 €',
+      stat2: '+ 95,00 €',
+    },
+    A: {
+      val: '€ 5.000,00',
+      gainText: '+360,00 € (+7,7%)',
+      gainColor: '#16a34a',
+      stat1: '+ 360,00 €',
+      stat2: '+ 48,00 €',
+    },
+    B: {
+      val: '€ 3.420,00',
+      gainText: '+260,00 € (+8,2%)',
+      gainColor: '#16a34a',
+      stat1: '+ 260,00 €',
+      stat2: '+ 47,00 €',
+    },
+  }
+
+  let selected = null
+
+  function selectFund(id) {
+    selected = selected === id ? null : id
+    render()
+  }
+
+  function render() {
+    const d = selected ? DATA[selected] : DATA.total
+
+    document.getElementById('b-val').textContent = d.val
+    const gainEl = document.getElementById('b-gain')
+    gainEl.childNodes[0].textContent = d.gainText + ' '
+    gainEl.style.color = d.gainColor
+    document.getElementById('b-stat1').textContent = d.stat1
+    document.getElementById('b-stat2').textContent = d.stat2
+
+    document.getElementById('b-arc-A').style.opacity = (!selected || selected === 'A') ? '1' : '0.18'
+    document.getElementById('b-arc-B').style.opacity = (!selected || selected === 'B') ? '1' : '0.18'
+    document.getElementById('b-pill-A').classList.toggle('active', selected === 'A')
+    document.getElementById('b-pill-B').classList.toggle('active', selected === 'B')
+  }
+
+  // Case D — 2 fondi rosso interattivo
+  // DATA_D — 2 fondi verde
+  // Prudente +€240 (+5,0%) · Aggressivo +€380 (+12,5%) · Totale +€620 (+8,1%)
+  const DATA_D = {
+    total: { val: '€ 8.420,00', gainText: '+€620 quest\'anno · (+8,1%)', stat1: '+ 620,00 €', stat2: '+ 52,00 €' },
+    A:     { val: '€ 5.000,00', gainText: '+€240 quest\'anno · (+5,0%)', stat1: '+ 240,00 €', stat2: '+ 21,00 €' },
+    B:     { val: '€ 3.420,00', gainText: '+€380 quest\'anno · (+12,5%)', stat1: '+ 380,00 €', stat2: '+ 31,00 €' },
+  }
+  let selectedD = null
+
+  function selectFundD(id) {
+    selectedD = selectedD === id ? null : id
+    renderD()
+  }
+
+  function renderD() {
+    const d = selectedD ? DATA_D[selectedD] : DATA_D.total
+    document.getElementById('d-val').textContent = d.val
+    const gainEl = document.getElementById('d-gain')
+    gainEl.firstChild.textContent = d.gainText + ' '
+    document.getElementById('d-stat1').textContent = d.stat1
+    document.getElementById('d-stat2').textContent = d.stat2
+    document.getElementById('d-arc-A').style.opacity = (!selectedD || selectedD === 'A') ? '1' : '0.18'
+    document.getElementById('d-arc-B').style.opacity = (!selectedD || selectedD === 'B') ? '1' : '0.18'
+    document.getElementById('d-pill-A').classList.toggle('active', selectedD === 'A')
+    document.getElementById('d-pill-B').classList.toggle('active', selectedD === 'B')
+  }
+</script>
+
+
+<!-- ══════════════════════════════════
+     CASE C — 1 FONDO · MERCATI GIÙ
+     Semicircle rosso, 1 fondo
+══════════════════════════════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">1 Fondo · Mercati giù</div>
+  <div class="phone">
+    <div class="sb">
+      <span class="sb-time">10:06</span>
+      <div class="sb-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+        <svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M1 6.5C4.5 3 8.5 1 12 1s7.5 2 11 5.5"/><path d="M4 10c2-2 5-3.5 8-3.5"/><path d="M7.5 13.5C9 12 10.5 11 12 11s3 1 4.5 2.5"/><circle cx="12" cy="17" r="1.5" fill="#000"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#000"/><path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="topbar">
+        <div class="topbar-title">Investimenti</div>
+        <div class="avatar">FA</div>
+      </div>
+
+      <!-- SEMICIRCLE C — rosso -->
+      <div class="semi-section">
+        <svg class="semi-arc-svg" viewBox="0 0 375 260" preserveAspectRatio="none">
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#d0d0d0" stroke-width="22" stroke-linecap="round"/>
+          <!-- red arc: 37% (180/487) -->
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#dc2626" stroke-width="22" stroke-linecap="round"
+            stroke-dasharray="180 487"/>
+        </svg>
+        <div class="semi-overlay">
+          <div class="semi-eyebrow">
+            Il tuo portafoglio
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="semi-value">€ 187,50</div>
+          <div class="semi-gain" style="color:#dc2626;">
+            -€11,20 questa settimana
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="semi-stats">
+            <div class="ss-card">
+              <div class="ss-lbl">Guadagno totale</div>
+              <div class="ss-val" style="color:#dc2626;">- 11,20 €</div>
+            </div>
+            <div class="ss-card">
+              <div class="ss-lbl">Mese scorso</div>
+              <div class="ss-val" style="color:#dc2626;">- 3,40 €</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div class="qa-lbl">Versa</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div class="qa-lbl">Obiettivo</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div><div class="qa-lbl">Regole</div></div>
+      </div>
+
+      <div class="sh" style="padding-top:16px"><div class="sh-title">I tuoi obiettivi</div></div>
+      <div class="obj-card">
+        <div class="oc-top">
+          <div><div class="oc-lbl">Obiettivo</div><div class="oc-name">Viaggio in Grecia</div></div>
+          <div style="text-align:right"><div class="oc-lbl">da raggiungere</div><div style="font-size:14px;font-weight:700;color:#0f0f0f">€ 500,00</div></div>
+        </div>
+        <div class="oc-bar-wrap"><div class="oc-bar" style="width:37%;background:#dc2626;"></div></div>
+        <div class="oc-foot"><span>Raggiunto il 37%</span><span><span class="oc-foot-val">€187</span> <span style="color:#dc2626;font-weight:600">-5,6%</span></span></div>
+      </div>
+
+      <div class="sh" style="padding-top:16px"><div class="sh-title">Le tue regole</div></div>
+      <div class="rule-card">
+        <div class="rule-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+        <div><div style="font-size:14px;font-weight:700;color:#0f0f0f">Addebito automatico</div><div style="font-size:11px;color:#767676;margin-top:1px">1° mag · Eurizon Bilanciato</div></div>
+        <div class="rule-right"><div class="rule-val">€10</div><div class="rule-freq">mese</div></div>
+      </div>
+
+      <div class="sh" style="padding-top:16px"><div class="sh-title">Il tuo fondo</div></div>
+      <div class="fund-card">
+        <div class="fc-top">
+          <div class="fc-icon" style="background:#7c3aed"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+          <div class="fc-name">Eurizon Bilanciato</div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="fc-bottom">
+          <div><div class="fc-tot-label">Totale</div><div class="fc-tot-val">187,50 €</div></div>
+          <div style="text-align:right"><div class="fc-tot-label">Guadagno totale</div><div class="gain-pill neg">- 11,20 €</div></div>
+        </div>
+      </div>
+
+      <div class="sh" style="padding-top:16px"><div class="sh-title">Transazioni</div></div>
+      <div class="tx-card">
+        <div class="tx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div><div style="font-size:13px;font-weight:600;color:#0f0f0f">Deposito ricorrente</div><div style="font-size:11px;color:#767676;margin-top:1px">Eurizon Bilanciato · Oggi, 08:30</div></div>
+        <div class="tx-amount">+ €10</div>
+      </div>
+      <div class="tx-card">
+        <div class="tx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        <div><div style="font-size:13px;font-weight:600;color:#0f0f0f">Deposito ricorrente</div><div style="font-size:11px;color:#767676;margin-top:1px">Eurizon Bilanciato · Ieri, 14:30</div></div>
+        <div class="tx-amount">+ €10</div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="tab-lbl">Home</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><div class="tab-lbl">Conti</div></div>
+      <div class="tab active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg><div class="tab-lbl" style="color:#f55a27">Investimenti</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="tab-lbl">Profilo</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     CASE D — 2 FONDI · VERDE · INTERATTIVO
+     €8.420 · Prudente +5,0% · Aggressivo +12,5%
+     Totale +€620 (+8,1%) — dati verosimili
+══════════════════════════════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">2 Fondi · Verde · Interattivo</div>
+  <div class="phone">
+    <div class="sb">
+      <span class="sb-time">10:06</span>
+      <div class="sb-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+        <svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M1 6.5C4.5 3 8.5 1 12 1s7.5 2 11 5.5"/><path d="M4 10c2-2 5-3.5 8-3.5"/><path d="M7.5 13.5C9 12 10.5 11 12 11s3 1 4.5 2.5"/><circle cx="12" cy="17" r="1.5" fill="#000"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#000"/><path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="topbar">
+        <div class="topbar-title">Investimenti</div>
+        <div class="avatar">FA</div>
+      </div>
+
+      <!-- SEMICIRCLE D — 2 fondi, interattivo, verde -->
+      <div class="semi-section">
+        <svg class="semi-arc-svg" viewBox="0 0 375 260" preserveAspectRatio="none" style="pointer-events:auto;">
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#d0d0d0" stroke-width="22" stroke-linecap="round" pointer-events="none"/>
+          <!-- Prudente 59.4% = 289/487, orange -->
+          <path id="d-arc-A" class="arc-segment"
+            d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#f55a27" stroke-width="22" stroke-linecap="round"
+            stroke-dasharray="289 487" pointer-events="none"/>
+          <!-- Aggressivo 40.6% = 198/487, dark -->
+          <path id="d-arc-B" class="arc-segment"
+            d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="#1a1a1a" stroke-width="22" stroke-linecap="butt"
+            stroke-dasharray="0 289 198 9999" pointer-events="none"/>
+          <!-- Hit areas -->
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="44" stroke-linecap="butt"
+            stroke-dasharray="289 487" pointer-events="all" style="cursor:pointer" onclick="selectFundD('A')"/>
+          <path d="M 32.5 250 A 155 155 0 0 1 342.5 250"
+            fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="44" stroke-linecap="butt"
+            stroke-dasharray="0 289 198 9999" pointer-events="all" style="cursor:pointer" onclick="selectFundD('B')"/>
+        </svg>
+        <div class="semi-overlay">
+          <div class="semi-eyebrow">
+            Il tuo portafoglio
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="semi-value" id="d-val">€ 8.420,00</div>
+          <div class="gain-tag" id="d-gain">
+            +€620 quest'anno · (+8,1%)
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="semi-stats">
+            <div class="ss-card">
+              <div class="ss-lbl">Guadagno totale</div>
+              <div class="ss-val" id="d-stat1">+ 620,00 €</div>
+            </div>
+            <div class="ss-card">
+              <div class="ss-lbl">Mese scorso</div>
+              <div class="ss-val" id="d-stat2">+ 52,00 €</div>
+            </div>
+          </div>
+          <div class="legend-pills">
+            <div class="lp" id="d-pill-A" onclick="selectFundD('A')">
+              <div class="lp-dot" style="background:#f55a27"></div>
+              <div class="lp-text">Prudente · €5.000 (59%)</div>
+            </div>
+            <div class="lp" id="d-pill-B" onclick="selectFundD('B')">
+              <div class="lp-dot" style="background:#1a1a1a"></div>
+              <div class="lp-text">Aggressivo · €3.420 (41%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div class="qa-lbl">Versa</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div class="qa-lbl">Obiettivo</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div><div class="qa-lbl">Regole</div></div>
+      </div>
+
+      <div class="sh" style="padding-top:16px"><div class="sh-title">I tuoi obiettivi</div></div>
+      <div class="obj-card">
+        <div class="oc-top">
+          <div><div class="oc-lbl">Obiettivo</div><div class="oc-name">Anticipo per la Casa</div></div>
+          <div style="text-align:right"><div class="oc-lbl">da raggiungere</div><div style="font-size:14px;font-weight:700;color:#0f0f0f">€ 10.000,00</div></div>
+        </div>
+        <div class="oc-bar-wrap"><div class="oc-bar" style="width:50%;background:#f55a27;"></div></div>
+        <div class="oc-foot"><span>Raggiunto il 50%</span><span><span class="oc-foot-val">€5.000,00</span> <span style="color:#16a34a;font-weight:600">+5,0%</span></span></div>
+      </div>
+      <div class="obj-card">
+        <div class="oc-top">
+          <div><div class="oc-lbl">Obiettivo</div><div class="oc-name">Università figlio</div></div>
+          <div style="text-align:right"><div class="oc-lbl">da raggiungere</div><div style="font-size:14px;font-weight:700;color:#0f0f0f">€ 5.000,00</div></div>
+        </div>
+        <div class="oc-bar-wrap"><div class="oc-bar" style="width:68%;background:#1a1a1a;"></div></div>
+        <div class="oc-foot"><span>Raggiunto il 68%</span><span><span class="oc-foot-val">€3.420,00</span> <span style="color:#16a34a;font-weight:600">+12,5%</span></span></div>
+      </div>
+
+      <div class="sh" style="padding-top:16px"><div class="sh-title">Le tue regole</div></div>
+      <div class="rule-card">
+        <div class="rule-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+        <div><div style="font-size:14px;font-weight:700;color:#0f0f0f">Addebito automatico</div><div style="font-size:11px;color:#767676;margin-top:1px">1° mag · Fondo Prudente</div></div>
+        <div class="rule-right"><div class="rule-val">€25</div><div class="rule-freq">mese</div></div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
+        <div><div style="font-size:14px;font-weight:700;color:#0f0f0f">Addebito automatico</div><div style="font-size:11px;color:#767676;margin-top:1px">1° mag · Fondo Aggressivo</div></div>
+        <div class="rule-right"><div class="rule-val">€10</div><div class="rule-freq">mese</div></div>
+      </div>
+
+      <div class="sh" style="padding-top:16px"><div class="sh-title">I tuoi fondi</div></div>
+      <div class="fund-card">
+        <div class="fc-top">
+          <div class="fc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F55A27"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5L12 1z"/></svg></div>
+          <div class="fc-name">Prudente</div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="fc-bottom">
+          <div><div class="fc-tot-label">Totale</div><div class="fc-tot-val">5.000,00 €</div></div>
+          <div style="text-align:right"><div class="fc-tot-label">Guadagno totale</div><div class="gain-pill">+ 240,00 €</div></div>
+        </div>
+      </div>
+      <div class="fund-card">
+        <div class="fc-top">
+          <div class="fc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F55A27"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></div>
+          <div class="fc-name">Aggressivo</div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="fc-bottom">
+          <div><div class="fc-tot-label">Totale</div><div class="fc-tot-val">3.420,00 €</div></div>
+          <div style="text-align:right"><div class="fc-tot-label">Guadagno totale</div><div class="gain-pill">+ 380,00 €</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="tab-lbl">Home</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><div class="tab-lbl">Conti</div></div>
+      <div class="tab active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg><div class="tab-lbl" style="color:#f55a27">Investimenti</div></div>
+      <div class="tab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#767676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="tab-lbl">Profilo</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     CASE D — MERCATI GIÙ + MODAL
+     "I mercati hanno corretto!"
+══════════════════════════════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">Mercati giù · Modal rassicurante</div>
+  <div class="phone" style="position:relative;">
+    <div class="sb">
+      <span class="sb-time">10:06</span>
+      <div class="sb-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+        <svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M1 6.5C4.5 3 8.5 1 12 1s7.5 2 11 5.5"/><path d="M4 10c2-2 5-3.5 8-3.5"/><path d="M7.5 13.5C9 12 10.5 11 12 11s3 1 4.5 2.5"/><circle cx="12" cy="17" r="1.5" fill="#000"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#000" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#000"/><path d="M23 4.5v3a1.5 1.5 0 000-3z" fill="#000" fill-opacity=".4"/></svg>
+      </div>
+    </div>
+
+    <!-- Background (same as Case C, slightly dimmed) -->
+    <div class="scroll" style="pointer-events:none; filter: brightness(0.88);">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; padding: 12px 20px 0;">
+        <div style="font-family:'Archivo',sans-serif; font-size:22px; font-weight:800; color:#0f0f0f; line-height:1.25; max-width:280px;">Ciao Filippo, mercati giù.<br>Niente panico!</div>
+        <div class="avatar">FA</div>
+      </div>
+      <div style="padding: 18px 20px 0;">
+        <div style="font-size:13px; color:#767676; margin-bottom:4px;">Il tuo portafoglio</div>
+        <div style="font-family:'Archivo',sans-serif; font-size:40px; font-weight:800; color:#0f0f0f; letter-spacing:-2px; line-height:1;">€ 187,50</div>
+        <div style="font-size:13px; font-weight:600; color:#dc2626; margin-top:6px;">- €11,20</div>
+      </div>
+      <div style="padding: 16px 20px 4px;">
+        <svg width="335" height="110" viewBox="0 0 335 110">
+          <defs>
+            <linearGradient id="redGrad2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#dc2626" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#dc2626" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M 0 52 C 40 44, 70 28, 105 22 C 135 17, 155 18, 175 24 C 195 30, 210 44, 235 54 C 255 62, 275 70, 335 78 L 335 108 L 0 108 Z" fill="url(#redGrad2)"/>
+          <path d="M 0 52 C 40 44, 70 28, 105 22 C 135 17, 155 18, 175 24 C 195 30, 210 44, 235 54 C 255 62, 275 70, 335 78" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="335" cy="78" r="4" fill="#dc2626"/>
+        </svg>
+        <div style="display:flex; justify-content:space-between; padding: 2px 0 0; font-size:12px; color:#767676;">
+          <span>Ott</span><span>Nov</span><span>Dic</span><span>Gen</span><span>Feb</span>
+          <span style="background:#f55a27; color:#fff; border-radius:12px; padding:1px 7px; font-weight:600;">Apr</span>
+        </div>
+      </div>
+      <div class="quick-actions" style="opacity:0.6">
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><div class="qa-lbl">Versa</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div class="qa-lbl">Obiettivo</div></div>
+        <div class="qa"><div class="qa-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div><div class="qa-lbl">Regole</div></div>
+      </div>
+    </div>
+
+    <!-- Dim overlay -->
+    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.28); z-index:10;"></div>
+
+    <!-- Bottom sheet modal -->
+    <div style="position:absolute; bottom:0; left:0; right:0; background:#fff; border-radius:24px 24px 0 0; padding:28px 24px 36px; z-index:11;">
+      <!-- handle -->
+      <div style="width:36px; height:4px; background:#e0e0e0; border-radius:2px; margin: 0 auto 22px;"></div>
+      <div style="font-family:'Archivo',sans-serif; font-size:26px; font-weight:800; color:#0f0f0f; line-height:1.2; margin-bottom:12px;">I mercati hanno corretto!</div>
+      <div style="font-size:15px; color:#5c5c5c; line-height:1.55; margin-bottom:22px;">Sul tuo portafoglio -€11 questa settimana. Per la Vacanza in Grecia non cambia nulla!</div>
+      <!-- info card -->
+      <div style="background:#f5f5f5; border-radius:14px; padding:14px 16px; display:flex; align-items:center; margin-bottom:22px;">
+        <div style="flex:1;">
+          <div style="font-size:15px; font-weight:700; color:#0f0f0f; margin-bottom:2px;">Arrivi entro agosto 2025</div>
+          <div style="font-size:12px; color:#767676;">Con la tua regola attuale</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0c0c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+      <!-- CTA -->
+      <button style="width:100%; background:#f55a27; color:#fff; border:none; border-radius:100px; padding:17px; font-family:'Archivo',sans-serif; font-size:17px; font-weight:700; cursor:pointer;">OK, Continuo</button>
+    </div>
+  </div>
+</div>
+
+
+</script>
+</body>
+</html>
