@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 HP · Figma Export</title>
+<style>
+:root {
+  --orange:#FF6B35; --orange-lt:#FFE8DE;
+  --navy:#1C1C1E;
+  --green:#16A34A; --green-lt:#F0FDF4;
+  --red:#FF3B30;
+  --blue:#0A84FF;
+  --finanz:#1A9E4A;
+  --text:#1C1C1E; --muted:#8E8E93;
+  --border:#E5E5EA; --bg:#F2F2F7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
+  background:#FFFFFF;
+  color:var(--text);
+  padding:64px 64px 80px;
+}
+
+/* ── LAYOUT ── */
+.canvas{display:flex;flex-direction:column;gap:64px}
+.group{display:flex;flex-direction:column;gap:24px}
+.group-label{
+  display:flex;align-items:center;gap:14px;
+  font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#AEAEB2;
+}
+.group-label .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.group-label::after{content:'';flex:1;height:1px;background:#E5E5EA}
+.phones-row{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.pc{display:flex;flex-direction:column;align-items:center;gap:8px}
+.chip{font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;letter-spacing:.3px}
+
+/* ── PHONE ── */
+.phone{width:250px;background:#1C1C1E;border-radius:42px;padding:11px;box-shadow:0 24px 64px rgba(0,0,0,.22),0 4px 16px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.07)}
+.phone-screen{background:#fff;border-radius:31px;overflow:hidden;display:flex;flex-direction:column;min-height:500px}
+.appr-screen{background:#fff;border-radius:31px;overflow:hidden;display:flex;flex-direction:column;min-height:500px}
+
+/* ── STATUS BAR ── */
+.sb{padding:11px 17px 3px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.sb-time{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.sb-icons{display:flex;align-items:center;gap:4px}
+
+/* ── HP HEADER ── */
+.hp-head{padding:3px 15px 7px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.hp-hl{display:flex;align-items:center;gap:7px}
+.hp-av{width:28px;height:28px;background:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--text);border:1.5px solid var(--border);flex-shrink:0}
+.hp-greet{font-size:9px;color:var(--muted);line-height:1}
+.hp-name{font-size:12px;font-weight:700;color:var(--text);line-height:1.2}
+.hp-hr{display:flex;align-items:center;gap:7px}
+.hp-earn{font-size:10px;font-weight:600;color:var(--text)}
+.hp-bell{font-size:15px}
+
+/* ── PORTFOLIO ── */
+.portfolio{padding:2px 15px 9px;text-align:center;flex-shrink:0}
+.pf-val{font-size:34px;font-weight:800;color:var(--text);letter-spacing:-1.2px;line-height:1}
+.pf-lbl{font-size:11px;color:var(--muted);margin-top:3px;display:flex;align-items:center;justify-content:center;gap:4px}
+.pf-delta{font-size:11px;font-weight:600;margin-top:2px;text-align:center}
+.up{color:var(--green)} .dn{color:var(--red)} .nt{color:var(--muted)}
+
+/* ── QUICK ACTIONS ── */
+.qa-row{display:flex;justify-content:center;gap:24px;padding:3px 15px 9px;flex-shrink:0}
+.qa-item{display:flex;flex-direction:column;align-items:center;gap:3px}
+.qa-ic{width:40px;height:40px;background:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px}
+.qa-lbl{font-size:9px;font-weight:600;color:var(--text)}
+
+/* ── SEC LABEL ── */
+.sec-lbl{font-size:13px;font-weight:700;color:var(--text);padding:7px 15px 5px;flex-shrink:0}
+
+/* ════ PILL LG ════ */
+.pill-lg{margin:0 11px 9px;border-radius:18px;padding:16px 16px 13px;position:relative;overflow:hidden;flex-shrink:0;min-height:155px;display:flex;flex-direction:column}
+.pill-lg.orange{background:var(--orange-lt)}
+.pill-lg.dark{background:#1A1A2E}
+.pill-lg .pl-x{position:absolute;top:11px;right:11px;width:22px;height:22px;background:rgba(0,0,0,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(0,0,0,.4)}
+.pill-lg.dark .pl-x{background:rgba(255,255,255,.12);color:rgba(255,255,255,.5)}
+.pill-lg .pl-tag{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--orange);margin-bottom:5px}
+.pill-lg.dark .pl-tag{color:rgba(255,255,255,.4)}
+.pill-lg .pl-title{font-size:20px;font-weight:900;line-height:1.1;letter-spacing:-.3px;color:var(--text);flex:1;padding-right:24px}
+.pill-lg.dark .pl-title{color:#fff}
+.pill-lg .pl-body{font-size:11px;line-height:1.45;color:rgba(0,0,0,.5);margin:5px 0 9px}
+.pill-lg.dark .pl-body{color:rgba(255,255,255,.45)}
+.pill-lg .pl-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto}
+.pill-lg .pl-arrow{width:36px;height:36px;background:var(--text);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0}
+.pill-lg.dark .pl-arrow{background:rgba(255,255,255,.18)}
+.pill-lg .pl-illus{font-size:38px;line-height:1;opacity:.65}
+
+/* ════ PILL MD ════ */
+.pill-md{margin:0 11px 9px;border-radius:14px;padding:12px 13px 11px;position:relative;flex-shrink:0;min-height:92px}
+.pill-md.orange{background:#FFF0E8;border:1px solid #FFD5B8}
+.pill-md.finanz{background:var(--finanz)}
+.pill-md .pm-badge{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;color:var(--muted);background:rgba(0,0,0,.06);padding:2px 6px;border-radius:9px;margin-bottom:5px}
+.pill-md.finanz .pm-badge{background:rgba(255,255,255,.2);color:rgba(255,255,255,.75)}
+.pill-md .pm-title{font-size:13px;font-weight:800;line-height:1.2;color:var(--text);margin-bottom:4px;padding-right:6px}
+.pill-md.finanz .pm-title{color:#fff}
+.pill-md .pm-body{font-size:10px;color:var(--muted);line-height:1.4;margin-bottom:7px}
+.pill-md.finanz .pm-body{color:rgba(255,255,255,.7)}
+.pill-md .pm-cta{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;color:var(--text);border:1.5px solid rgba(0,0,0,.18);border-radius:18px;padding:3px 10px}
+.pill-md.finanz .pm-cta{color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* ════ PILL SM ════ */
+.pill-sm{margin:0 11px 9px;border-radius:11px;padding:7px 11px;display:flex;align-items:center;gap:9px;flex-shrink:0;background:#fff;border:1px solid var(--border)}
+.ps-dot{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0}
+.ps-dot.o{background:var(--orange)} .ps-dot.g{background:var(--finanz)} .ps-dot.b{background:var(--blue)}
+.ps-body{flex:1;min-width:0}
+.ps-title{font-size:10px;font-weight:600;color:var(--text)}
+.ps-sub{font-size:9px;color:var(--muted);margin-top:1px}
+.ps-arr{font-size:14px;color:var(--muted)}
+
+/* ── GOAL CARD ── */
+.goal-card{margin:0 11px 7px;background:var(--bg);border-radius:12px;padding:10px 12px;flex-shrink:0}
+.gc-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px}
+.gc-emoji{font-size:13px;margin-bottom:2px}
+.gc-name{font-size:12px;font-weight:700;color:var(--text)}
+.gc-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.gc-val{font-size:14px;font-weight:800;color:var(--text)}
+.gc-target{font-size:9px;color:var(--muted);margin-top:1px;text-align:right}
+.gc-bar{height:3px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:7px}
+.gc-fill{height:100%;border-radius:3px}
+.gc-fill.o{background:var(--orange)} .gc-fill.g{background:var(--green)}
+.gc-fill.b{background:var(--blue)} .gc-fill.r{background:var(--red)}
+
+/* ── EMPTY GOAL ── */
+.empty-goal{margin:0 11px 7px;border:1.5px dashed var(--border);border-radius:12px;padding:12px;text-align:center;flex-shrink:0}
+.eg-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
+.eg-sub{font-size:10px;color:var(--muted)}
+
+/* ── HERO CARD ── */
+.hero-card{margin:0 11px 7px;background:var(--bg);border-radius:12px;padding:10px 12px;flex-shrink:0}
+.hero-q{font-size:12px;font-weight:800;color:var(--text);margin-bottom:7px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:5px}
+.hero-chip{background:#fff;border:1px solid var(--border);border-radius:18px;padding:4px 10px;font-size:10px;font-weight:600;color:var(--text)}
+.hero-chip.sel{background:var(--orange);border-color:var(--orange);color:#fff}
+
+/* ── REGOLA ROW ── */
+.regola-row{margin:0 11px 7px;display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg);border-radius:12px;flex-shrink:0}
+.rr-l{display:flex;align-items:center;gap:9px}
+.rr-ic{width:28px;height:28px;background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.rr-name{font-size:11px;font-weight:700;color:var(--text)}
+.rr-sub{font-size:9px;color:var(--muted);margin-top:1px}
+.rr-amt{font-size:13px;font-weight:800;color:var(--text)}
+
+/* ── IBAN CARD ── */
+.iban-card{margin:0 11px 7px;background:var(--bg);border-radius:12px;padding:10px 12px;flex-shrink:0}
+.iban-lbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.iban-num{font-size:10px;font-weight:700;color:var(--text);letter-spacing:.2px;word-break:break-all;margin-bottom:8px}
+.iban-btns{display:flex;gap:7px;margin-bottom:5px}
+.iban-btn{flex:1;background:#fff;border:1px solid var(--border);border-radius:9px;padding:6px;text-align:center;font-size:9px;font-weight:600;color:var(--text)}
+.iban-btn.primary{background:var(--text);border-color:var(--text);color:#fff}
+.iban-note{font-size:9px;color:var(--muted);text-align:center}
+
+/* ── PLAN BANNER ── */
+.plan-banner{margin:0 11px 7px;background:var(--green-lt);border:1px solid #BBF7D0;border-radius:12px;padding:9px 11px;display:flex;align-items:center;gap:9px;flex-shrink:0}
+.pb-check{width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0}
+.pb-title{font-size:11px;font-weight:700;color:var(--text)}
+.pb-sub{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* ── CHART ── */
+.chart-wrap{margin:0 11px 7px;background:var(--bg);border-radius:12px;overflow:hidden;flex-shrink:0}
+.chart-wrap svg{display:block;width:100%;height:48px}
+
+/* ── TX LIST ── */
+.tx-list{margin:0 11px 7px;background:var(--bg);border-radius:12px;overflow:hidden;flex-shrink:0}
+.tx-hdr{padding:7px 12px 3px;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.tx-row{display:flex;align-items:center;gap:9px;padding:6px 12px}
+.tx-row+.tx-row{border-top:1px solid var(--border)}
+.tx-ic{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.tx-ic.in{background:#DCFCE7} .tx-ic.out{background:#FEE2E2}
+.tx-body{flex:1}
+.tx-name{font-size:11px;font-weight:600;color:var(--text)}
+.tx-date{font-size:9px;color:var(--muted);margin-top:1px}
+.tx-amt{font-size:11px;font-weight:700}
+.tx-amt.in{color:var(--green)} .tx-amt.out{color:var(--red)}
+
+/* ── FONDO ROW ── */
+.fondo-row{display:flex;align-items:center;gap:10px;padding:9px 15px;border-top:1px solid var(--border);flex-shrink:0}
+.fo-ic{width:34px;height:34px;background:#2A2A3E;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.fo-info{flex:1}
+.fo-name{font-size:11px;font-weight:700;color:var(--text)}
+.fo-type{font-size:9px;color:var(--muted);margin-top:1px}
+.fo-right{text-align:right}
+.fo-val{font-size:12px;font-weight:700;color:var(--text)}
+.fo-perf{font-size:10px;font-weight:600}
+.fo-perf.g{color:var(--green)} .fo-perf.r{color:var(--red)}
+
+/* ── BOTTOM SHEET ── */
+.bsheet{margin:0 7px 7px;background:#fff;border-radius:18px;padding:11px 14px 14px;box-shadow:0 -4px 20px rgba(0,0,0,.09);flex-shrink:0}
+.bs-handle{width:32px;height:3px;background:var(--border);border-radius:2px;margin:0 auto 10px}
+.bs-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px}
+.bs-body{font-size:11px;color:var(--muted);line-height:1.45;margin-bottom:8px}
+.bs-hl{background:var(--bg);border-radius:9px;padding:7px 9px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--text)}
+.bs-cta{border-radius:11px;padding:10px;text-align:center;font-size:12px;font-weight:700;color:#fff}
+.bs-cta.o{background:var(--orange)} .bs-cta.g{background:var(--green)} .bs-cta.n{background:var(--navy)}
+.bs-sec{margin-top:5px;text-align:center;font-size:10px;color:var(--muted)}
+
+/* ── ALERT ── */
+.alert{margin:0 11px 7px;border-radius:12px;padding:9px 11px;display:flex;align-items:flex-start;gap:7px;flex-shrink:0}
+.alert.info{background:#EFF6FF;border:1px solid #BFDBFE}
+.alert.success{background:var(--green-lt);border:1px solid #BBF7D0}
+.al-ic{font-size:13px;flex-shrink:0;margin-top:1px}
+.al-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
+.al-sub{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* ── APPROFONDIMENTO ── */
+.appr-top{padding:9px 15px 2px;display:flex;align-items:center;gap:7px;flex-shrink:0}
+.appr-back{font-size:20px;color:var(--orange);line-height:1}
+.appr-crumb{font-size:11px;color:var(--muted)}
+.appr-hero{padding:7px 15px 5px;flex-shrink:0}
+.appr-src{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.src-dot{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0}
+.src-dot.o{background:var(--orange)} .src-dot.g{background:var(--finanz)} .src-dot.b{background:var(--blue)}
+.src-name{font-size:11px;font-weight:700}
+.src-name.o{color:var(--orange)} .src-name.g{color:var(--finanz)} .src-name.b{color:var(--blue)}
+.appr-title{font-size:16px;font-weight:900;color:var(--text);line-height:1.2;letter-spacing:-.3px;margin-bottom:3px}
+.appr-meta{font-size:10px;color:var(--muted);display:flex;gap:7px}
+.appr-div{height:1px;background:var(--border);margin:7px 15px;flex-shrink:0}
+.appr-body{padding:0 15px 8px;flex:1;overflow:hidden}
+.appr-lead{font-size:12px;font-weight:700;color:var(--text);line-height:1.45;margin-bottom:7px}
+.appr-p{font-size:10px;color:var(--muted);line-height:1.55;margin-bottom:7px}
+.appr-hl{border-radius:0 9px 9px 0;padding:7px 9px;margin-bottom:7px}
+.appr-hl.o{background:#FFF4F0;border-left:3px solid var(--orange)}
+.appr-hl.g{background:#F0FDF4;border-left:3px solid var(--green)}
+.appr-hl.b{background:#EFF6FF;border-left:3px solid var(--blue)}
+.appr-hl p{font-size:10px;font-weight:700;color:var(--text);line-height:1.4}
+.appr-cta{margin:0 15px 11px;border-radius:12px;padding:10px;text-align:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.appr-cta.o{background:var(--orange)} .appr-cta.g{background:var(--finanz)} .appr-cta.n{background:#1A1A2E}
+
+/* ── BOTTOM NAV ── */
+.bnav{background:#fff;border-top:1px solid var(--border);padding:7px 0 14px;display:flex;justify-content:space-around;align-items:center;flex-shrink:0}
+.bn{display:flex;flex-direction:column;align-items:center;gap:2px}
+.bn-lbl{font-size:9px;font-weight:600;color:var(--muted)}
+.bn.act .bn-lbl{color:var(--orange)}
+</style>
+</head>
+<body>
+
+<script>
+var SVG={
+  home:'<svg width="20" height="19" viewBox="0 0 20 19" fill="none"><path d="M1 8L10 1L19 8V18C19 18.55 18.55 19 18 19H13V13H7V19H2C1.45 19 1 18.55 1 18V8Z" fill="currentColor"/></svg>',
+  rules:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 6H13M5 9H10M5 12H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  funds:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="10" width="3" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="7.5" y="6" width="3" height="11" rx="1" fill="currentColor" opacity=".7"/><rect x="13" y="2" width="3" height="15" rx="1" fill="currentColor"/></svg>',
+  user:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M2 17C2 13.69 5.13 11 9 11C12.87 11 16 13.69 16 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  signal:'<svg width="13" height="10" viewBox="0 0 13 10"><rect x="0" y="6" width="2.5" height="4" rx=".5" fill="currentColor" opacity=".3"/><rect x="3.5" y="4" width="2.5" height="6" rx=".5" fill="currentColor" opacity=".6"/><rect x="7" y="2" width="2.5" height="8" rx=".5" fill="currentColor" opacity=".8"/><rect x="10.5" y="0" width="2.5" height="10" rx=".5" fill="currentColor"/></svg>',
+  wifi:'<svg width="13" height="10" viewBox="0 0 14 10"><path d="M7 8.5C7.55 8.5 8 8.95 8 9.5C8 10.05 7.55 10.5 7 10.5C6.45 10.5 6 10.05 6 9.5C6 8.95 6.45 8.5 7 8.5Z" fill="currentColor"/><path d="M4 6.8C4.87 5.93 6.06 5.4 7 5.4C7.94 5.4 9.13 5.93 10 6.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".6"/><path d="M1.5 4.3C3.1 2.67 5.15 1.9 7 1.9C8.85 1.9 10.9 2.67 12.5 4.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".35"/></svg>',
+  batt:'<svg width="18" height="10" viewBox="0 0 18 10"><rect x=".5" y=".5" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1" fill="none"/><rect x="1.5" y="1.5" width="10" height="7" rx="1.2" fill="currentColor"/><path d="M15.5 3.5V6.5C16.33 6.17 17 5.5 17 5C17 4.5 16.33 3.83 15.5 3.5Z" fill="currentColor" opacity=".5"/></svg>'
+};
+function sb(){return'<div class="sb"><span class="sb-time">10:06</span><div class="sb-icons"><span style="color:#1C1C1E;opacity:.8">'+SVG.signal+'</span><span style="color:#1C1C1E;opacity:.8">'+SVG.wifi+'</span><span style="color:#1C1C1E">'+SVG.batt+'</span></div></div>'}
+function bnav(a){a=a||0;var it=[{i:SVG.home,l:'Home'},{i:SVG.rules,l:'Regole'},{i:SVG.funds,l:'Fondi'},{i:SVG.user,l:'Profilo'}];var h='<div class="bnav">';it.forEach(function(x,i){var act=i===a;h+='<div class="bn'+(act?' act':'')+'"><div style="width:22px;height:20px;display:flex;align-items:center;justify-content:center;color:'+(act?'#FF6B35':'#8E8E93')+'">'+x.i+'</div><span class="bn-lbl">'+x.l+'</span></div>'});return h+'</div>'}
+function chart(pts,col){var W=228,H=48,P=5,n=pts.length;var pp=pts.map(function(v,i){return[P+(i/(n-1))*(W-P*2),H-P-(v/100)*(H-P*2)]});var lp=pp.map(function(p,i){return(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)}).join(' ');var ap=lp+' L'+pp[n-1][0].toFixed(1)+' '+H+' L'+pp[0][0].toFixed(1)+' '+H+' Z';var c=col||'#1C1C1E';var id='g'+Math.random().toString(36).slice(2,8);return'<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+c+'" stop-opacity="0.15"/><stop offset="1" stop-color="'+c+'" stop-opacity="0"/></linearGradient></defs><path d="'+ap+'" fill="url(#'+id+')"/><path d="'+lp+'" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.js-sb').forEach(function(e){e.innerHTML=sb()});
+  document.querySelectorAll('.js-bnav').forEach(function(e){e.innerHTML=bnav(parseInt(e.dataset.tab||0))});
+  document.querySelectorAll('.js-chart').forEach(function(e){e.innerHTML=chart(JSON.parse(e.dataset.pts),e.dataset.col)});
+});
+</script>
+
+<div class="canvas">
+
+  <!-- ══ 01 NUOVO ══ -->
+  <div class="group">
+    <div class="group-label"><span class="dot" style="background:#FF3B30"></span>01 · NUOVO · Pill LG in cima</div>
+    <div class="phones-row">
+
+      <!-- 01A · skip regola · €0 -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">0,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta nt">Nessun versamento ancora</div>
+          </div>
+          <div class="qa-row">
+            <div class="qa-item"><div class="qa-ic">＋</div><div class="qa-lbl">Versa</div></div>
+            <div class="qa-item"><div class="qa-ic">🎯</div><div class="qa-lbl">Obiettivo</div></div>
+          </div>
+          <div class="sec-lbl">Pillola educativa</div>
+          <div class="pill-lg dark">
+            <div class="pl-x">✕</div>
+            <div class="pl-tag">Gimme5 · Il primo passo</div>
+            <div class="pl-title">Crea la tua prima regola di risparmio.</div>
+            <div class="pl-body">Chi versa in automatico ogni mese raggiunge l'obiettivo il 40% più veloce.</div>
+            <div class="pl-foot"><div class="pl-arrow">→</div><div class="pl-illus">⚡</div></div>
+          </div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="empty-goal">
+            <div class="eg-title">Nessun obiettivo ancora</div>
+            <div class="eg-sub">Sceglilo dopo il primo versamento</div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF3B30">01A · Skip regola · €0</div>
+      </div>
+
+      <!-- 01A · skip regola · €50 in app -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">50,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta up">↑ Primo versamento ricevuto</div>
+          </div>
+          <div class="qa-row">
+            <div class="qa-item"><div class="qa-ic">＋</div><div class="qa-lbl">Versa</div></div>
+            <div class="qa-item"><div class="qa-ic">🎯</div><div class="qa-lbl">Obiettivo</div></div>
+          </div>
+          <div class="sec-lbl">Pillola educativa</div>
+          <div class="pill-lg dark">
+            <div class="pl-x">✕</div>
+            <div class="pl-tag">Gimme5 · Adesso puoi</div>
+            <div class="pl-title">Hai i soldi. Attiva il versamento automatico.</div>
+            <div class="pl-body">Chi imposta una regola mensile raggiunge l'obiettivo il 40% più veloce.</div>
+            <div class="pl-foot"><div class="pl-arrow">→</div><div class="pl-illus">🚀</div></div>
+          </div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="empty-goal">
+            <div class="eg-title">Scegli il tuo primo obiettivo</div>
+            <div class="eg-sub">Dai un nome al tuo risparmio</div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF3B30">01A · Skip regola · €50</div>
+      </div>
+
+      <!-- 01A · Approfondimento -->
+      <div class="pc">
+        <div class="phone"><div class="appr-screen">
+          <div class="js-sb"></div>
+          <div class="appr-top"><span class="appr-back">‹</span><span class="appr-crumb">Home · Pillola educativa</span></div>
+          <div class="appr-hero">
+            <div class="appr-src"><div class="src-dot o">G</div><div class="src-name o">Gimme5</div></div>
+            <div class="appr-title">Automatico batte manuale — sempre</div>
+            <div class="appr-meta"><span>⏱ 2 min</span><span>· Come funziona</span></div>
+          </div>
+          <div class="appr-div"></div>
+          <div class="appr-body">
+            <div class="appr-lead">Chi versa in automatico ogni mese raggiunge l'obiettivo il 40% più veloce.</div>
+            <div class="appr-p">Non perché versi di più — ma perché non salta mai un mese. La regola elimina la decisione.</div>
+            <div class="appr-hl o"><p>€10/mese auto × 10 anni = €1.468.<br>Gli stessi €10/mese manuali → €900.</p></div>
+            <div class="appr-p">Puoi cambiare l'importo o fermare la regola in qualsiasi momento. Nessun vincolo.</div>
+          </div>
+          <div class="appr-cta o">Crea la tua regola →</div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF3B30">01A · Approfondimento</div>
+      </div>
+
+      <!-- 01B · IBAN sopra + pill LG -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">0,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta nt">In attesa del primo versamento</div>
+          </div>
+          <div class="qa-row">
+            <div class="qa-item"><div class="qa-ic">＋</div><div class="qa-lbl">Versa</div></div>
+            <div class="qa-item"><div class="qa-ic">🎯</div><div class="qa-lbl">Obiettivo</div></div>
+          </div>
+          <div class="iban-card">
+            <div class="iban-lbl">Invia il primo versamento</div>
+            <div class="iban-num">IT60 X054 2811 1010 0000 0123 456</div>
+            <div class="iban-btns">
+              <div class="iban-btn primary">📋 Copia IBAN</div>
+              <div class="iban-btn">🏦 Apri banca</div>
+            </div>
+            <div class="iban-note">Minimo €5 · 2–3 giorni lavorativi</div>
+          </div>
+          <div class="pill-lg orange">
+            <div class="pl-x">✕</div>
+            <div class="pl-tag">Gimme5 · Tutto pronto</div>
+            <div class="pl-title">La tua regola è attiva. Aspetta il primo versamento.</div>
+            <div class="pl-body">Dal 1° del mese prossimo i soldi si muovono da soli.</div>
+            <div class="pl-foot"><div class="pl-arrow">→</div><div class="pl-illus">📅</div></div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF9500">01B · Regola ok · Aspetta bonifico</div>
+      </div>
+
+      <!-- 01B · Approfondimento -->
+      <div class="pc">
+        <div class="phone"><div class="appr-screen">
+          <div class="js-sb"></div>
+          <div class="appr-top"><span class="appr-back">‹</span><span class="appr-crumb">Home · Pillola educativa</span></div>
+          <div class="appr-hero">
+            <div class="appr-src"><div class="src-dot o">G</div><div class="src-name o">Gimme5</div></div>
+            <div class="appr-title">Come funziona l'addebito automatico</div>
+            <div class="appr-meta"><span>⏱ 1 min</span><span>· La tua regola</span></div>
+          </div>
+          <div class="appr-div"></div>
+          <div class="appr-body">
+            <div class="appr-lead">Hai impostato una regola mensile. Ecco cosa succede adesso.</div>
+            <div class="appr-hl o"><p>Ogni 1° del mese Gimme5 preleva l'importo scelto e lo investe automaticamente.</p></div>
+            <div class="appr-p">Non devi fare nulla. Non devi ricordarti. Non devi approvare ogni volta.</div>
+            <div class="appr-hl o"><p>Il tuo primo addebito automatico:<br>1° maggio 2025.</p></div>
+          </div>
+          <div class="appr-cta o">Capito →</div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF9500">01B · Approfondimento</div>
+      </div>
+
+      <!-- 01C · Regola + soldi + scegli obiettivo -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">10,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta up">↑ Primo versamento ricevuto</div>
+          </div>
+          <div class="qa-row">
+            <div class="qa-item"><div class="qa-ic">＋</div><div class="qa-lbl">Versa</div></div>
+            <div class="qa-item"><div class="qa-ic">🎯</div><div class="qa-lbl">Obiettivo</div></div>
+          </div>
+          <div class="sec-lbl">Pillola educativa</div>
+          <div class="pill-lg orange">
+            <div class="pl-x">✕</div>
+            <div class="pl-tag">Gimme5 · Un ultimo passo</div>
+            <div class="pl-title">Dai un nome al tuo risparmio. Funziona davvero.</div>
+            <div class="pl-body">Chi si dà un obiettivo risparmia il 91% in più.</div>
+            <div class="pl-foot"><div class="pl-arrow">→</div><div class="pl-illus">🎯</div></div>
+          </div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="hero-card">
+            <div class="hero-q">Cosa stai risparmiando per?</div>
+            <div class="hero-chips">
+              <div class="hero-chip">✈️ Viaggio</div>
+              <div class="hero-chip">🏠 Casa</div>
+              <div class="hero-chip">🚗 Veicolo</div>
+              <div class="hero-chip">🎓 Studio</div>
+              <div class="hero-chip">🛡️ Emergenza</div>
+            </div>
+          </div>
+          <div class="plan-banner">
+            <div class="pb-check">✓</div>
+            <div><div class="pb-title">Regola attiva · 1° maggio</div><div class="pb-sub">€10/mese · Addebito automatico</div></div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF6B35">01C · Regola + soldi · Scegli obiettivo</div>
+      </div>
+
+      <!-- 01C · Approfondimento -->
+      <div class="pc">
+        <div class="phone"><div class="appr-screen">
+          <div class="js-sb"></div>
+          <div class="appr-top"><span class="appr-back">‹</span><span class="appr-crumb">Home · Pillola educativa</span></div>
+          <div class="appr-hero">
+            <div class="appr-src"><div class="src-dot o">G</div><div class="src-name o">Gimme5</div></div>
+            <div class="appr-title">Perché l'obiettivo cambia tutto</div>
+            <div class="appr-meta"><span>⏱ 2 min</span><span>· Dati reali utenti</span></div>
+          </div>
+          <div class="appr-div"></div>
+          <div class="appr-body">
+            <div class="appr-lead">Chi si dà un obiettivo risparmia il 91% in più. Sono i dati reali dei nostri utenti.</div>
+            <div class="appr-hl o"><p>Da €379/anno a €724/anno in media.<br>Solo aggiungendo un obiettivo concreto.</p></div>
+            <div class="appr-p">Il 57% dice che la cosa più motivante è vedere i progressi verso un goal specifico.</div>
+            <div class="appr-hl o"><p>Chi ha un obiettivo versa +€50 nel primo mese.</p></div>
+            <div class="appr-p">Fonte: Gargano & Rossi (2024), The Journal of Finance.</div>
+          </div>
+          <div class="appr-cta o">Scegli il tuo obiettivo →</div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF6B35">01C · Approfondimento</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 02 DORMIENTE ══ -->
+  <div class="group">
+    <div class="group-label"><span class="dot" style="background:#8E8E93"></span>02 · DORMIENTE · Zero pill in-app</div>
+    <div class="phones-row">
+
+      <!-- Silenzio -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">187,50 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta nt">Non apri l'app da 63 giorni</div>
+          </div>
+          <div class="chart-wrap"><div class="js-chart" data-pts="[20,42,58,64,65,65,65,65]" data-col="#8E8E93"></div></div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🏖️</div><div class="gc-name">Vacanza Grecia</div><div class="gc-sub">€187 di €500</div></div><div class="gc-val">37%</div></div>
+            <div class="gc-bar"><div class="gc-fill o" style="width:37%"></div></div>
+          </div>
+          <div class="tx-list">
+            <div class="tx-hdr">Ultimi movimenti</div>
+            <div class="tx-row"><div class="tx-ic in">↗</div><div class="tx-body"><div class="tx-name">Regola automatica</div><div class="tx-date">10 feb 2025</div></div><div class="tx-amt in">+€10,00</div></div>
+            <div class="tx-row"><div class="tx-ic in">↗</div><div class="tx-body"><div class="tx-name">Regola automatica</div><div class="tx-date">1 gen 2025</div></div><div class="tx-amt in">+€10,00</div></div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#8E8E93">02A · Rientro · Silenzio</div>
+      </div>
+
+      <!-- Bottom sheet -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">187,50 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta nt">Non apri l'app da 63 giorni</div>
+          </div>
+          <div class="chart-wrap"><div class="js-chart" data-pts="[20,42,58,64,65,65,65,65]" data-col="#8E8E93"></div></div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🏖️</div><div class="gc-name">Vacanza Grecia</div><div class="gc-sub">€187 di €500</div></div><div class="gc-val">37%</div></div>
+            <div class="gc-bar"><div class="gc-fill o" style="width:37%"></div></div>
+          </div>
+          <div class="bsheet">
+            <div class="bs-handle"></div>
+            <div class="bs-title">Il tuo piano ha lavorato per te.</div>
+            <div class="bs-body">In 63 giorni hai accumulato €90 in automatico. Sei al 37%.</div>
+            <div class="bs-hl">Con €10/mese arrivi entro luglio 2025.</div>
+            <div class="bs-cta g">Continua così →</div>
+            <div class="bs-sec">Non ora</div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#8E8E93">02B · Bottom sheet rientro</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 03 A RISCHIO ══ -->
+  <div class="group">
+    <div class="group-label"><span class="dot" style="background:#FF9500"></span>03 · A RISCHIO · Silenzio 24h · Zero pill</div>
+    <div class="phones-row">
+
+      <!-- Silenzio 24h -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">342,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta dn">↓ –€11,20 questa settimana</div>
+          </div>
+          <div class="chart-wrap"><div class="js-chart" data-pts="[20,42,68,82,88,90,86,83]" data-col="#FF3B30"></div></div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🏖️</div><div class="gc-name">Vacanza Grecia</div><div class="gc-sub">€342 di €500</div></div><div class="gc-val">68%</div></div>
+            <div class="gc-bar"><div class="gc-fill r" style="width:68%"></div></div>
+          </div>
+          <div class="regola-row">
+            <div class="rr-l"><div class="rr-ic">🔄</div><div><div class="rr-name">Addebito automatico</div><div class="rr-sub">€10/mese · attivo</div></div></div>
+            <div class="rr-amt">€10</div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF9500">03A · 0–24h · Silenzio</div>
+      </div>
+
+      <!-- Bottom sheet 48h Finanz -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">342,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta dn">↓ –€11,20 questa settimana</div>
+          </div>
+          <div class="chart-wrap"><div class="js-chart" data-pts="[20,42,68,82,88,90,86,83]" data-col="#FF3B30"></div></div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🏖️</div><div class="gc-name">Vacanza Grecia</div><div class="gc-sub">€342 di €500</div></div><div class="gc-val">68%</div></div>
+            <div class="gc-bar"><div class="gc-fill r" style="width:68%"></div></div>
+          </div>
+          <div class="bsheet">
+            <div class="bs-handle"></div>
+            <div class="bs-title">I mercati hanno corretto.</div>
+            <div class="bs-body">Sul tuo portafoglio: –€11 questa settimana. Per il tuo obiettivo non cambia nulla.</div>
+            <div class="bs-hl">Arrivi comunque entro agosto 2025 con la tua regola.</div>
+            <div class="bs-cta n">È normale. Continua →</div>
+            <div class="bs-sec">Powered by Finanz</div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#FF9500">03B · +48h · Bottom sheet Finanz</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 04 ATTIVO ══ -->
+  <div class="group">
+    <div class="group-label"><span class="dot" style="background:#16A34A"></span>04 · ATTIVO · Pill MD dopo obiettivi</div>
+    <div class="phones-row">
+
+      <!-- HP Attivo Gimme5 pill -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">1.840,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta up">↑ +€124 quest'anno · +7,2%</div>
+          </div>
+          <div class="chart-wrap"><div class="js-chart" data-pts="[10,20,32,44,55,65,75,84,92,100]" data-col="#16A34A"></div></div>
+          <div class="qa-row">
+            <div class="qa-item"><div class="qa-ic">＋</div><div class="qa-lbl">Versa</div></div>
+            <div class="qa-item"><div class="qa-ic">🎯</div><div class="qa-lbl">Obiettivo</div></div>
+            <div class="qa-item"><div class="qa-ic">🔄</div><div class="qa-lbl">Regole</div></div>
+          </div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🏠</div><div class="gc-name">Casa — anticipo</div><div class="gc-sub">€1.500 di €10.000 · lug 2028</div></div><div><div class="gc-val">15%</div><div class="gc-target">€8.500 mancano</div></div></div>
+            <div class="gc-bar"><div class="gc-fill b" style="width:15%"></div></div>
+          </div>
+          <div class="sec-lbl">Pillola educativa</div>
+          <div class="pill-md orange">
+            <div class="pm-badge">Gimme5 · Il tuo piano</div>
+            <div class="pm-title">Sei al 15%. Con €10/mese ci arrivi nel 2028.</div>
+            <div class="pm-body">Aumentando a €25/mese arrivi nel 2026.</div>
+            <div class="pm-cta">Vedi la proiezione →</div>
+          </div>
+          <div class="regola-row">
+            <div class="rr-l"><div class="rr-ic">🔄</div><div><div class="rr-name">Addebito automatico</div><div class="rr-sub">€10/mese · 1° maggio</div></div></div>
+            <div class="rr-amt">€10</div>
+          </div>
+          <div class="tx-list">
+            <div class="tx-hdr">Ultimi movimenti</div>
+            <div class="tx-row"><div class="tx-ic in">↗</div><div class="tx-body"><div class="tx-name">Regola automatica</div><div class="tx-date">Oggi, 08:30</div></div><div class="tx-amt in">+€10,00</div></div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#16A34A">04 · Attivo · Pill MD Gimme5</div>
+      </div>
+
+      <!-- HP Attivo Finanz pill -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">1.840,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta up">↑ +€124 quest'anno · +7,2%</div>
+          </div>
+          <div class="chart-wrap"><div class="js-chart" data-pts="[10,20,32,44,55,65,75,84,92,100]" data-col="#16A34A"></div></div>
+          <div class="qa-row">
+            <div class="qa-item"><div class="qa-ic">＋</div><div class="qa-lbl">Versa</div></div>
+            <div class="qa-item"><div class="qa-ic">🎯</div><div class="qa-lbl">Obiettivo</div></div>
+            <div class="qa-item"><div class="qa-ic">🔄</div><div class="qa-lbl">Regole</div></div>
+          </div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🏠</div><div class="gc-name">Casa — anticipo</div><div class="gc-sub">€1.500 di €10.000</div></div><div class="gc-val">15%</div></div>
+            <div class="gc-bar"><div class="gc-fill b" style="width:15%"></div></div>
+          </div>
+          <div class="sec-lbl">Pillola educativa</div>
+          <div class="pill-md finanz">
+            <div class="pm-badge">Powered by Finanz</div>
+            <div class="pm-title">Perché non mettere tutto nello stesso fondo.</div>
+            <div class="pm-body">Distribuire su 2 fondi riduce la volatilità senza rinunciare al rendimento.</div>
+            <div class="pm-cta">Leggi in 3 min →</div>
+          </div>
+          <div class="regola-row">
+            <div class="rr-l"><div class="rr-ic">🔄</div><div><div class="rr-name">Addebito automatico</div><div class="rr-sub">€10/mese · 1° maggio</div></div></div>
+            <div class="rr-amt">€10</div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#1A9E4A">04 · Attivo · Pill MD Finanz</div>
+      </div>
+
+      <!-- Approfondimento Finanz -->
+      <div class="pc">
+        <div class="phone"><div class="appr-screen">
+          <div class="js-sb"></div>
+          <div class="appr-top"><span class="appr-back">‹</span><span class="appr-crumb">Home · Pillola educativa</span></div>
+          <div class="appr-hero">
+            <div class="appr-src"><div class="src-dot g">F</div><div class="src-name g">Finanz</div></div>
+            <div class="appr-title">Perché non mettere tutto nello stesso posto</div>
+            <div class="appr-meta"><span>⏱ 3 min</span><span>· Diversificazione</span></div>
+          </div>
+          <div class="appr-div"></div>
+          <div class="appr-body">
+            <div class="appr-lead">Non è sfiducia nel fondo. È matematica del rischio.</div>
+            <div class="appr-p">Distribuire su 2 fondi con correlazione diversa riduce le oscillazioni mantenendo il rendimento atteso simile.</div>
+            <div class="appr-hl g"><p>70% azionario + 30% prudente:<br>volatilità –18% a parità di rendimento.</p></div>
+            <div class="appr-p">Non serve ribilanciare spesso. Una volta l'anno è sufficiente. Fonte: Finanz.</div>
+          </div>
+          <div class="appr-cta g">Ho capito →</div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#1A9E4A">04 · Approfondimento Finanz</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 05 ESPERTO ══ -->
+  <div class="group">
+    <div class="group-label"><span class="dot" style="background:#0A84FF"></span>05 · ESPERTO · Pill SM in fondo · quasi invisibile</div>
+    <div class="phones-row">
+
+      <!-- HP Esperto -->
+      <div class="pc">
+        <div class="phone"><div class="phone-screen">
+          <div class="js-sb"></div>
+          <div class="hp-head">
+            <div class="hp-hl"><div class="hp-av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div>
+            <div class="hp-hr"><span class="hp-earn">Guadagna 10€</span><span class="hp-bell">🔔</span></div>
+          </div>
+          <div class="portfolio">
+            <div class="pf-val">8.420,00 €</div>
+            <div class="pf-lbl">Valore totale</div>
+            <div class="pf-delta up">↑ +€620 quest'anno · +8,1%</div>
+          </div>
+          <div class="chart-wrap"><div class="js-chart" data-pts="[5,12,20,30,40,50,60,70,80,88,94,100]" data-col="#0A84FF"></div></div>
+          <div class="qa-row">
+            <div class="qa-item"><div class="qa-ic">＋</div><div class="qa-lbl">Versa</div></div>
+            <div class="qa-item"><div class="qa-ic">📊</div><div class="qa-lbl">Report</div></div>
+            <div class="qa-item"><div class="qa-ic">⚙️</div><div class="qa-lbl">Gestisci</div></div>
+          </div>
+          <div class="sec-lbl">I tuoi obiettivi</div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🏠</div><div class="gc-name">Casa — anticipo</div><div class="gc-sub">€4.200 di €10.000</div></div><div class="gc-val">42%</div></div>
+            <div class="gc-bar"><div class="gc-fill o" style="width:42%"></div></div>
+          </div>
+          <div class="goal-card">
+            <div class="gc-row"><div><div class="gc-emoji">🎓</div><div class="gc-name">Università figlio</div><div class="gc-sub">€1.800 di €5.000</div></div><div class="gc-val">36%</div></div>
+            <div class="gc-bar"><div class="gc-fill b" style="width:36%"></div></div>
+          </div>
+          <div class="sec-lbl">Regole attive</div>
+          <div class="regola-row">
+            <div class="rr-l"><div class="rr-ic">🔄</div><div><div class="rr-name">Addebito automatico</div><div class="rr-sub">€25/mese · attivo</div></div></div>
+            <div class="rr-amt">€25</div>
+          </div>
+          <div class="sec-lbl">I tuoi fondi</div>
+          <div class="fondo-row"><div class="fo-ic">📈</div><div class="fo-info"><div class="fo-name">Gimme5 Prudente</div><div class="fo-type">Bilanciato · Rischio Basso</div></div><div class="fo-right"><div class="fo-val">€3.200</div><div class="fo-perf g">+4,2%</div></div></div>
+          <div class="fondo-row"><div class="fo-ic">🌍</div><div class="fo-info"><div class="fo-name">Amundi Azionario ESG</div><div class="fo-type">Azionario · Rischio Medio</div></div><div class="fo-right"><div class="fo-val">€3.100</div><div class="fo-perf g">+9,8%</div></div></div>
+          <div class="pill-sm">
+            <div class="ps-dot g">F</div>
+            <div class="ps-body"><div class="ps-title">Asset allocation: cosa cambia dopo i 40</div><div class="ps-sub">Finanz · 4 min</div></div>
+            <div class="ps-arr">›</div>
+          </div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#0A84FF">05 · Esperto · Pill SM in fondo</div>
+      </div>
+
+      <!-- Approfondimento SM -->
+      <div class="pc">
+        <div class="phone"><div class="appr-screen">
+          <div class="js-sb"></div>
+          <div class="appr-top"><span class="appr-back">‹</span><span class="appr-crumb">Home · Per te</span></div>
+          <div class="appr-hero">
+            <div class="appr-src"><div class="src-dot g">F</div><div class="src-name g">Finanz</div></div>
+            <div class="appr-title">Asset allocation: cosa cambia dopo i 40</div>
+            <div class="appr-meta"><span>⏱ 4 min</span><span>· Gestione del rischio</span></div>
+          </div>
+          <div class="appr-div"></div>
+          <div class="appr-body">
+            <div class="appr-lead">L'orizzonte temporale si accorcia. Il rischio che puoi permetterti cambia.</div>
+            <div class="appr-p">Sotto i 40 anni puoi tollerare più volatilità. Dopo i 40, ogni anno riduce la finestra di recupero.</div>
+            <div class="appr-hl g"><p>110 meno la tua età = % suggerita in azionario.<br>42 anni → 68% azionario, 32% prudente.</p></div>
+            <div class="appr-p">Ribilanciare una volta l'anno è sufficiente. Fonte: Finanz.</div>
+          </div>
+          <div class="appr-cta g">Rivedi la tua allocazione →</div>
+          <div class="js-bnav"></div>
+        </div></div>
+        <div class="chip" style="background:#0A84FF">05 · Approfondimento Finanz</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

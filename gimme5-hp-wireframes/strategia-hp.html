@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gimme5 — Strategia HP & Pillole Educative</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      background: #f5f5f5;
+      color: #111;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 60px 32px 120px;
+    }
+
+    /* Header */
+    .doc-header {
+      margin-bottom: 64px;
+      padding-bottom: 32px;
+      border-bottom: 2px solid #111;
+    }
+
+    .doc-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .doc-title {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .doc-subtitle {
+      font-size: 16px;
+      color: #555;
+      max-width: 560px;
+    }
+
+    .doc-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .meta-item {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .meta-item strong {
+      color: #111;
+      font-weight: 600;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 64px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .section-body {
+      color: #333;
+      max-width: 640px;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+      font-size: 14px;
+    }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #888;
+      padding: 10px 14px;
+      border-bottom: 2px solid #e0e0e0;
+      background: #fafafa;
+    }
+
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .tag-orange { background: #FFF0E5; color: #C24E00; }
+    .tag-green  { background: #EDFBF1; color: #0D6E35; }
+    .tag-grey   { background: #F0F0F0; color: #555; }
+    .tag-dark   { background: #111; color: rgba(255,255,255,.7); }
+    .tag-blue   { background: #EFF6FF; color: #1D4ED8; }
+    .tag-warn   { background: #FFFBEB; color: #B45309; }
+
+    /* Two columns */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .col-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 24px;
+    }
+
+    .col-card.tinted { background: #FFF5EE; border-color: #FFD4A8; }
+
+    .col-card-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 14px;
+    }
+    .col-card-title.orange { color: #D95000; }
+    .col-card-title.green  { color: #1A9E4A; }
+
+    .item-list { display: flex; flex-direction: column; gap: 9px; }
+    .item-list li {
+      list-style: none;
+      font-size: 13px;
+      color: #444;
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .item-list li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 7px;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+    .item-list.orange li::before { background: #FF6B00; }
+    .item-list.green  li::before { background: #1A9E4A; }
+
+    /* Def box */
+    .def-box {
+      background: #131420;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+    .def-box p { font-size: 14px; color: rgba(255,255,255,.75); line-height: 1.65; }
+    .def-box strong { color: #FF6B00; }
+
+    /* Segment grid */
+    .segment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .segment-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+    .segment-card.full-width { grid-column: 1 / -1; }
+
+    .segment-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #bbb;
+      margin-bottom: 4px;
+    }
+
+    .segment-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .segment-desc {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .segment-detail {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.6;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+
+    /* Pill visual */
+    .pill-visual {
+      display: flex;
+      align-items: flex-end;
+      gap: 32px;
+      margin: 28px 0 8px;
+    }
+
+    .pill-block { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .pill-rect { background: #FF6B00; border-radius: 8px; width: 100px; }
+    .pill-rect.lg   { height: 72px; }
+    .pill-rect.md   { height: 44px; }
+    .pill-rect.sm   { height: 18px; border-radius: 5px; }
+    .pill-rect.zero { height: 4px; background: #ddd; border-radius: 4px; }
+    .pill-label     { font-size: 12px; font-weight: 700; color: #444; }
+    .pill-sublabel  { font-size: 11px; color: #aaa; text-align: center; line-height: 1.4; }
+
+    /* Matrix */
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 10px;
+      align-items: stretch;
+    }
+    .matrix-dim {
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      background: #111; border-radius: 8px; padding: 10px 8px;
+    }
+    .matrix-dim span { font-size: 18px; font-weight: 900; color: #FF6B00; }
+    .matrix-dim small { font-size: 9px; color: rgba(255,255,255,.35); text-align: center; margin-top: 2px; }
+    .matrix-cell { border-radius: 8px; padding: 12px 14px; }
+    .matrix-cell.orange { background: #FFF0E5; border: 1px solid #FFD4A8; }
+    .matrix-cell.green  { background: #EDFBF1; border: 1px solid #BBF7D0; }
+    .cell-source { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+    .cell-source.o { color: #C24E00; }
+    .cell-source.g { color: #0D6E35; }
+    .matrix-cell p { font-size: 12px; color: #333; line-height: 1.5; font-style: italic; }
+
+    /* Trigger list */
+    .trigger-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    .trigger-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 14px 16px;
+    }
+    .trigger-num { font-size: 12px; font-weight: 800; color: #bbb; flex-shrink: 0; width: 22px; padding-top: 1px; }
+    .trigger-body { flex: 1; }
+    .trigger-body strong { font-size: 13px; font-weight: 700; color: #111; display: block; margin-bottom: 3px; }
+    .trigger-body span  { font-size: 12px; color: #888; }
+    .trigger-body .trigger-copy { font-size: 12px; color: #555; font-style: italic; margin-top: 5px; border-left: 2px solid #FF6B00; padding-left: 8px; }
+    .trigger-tags { display: flex; gap: 5px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; min-width: 80px; }
+
+    /* Do/Don't */
+    .dd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+    .dd-col-title {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 7px;
+    }
+    .dd-col-title.ok { color: #0D6E35; }
+    .dd-col-title.no { color: #C0392B; }
+    .dd-items { display: flex; flex-direction: column; gap: 6px; }
+    .dd-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px; border-radius: 8px; font-size: 13px; line-height: 1.5;
+    }
+    .dd-item.ok { background: #EDFBF1; color: #14532D; }
+    .dd-item.no { background: #FFF1F0; color: #7F1D1D; }
+    .dd-ic { flex-shrink: 0; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 1px; font-size: 9px; color: #fff; }
+    .dd-ic.ok { background: #16A34A; }
+    .dd-ic.no { background: #DC2626; }
+
+    /* Sessions */
+    .sessions-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 8px; }
+    .session-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; }
+    .session-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #aaa; margin-bottom: 10px; }
+    .session-pill-o { background: #FFF0E5; border-radius: 8px; padding: 10px 12px; font-size: 12px; color: #C24E00; font-weight: 500; line-height: 1.5; font-style: italic; margin-bottom: 8px; }
+    .session-pill-g { background: #EDFBF1; border-radius: 8px; padding: 10px 12px; font-size: 12px; color: #0D6E35; font-weight: 500; line-height: 1.5; font-style: italic; margin-bottom: 8px; }
+    .session-meta { font-size: 11px; color: #bbb; }
+
+    /* Numbers */
+    .numbers-block { background: #131420; border-radius: 12px; padding: 40px 48px; margin-top: 8px; }
+    .numbers-row {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 1px; background: rgba(255,255,255,.07); border-radius: 8px; overflow: hidden; margin-bottom: 28px;
+    }
+    .num-item { background: #131420; padding: 28px 20px; text-align: center; }
+    .num-big  { font-size: 56px; font-weight: 900; color: #FF6B00; letter-spacing: -2px; line-height: 1; }
+    .num-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.45); margin-top: 6px; }
+    .num-sub   { font-size: 10px; color: rgba(255,255,255,.2); margin-top: 3px; }
+    .formula   { text-align: center; font-size: 13px; color: rgba(255,255,255,.4); line-height: 1.8; }
+    .formula strong { color: #FF6B00; font-size: 18px; font-weight: 900; display: block; margin-top: 8px; letter-spacing: -.3px; }
+
+    /* HP layout blocks */
+    .hp-layout { margin-top: 16px; }
+    .hp-column { display: flex; flex-direction: column; gap: 6px; max-width: 420px; }
+    .hp-col-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #aaa; margin-bottom: 8px; }
+    .hp-block {
+      background: #fff; border: 1px solid #e0e0e0; border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; color: #444;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hp-block.highlight { background: #FFF5EE; border-color: #FFD4A8; color: #D95000; font-weight: 600; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+
+    /* Rule list */
+    .rule-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .rule-item { display: flex; align-items: flex-start; gap: 14px; background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 14px 16px; }
+    .rule-icon { flex-shrink: 0; margin-top: 2px; }
+    .rule-text { font-size: 13px; color: #444; line-height: 1.6; }
+    .rule-text strong { font-size: 14px; font-weight: 700; color: #111; display: block; margin-bottom: 3px; }
+
+    /* Onboarding states */
+    .onb-states { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .onb-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 18px 20px; }
+    .onb-card.full { grid-column: 1 / -1; }
+    .onb-tag { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+    .onb-tag.orange { color: #FF6B00; }
+    .onb-tag.grey   { color: #888; }
+    .onb-tag.red    { color: #dc2626; }
+    .onb-tag.green  { color: #16a34a; }
+    .onb-tag.blue   { color: #2563eb; }
+    .onb-tag.amber  { color: #d97706; }
+    .onb-title  { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 6px; line-height: 1.3; }
+    .onb-copy   { font-size: 12px; color: #888; margin-bottom: 4px; }
+    .onb-cta    { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-top: 8px; }
+    .onb-cta.orange { background: #FF6B00; color: #fff; }
+    .onb-cta.dark   { background: #111; color: #fff; }
+    .onb-cta.green  { background: #16a34a; color: #fff; }
+    .onb-cta.warn   { background: #d97706; color: #fff; }
+    .onb-pill { margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 12px; line-height: 1.4; }
+    .onb-pill.dark   { background: #1A1A2E; color: rgba(255,255,255,.8); }
+    .onb-pill.orange { background: #FFF0E5; color: #C24E00; }
+    .onb-pill.lg     { border-left: 3px solid #FF6B00; }
+    .onb-pill.md     { border-left: 2px solid #FF6B00; }
+    .onb-pill.warn   { background: #FFFBEB; color: #92400E; border-left: 2px solid #D97706; }
+    .onb-pill.none   { background: #f5f5f5; color: #aaa; font-style: italic; }
+    .onb-pill strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+    /* Guarantees */
+    .guarantee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .guarantee-item { display: flex; gap: 12px; background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 14px; }
+    .g-ic { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: #FF6B00; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+    .guarantee-item p { font-size: 13px; color: #333; line-height: 1.5; }
+    .guarantee-item strong { color: #111; }
+
+    /* Divider */
+    .divider { height: 1px; background: #e0e0e0; margin: 0 0 64px; }
+
+    /* Info box */
+    .info-box { padding: 14px 16px; border-radius: 10px; margin-top: 16px; font-size: 13px; line-height: 1.6; }
+    .info-box.orange { background: #FFF5EE; border: 1px solid #FFD4A8; color: #7C2D12; }
+    .info-box.grey   { background: #f0f0f0; color: #555; }
+    .info-box strong { color: #C24E00; }
+    .info-box.grey strong { color: #111; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-label">Gimme5 · Sprint 2 · Aprile 2026</div>
+    <div class="doc-title">Pillole Educative — Strategia</div>
+    <div class="doc-subtitle">Sistema adattivo: la HP cambia in base a chi sei. Il messaggio non saluta — istruisce.</div>
+    <div class="doc-meta">
+      <div class="meta-item"><strong>Team</strong> Cosmico × Gimme5</div>
+      <div class="meta-item"><strong>Status</strong> Da validare</div>
+      <div class="meta-item"><strong>Data</strong> Aprile 2026</div>
+    </div>
+  </div>
+
+
+  <!-- 01 IL PROBLEMA -->
+  <div class="section">
+    <div class="section-label">01</div>
+    <div class="section-title">Come funziona oggi l'educazione finanziaria in app</div>
+    <div class="section-body">
+      <p>Il confronto tra l'as-is e il sistema che stiamo progettando.</p>
+    </div>
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-card-title">Come funziona adesso</div>
+        <ul class="item-list">
+          <li>Contenuto statico, uguale per tutti gli utenti</li>
+          <li>Non distingue chi inizia da chi è esperto</li>
+          <li>Non reagisce ai comportamenti o agli eventi</li>
+          <li>Vissuto come rumore di fondo, ignorato</li>
+        </ul>
+      </div>
+      <div class="col-card tinted">
+        <div class="col-card-title orange">Come deve funzionare</div>
+        <ul class="item-list orange">
+          <li>Contenuto adattato allo stato dell'utente</li>
+          <li>Il greeting è un'istruzione, non un saluto</li>
+          <li>Il FOMO è quantificato con numeri reali</li>
+          <li>La pill scala con l'esperienza dell'utente</li>
+        </ul>
+      </div>
+    </div>
+    <div class="def-box" style="margin-top:16px;">
+      <p>Il messaggio non saluta. <strong>Il messaggio istruisce.</strong> L'utente deve capire in 2 secondi cosa deve fare e perché farlo adesso.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 02 COSA SONO -->
+  <div class="section">
+    <div class="section-label">02</div>
+    <div class="section-title">Cosa sono le pillole educative</div>
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-card-title">Educazione possibile</div>
+        <ul class="item-list">
+          <li>Messaggi generici, statici, uguali per tutti</li>
+          <li>Non legati al comportamento dell'utente</li>
+          <li>Vissuti come pubblicità o notifiche di sistema</li>
+        </ul>
+      </div>
+      <div class="col-card tinted">
+        <div class="col-card-title orange">Cultura finanziaria genuina</div>
+        <ul class="item-list orange">
+          <li>Contenuto pertinente, al momento giusto</li>
+          <li>Dimensione calibrata sul segmento utente</li>
+          <li>Sempre tappabile — ha sempre un approfondimento</li>
+        </ul>
+      </div>
+    </div>
+    <div class="def-box">
+      <p>La pillola è un contenuto contestuale che appare nella Homepage in risposta a un <strong>evento specifico</strong>, con dimensione e fonte calibrate sul <strong>segmento dell'utente</strong>. Non è decorazione — è sempre tappabile e ha sempre un approfondimento.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 03 GERARCHIA -->
+  <div class="section">
+    <div class="section-label">03</div>
+    <div class="section-title">Gerarchia delle pillole</div>
+    <div class="section-body">
+      <p>La pillola <strong>scende nella pagina e si rimpicciolisce</strong> man mano che l'utente acquista esperienza. Non è solo dimensione — cambia posizione e peso visivo.</p>
+    </div>
+
+    <div class="pill-visual">
+      <div class="pill-block">
+        <div class="pill-rect lg"></div>
+        <div class="pill-label">LG</div>
+        <div class="pill-sublabel">In cima<br>Nuovo C3</div>
+      </div>
+      <div class="pill-block">
+        <div class="pill-rect md"></div>
+        <div class="pill-label">MD</div>
+        <div class="pill-sublabel">A metà<br>Nuovo C1–C2<br>Fantasma · Pausa · Attivo</div>
+      </div>
+      <div class="pill-block">
+        <div class="pill-rect sm"></div>
+        <div class="pill-label">SM</div>
+        <div class="pill-sublabel">In fondo<br>Esperto</div>
+      </div>
+      <div class="pill-block">
+        <div class="pill-rect zero"></div>
+        <div class="pill-label">—</div>
+        <div class="pill-sublabel">Assente<br>Dormiente · A Rischio</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dim.</th>
+          <th>Segmento</th>
+          <th>Posizione HP</th>
+          <th>Fonte</th>
+          <th>Contenuto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>LG</strong></td>
+          <td>Nuovo C3A · C3B</td>
+          <td>In cima — protagonista</td>
+          <td><span class="tag tag-orange">Gimme5</span></td>
+          <td>FOMO quantificato — mesi e euro persi</td>
+        </tr>
+        <tr>
+          <td><strong>MD</strong></td>
+          <td>Nuovo C1 · C2 · Fantasma · In Pausa · Attivo</td>
+          <td>Dopo CTA o dopo grafico</td>
+          <td><span class="tag tag-orange">Gimme5</span> <span class="tag tag-green">Finanz</span></td>
+          <td>Dato reale Gimme5 o educazione finanziaria Finanz</td>
+        </tr>
+        <tr>
+          <td><strong>SM</strong></td>
+          <td>Esperto</td>
+          <td>In fondo — quasi invisibile</td>
+          <td><span class="tag tag-orange">Gimme5</span> <span class="tag tag-green">Finanz</span></td>
+          <td>Approfondimento avanzato, quasi ambient</td>
+        </tr>
+        <tr>
+          <td><strong>—</strong></td>
+          <td>Dormiente · A Rischio</td>
+          <td>Non presente</td>
+          <td>—</td>
+          <td>Nessuna pill — parla solo il bottom sheet</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 03B MATRICE -->
+  <div class="section">
+    <div class="section-label">03B</div>
+    <div class="section-title">3 dimensioni × 2 fonti — tutte le combinazioni</div>
+    <div class="section-body">
+      <p>Ogni dimensione può provenire da entrambe le fonti. La fonte determina colore e tono, non la posizione.</p>
+    </div>
+
+    <div style="margin-top:24px;">
+      <div class="matrix-row">
+        <div class="matrix-dim"><span>LG</span><small>Nuovo · in cima</small></div>
+        <div class="matrix-cell orange">
+          <div class="cell-source o">Gimme5</div>
+          <p>"I soldi senza meta finiscono. +91% di risparmio. Basta avere un obiettivo."</p>
+        </div>
+        <div class="matrix-cell green">
+          <div class="cell-source g">Finanz</div>
+          <p>"Hai già 2 mesi di cushion finanziario. La media italiana è 3 settimane."</p>
+        </div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-dim"><span>MD</span><small>Attivo · a metà</small></div>
+        <div class="matrix-cell orange">
+          <div class="cell-source o">Gimme5</div>
+          <p>"Sei al 15%. Con €10 al mese ci arrivi nel 2028." oppure "30 giorni di fila. Non ci arrivano in tanti fin qui."</p>
+        </div>
+        <div class="matrix-cell green">
+          <div class="cell-source g">Finanz</div>
+          <p>"Non è il fondo, è matematica del rischio. Diversifica il tuo portafoglio."</p>
+        </div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-dim"><span>SM</span><small>Esperto · in fondo</small></div>
+        <div class="matrix-cell orange">
+          <div class="cell-source o">Gimme5</div>
+          <p>"Sei nel top 15% degli utenti Gimme5 per risparmio mensile."</p>
+        </div>
+        <div class="matrix-cell green">
+          <div class="cell-source g">Finanz</div>
+          <p>"Asset allocation: cosa cambia dopo i 40."</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box grey" style="margin-top:16px;">
+      <strong>Nota:</strong> Ogni pillola ha sempre un approfondimento accessibile con tap — non è mai solo decorazione.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 04 5 SEGMENTI -->
+  <div class="section">
+    <div class="section-label">04</div>
+    <div class="section-title">Chi è l'utente e cosa vede in homepage</div>
+    <div class="section-body">
+      <p>Cinque segmenti, 9 stati totali. Stessa struttura HP, contenuti che cambiano.</p>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Segmento</th>
+          <th>Descrizione</th>
+          <th>Pill</th>
+          <th>Grafico</th>
+          <th>Bottom sheet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>01 Nuovo</strong><br><span style="font-size:11px;color:#888">4 sotto-stati</span></td>
+          <td>Prima volta in HP da onboarding. Ha il fondo. Regola e bonifico variabili.</td>
+          <td><span class="tag tag-orange">LG</span> o <span class="tag tag-grey">MD</span></td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>02 Fantasma</strong></td>
+          <td>Rientra dopo settimane. Zero versamenti. Soldi fermi.</td>
+          <td><span class="tag tag-grey">MD</span></td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>03 In Pausa</strong></td>
+          <td>Regola sospesa da 60+ giorni. Ha soldi ma l'automatismo è fermo.</td>
+          <td><span class="tag tag-warn">MD warn</span></td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>04 Dormiente</strong></td>
+          <td>Regola attiva ma non apre l'app da settimane. I soldi lavorano in silenzio.</td>
+          <td><span class="tag tag-grey">—</span></td>
+          <td>Piatto · muted</td>
+          <td>Sì · auto</td>
+        </tr>
+        <tr>
+          <td><strong>05 A Rischio</strong></td>
+          <td>Mercati in calo. Portafoglio negativo questa settimana.</td>
+          <td><span class="tag tag-grey">—</span></td>
+          <td>Decrescente · rosso</td>
+          <td>Sì · dopo 48h</td>
+        </tr>
+        <tr>
+          <td><strong>06 Attivo</strong></td>
+          <td>Risparmia regolarmente. Saldo e regola attivi. Il core user.</td>
+          <td><span class="tag tag-orange">MD</span></td>
+          <td>Crescente · verde</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>07 Esperto</strong></td>
+          <td>6+ mesi, avanzato. Più fondi, più obiettivi, layout denso.</td>
+          <td><span class="tag tag-grey">SM</span></td>
+          <td>Crescente · verde</td>
+          <td>No</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 05 COME L'ONBOARDING DECIDE LA PRIMA HP -->
+  <div class="section">
+    <div class="section-label">05</div>
+    <div class="section-title">Come l'onboarding decide la prima homepage</div>
+    <div class="section-body">
+      <p>Il fondo è sempre creato — è obbligatorio in onboarding. Regola e bonifico sono opzionali e determinano il sotto-stato del Nuovo utente.</p>
+    </div>
+
+    <div class="onb-states">
+
+      <div class="onb-card">
+        <div class="onb-tag orange">C1 · Tutto fatto + bonifico</div>
+        <div class="onb-title">Filippo la tua regola è attiva, manca un passo</div>
+        <div class="onb-copy">Nessun obiettivo ancora · €0,00</div>
+        <div class="onb-cta orange">Imposta il tuo primo obiettivo</div>
+        <div class="onb-pill dark md">
+          <strong>I soldi senza meta finiscono.</strong>
+          +91% di risparmio. Basta avere un obiettivo.
+        </div>
+      </div>
+
+      <div class="onb-card">
+        <div class="onb-tag orange">C2 · Bonifico fatto, no regola</div>
+        <div class="onb-title">Filippo hai €10, manca solo la regola</div>
+        <div class="onb-copy">Nessuna regola attiva · €10,00</div>
+        <div class="onb-cta orange">Attiva il risparmio automatico</div>
+        <div class="onb-pill orange md">
+          <strong>Attiva il versamento automatico.</strong>
+          Con €50/mese in 6 mesi puoi guadagnare fino a €300.
+        </div>
+      </div>
+
+      <div class="onb-card">
+        <div class="onb-tag orange">C3A · Tutto skippato · obiettivo = risparmiare</div>
+        <div class="onb-title">Benvenuto Filippo, per iniziare a risparmiare versa e imposta la regola</div>
+        <div class="onb-copy">Nessun versamento · €0,00 (piccolo)</div>
+        <div class="onb-cta orange">Versa e imposta la tua prima regola</div>
+        <div class="onb-pill orange lg">
+          <strong>Inizia adesso.</strong>
+          Con €50/mese in 6 mesi metti da parte circa €300.
+        </div>
+      </div>
+
+      <div class="onb-card">
+        <div class="onb-tag orange">C3B · Tutto skippato · obiettivo = guadagnare</div>
+        <div class="onb-title">Benvenuto Filippo, per iniziare a guadagnare versa e imposta la regola</div>
+        <div class="onb-copy">Nessun versamento · €0,00 (piccolo)</div>
+        <div class="onb-cta orange">Versa e inizia subito a guadagnare</div>
+        <div class="onb-pill orange lg">
+          <strong>Inizia adesso.</strong>
+          Con €50/mese sarebbero già €120 versati. Non perdere tempo.
+        </div>
+      </div>
+
+      <div class="onb-card">
+        <div class="onb-tag grey">Fantasma · Rientra dopo settimane</div>
+        <div class="onb-title">Bentornato Filippo, sono 4 giorni. Zero versamenti.</div>
+        <div class="onb-copy">Nessun obiettivo · €10,00</div>
+        <div class="onb-cta orange">Versa e imposta la tua prima regola</div>
+        <div class="onb-pill orange md">
+          <strong>Inizia adesso.</strong>
+          Con €50/mese sarebbero stati €240 versati. Non perdere tempo.
+        </div>
+      </div>
+
+      <div class="onb-card">
+        <div class="onb-tag amber">In Pausa · Regola ferma 60+ gg</div>
+        <div class="onb-title">Bentornato Filippo, la tua regola è ferma da 60 giorni.</div>
+        <div class="onb-copy">Regola sospesa · €10,00</div>
+        <div class="onb-cta warn">Riprendi a risparmiare</div>
+        <div class="onb-pill warn">
+          <strong>Hai saltato 2 mesi.</strong>
+          La tua regola era di €50/mese. Riprendi adesso.
+        </div>
+      </div>
+
+      <div class="onb-card">
+        <div class="onb-tag grey">Dormiente · Non apre da 63 giorni</div>
+        <div class="onb-title">Bentornato Filippo, da quanto tempo!</div>
+        <div class="onb-copy">€187,50 · grafico piatto · obiettivo visibile</div>
+        <div class="onb-pill none">
+          Nessun pill — bottom sheet: "Il tuo piano ha lavorato per te. In 63 giorni hai accumulato €90. Sei al 37% della Vacanza Grecia." → CTA "Continua così"
+        </div>
+      </div>
+
+      <div class="onb-card">
+        <div class="onb-tag red">A Rischio · Mercati in calo</div>
+        <div class="onb-title">Ciao Filippo, mercati giù. Niente panico.</div>
+        <div class="onb-copy">€342,00 · ↓ –€11,20 · grafico rosso</div>
+        <div class="onb-pill none">
+          Nessun pill prime 24h — bottom sheet dopo 48h: "I mercati hanno corretto. –€11 questa settimana. Per la Vacanza Grecia non cambia nulla." → CTA "Ok, Continua"
+        </div>
+      </div>
+
+      <div class="onb-card full">
+        <div class="onb-tag green">Attivo · Esperto · Tutto ok</div>
+        <div class="onb-title">Bentornato Filippo — grafico verde · quick actions · pill progressiva</div>
+        <div class="onb-copy">Attivo: €1.840,00 · +€124 · +7,2% · pill MD · Esperto: €8.420,00 · pill SM</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;">
+          <div class="onb-pill orange md"><strong>15% fatto. Nel 2028 ci sei.</strong>Con €10/mese ci arrivi nel 2028.</div>
+          <div class="onb-pill orange md" style="background:#EDFBF1;color:#0D6E35;border-left-color:#16a34a;"><strong>Non è il fondo, è matematica.</strong>Diversifica il tuo portafoglio. <span style="font-size:10px;color:#aaa;">(Finanz)</span></div>
+          <div class="onb-pill orange md"><strong>30 giorni di fila.</strong>Non ci arrivano in tanti fin qui.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 06 TRIGGER -->
+  <div class="section">
+    <div class="section-label">06</div>
+    <div class="section-title">I trigger che attivano una pillola</div>
+    <div class="section-body">
+      <p>La pillola non viene mostrata casualmente. Si attiva in risposta a eventi specifici. Ogni trigger ha un segmento, un copy e una logica di timing.</p>
+    </div>
+
+    <div class="trigger-list">
+
+      <div class="trigger-item">
+        <div class="trigger-num">01</div>
+        <div class="trigger-body">
+          <strong>Primo atterraggio post-onboarding</strong>
+          <span>Utente entra in HP per la prima volta dopo aver creato il fondo. Stato dipende da regola e bonifico.</span>
+          <div class="trigger-copy">"Benvenuto Filippo, per iniziare a [obiettivo] versa e imposta la regola"</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-orange">Nuovo</span>
+          <span class="tag tag-orange">Gimme5</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">02</div>
+        <div class="trigger-body">
+          <strong>Regola attiva, manca obiettivo</strong>
+          <span>L'utente ha impostato la regola e inviato il bonifico ma non ha ancora un obiettivo.</span>
+          <div class="trigger-copy">"I soldi senza meta finiscono." / "+91% di risparmio. Basta avere un obiettivo."</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-orange">Nuovo C1</span>
+          <span class="tag tag-dark">DARK MD</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">03</div>
+        <div class="trigger-body">
+          <strong>Bonifico fatto, nessuna regola automatica</strong>
+          <span>Soldi presenti ma nessun addebito ricorrente. L'automazione è il passo mancante.</span>
+          <div class="trigger-copy">"Attiva il versamento automatico." / "Con €50/mese in 6 mesi puoi guadagnare fino a €300."</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-orange">Nuovo C2</span>
+          <span class="tag tag-orange">ORANGE MD</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">04</div>
+        <div class="trigger-body">
+          <strong>Rientro dopo inattività — zero versamenti</strong>
+          <span>Utente che rientra dopo giorni/settimane senza aver mai versato. Fantasma.</span>
+          <div class="trigger-copy">"Con €50/mese sarebbero stati €240 versati. Non perdere tempo."</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-grey">Fantasma</span>
+          <span class="tag tag-orange">ORANGE MD</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">05</div>
+        <div class="trigger-body">
+          <strong>Regola sospesa da 60+ giorni</strong>
+          <span>L'utente aveva una regola attiva ma è stata sospesa. Ha comunque dei soldi in app.</span>
+          <div class="trigger-copy">"Hai saltato 2 mesi." / "La tua regola era di €50/mese. Riprendi adesso."</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-warn">In Pausa</span>
+          <span class="tag tag-warn">WARN MD</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">06</div>
+        <div class="trigger-body">
+          <strong>Rientro dopo lunga assenza — regola attiva</strong>
+          <span>L'utente non apriva l'app da settimane ma la regola ha continuato a lavorare. Bottom sheet rassicurante.</span>
+          <div class="trigger-copy">"Il tuo piano ha lavorato per te. In 63 giorni hai accumulato €90." → CTA "Continua così"</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-grey">Dormiente</span>
+          <span class="tag tag-grey">NESSUN PILL</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">07</div>
+        <div class="trigger-body">
+          <strong>Calo di mercato rilevante</strong>
+          <span>Il portafoglio è in negativo questa settimana. Prime 24h: silenzio. Dopo 48h: bottom sheet rassicurante.</span>
+          <div class="trigger-copy">"I mercati hanno corretto. Per la Vacanza Grecia non cambia nulla se continui a versare." → CTA "Ok, Continua"</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-grey">A Rischio</span>
+          <span class="tag tag-grey">NESSUN PILL</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">08</div>
+        <div class="trigger-body">
+          <strong>Traguardo obiettivo raggiunto</strong>
+          <span>25%, 50%, 75%, 100% dell'obiettivo completato. La pill celebra il progresso.</span>
+          <div class="trigger-copy">"15% fatto. Nel 2028 ci sei." / "Sei a metà strada. Il 2028 è vicino."</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-green">Attivo</span>
+          <span class="tag tag-orange">ORANGE MD</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">09</div>
+        <div class="trigger-body">
+          <strong>Streak versamenti consecutivi</strong>
+          <span>30, 60, 90 giorni consecutivi di versamenti. La pill celebra l'abitudine.</span>
+          <div class="trigger-copy">"30 giorni di fila. Non ci arrivano in tanti fin qui."</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-green">Attivo</span>
+          <span class="tag tag-orange">ORANGE MD</span>
+        </div>
+      </div>
+
+      <div class="trigger-item">
+        <div class="trigger-num">10</div>
+        <div class="trigger-body">
+          <strong>Apertura periodica (rotazione contenuto)</strong>
+          <span>Accesso regolare — la pill ruota con nuovo contenuto ogni sessione. Max 1 pill per sessione.</span>
+          <div class="trigger-copy">Contenuto Gimme5 o Finanz — si alterna a ogni accesso</div>
+        </div>
+        <div class="trigger-tags">
+          <span class="tag tag-green">Attivo</span>
+          <span class="tag tag-blue">Esperto</span>
+          <span class="tag tag-green">Finanz</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="info-box orange">
+      <strong>Regola timing:</strong> MAX 1 pill per sessione. Dormiente e A Rischio non ricevono pill — l'utente è fragile, non si preme. Il bottom sheet sostituisce la pill in questi stati.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 07 COSA È E COSA NON È -->
+  <div class="section">
+    <div class="section-label">07</div>
+    <div class="section-title">Cosa è la pillola e cosa non ti fa mai</div>
+    <div class="dd-grid">
+      <div>
+        <div class="dd-col-title ok">✓ Sì — cosa fa</div>
+        <div class="dd-items">
+          <div class="dd-item ok"><div class="dd-ic ok">✓</div>Usa numeri reali dell'utente (giorni, €, %)</div>
+          <div class="dd-item ok"><div class="dd-ic ok">✓</div>Dà un'istruzione chiara e specifica</div>
+          <div class="dd-item ok"><div class="dd-ic ok">✓</div>È sempre tappabile — apre un approfondimento</div>
+          <div class="dd-item ok"><div class="dd-ic ok">✓</div>Scala con l'esperienza (LG → MD → SM)</div>
+          <div class="dd-item ok"><div class="dd-ic ok">✓</div>Tono umano, diretto, quasi parlato</div>
+        </div>
+      </div>
+      <div>
+        <div class="dd-col-title no">✗ No — cosa non fa mai</div>
+        <div class="dd-items">
+          <div class="dd-item no"><div class="dd-ic no">✗</div>Usa linguaggio finanziario complesso</div>
+          <div class="dd-item no"><div class="dd-ic no">✗</div>È accusatoria o crea senso di colpa</div>
+          <div class="dd-item no"><div class="dd-ic no">✗</div>Appare più di 1 volta per sessione</div>
+          <div class="dd-item no"><div class="dd-ic no">✗</div>È presente quando l'utente è fragile (Dormiente · A Rischio)</div>
+          <div class="dd-item no"><div class="dd-ic no">✗</div>È decorativa — senza contenuto e senza azione</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 08 COME EVOLVE IN 5 STATI -->
+  <div class="section">
+    <div class="section-label">08</div>
+    <div class="section-title">Come evolve la homepage in 5 sessioni</div>
+    <div class="section-body">
+      <p>Stesso utente, sessioni diverse. La pill si rimpicciolisce, il contenuto si sposta, la HP si densifica.</p>
+    </div>
+    <div class="sessions-row">
+      <div class="session-card">
+        <div class="session-label">Sessione 1 — Nuovo</div>
+        <div class="session-pill-o">"Inizia adesso. Con €50/mese metti da parte €300 in 6 mesi."</div>
+        <div class="session-meta">Pill LG orange in cima · nessun grafico · nessun obiettivo</div>
+      </div>
+      <div class="session-card">
+        <div class="session-label">Sessione 2–4 — Attivo</div>
+        <div class="session-pill-o">"15% fatto. Nel 2028 ci sei."</div>
+        <div class="session-meta">Pill MD a metà · grafico verde · obiettivo visibile</div>
+      </div>
+      <div class="session-card">
+        <div class="session-label">Sessione 5+ — Esperto</div>
+        <div class="session-pill-g">"Asset allocation: cosa cambia dopo i 40."</div>
+        <div class="session-meta">Pill SM in fondo · Finanz · layout denso</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+
+  <!-- 09 NUMERI -->
+  <div class="section">
+    <div class="section-label">09</div>
+    <div class="section-title">Le 5 cose da tenere in testa</div>
+    <div class="numbers-block">
+      <div class="numbers-row">
+        <div class="num-item">
+          <div class="num-big">3</div>
+          <div class="num-label">Dimensioni pill</div>
+          <div class="num-sub">LG · MD · SM</div>
+        </div>
+        <div class="num-item">
+          <div class="num-big">2</div>
+          <div class="num-label">Fonti contenuto</div>
+          <div class="num-sub">Gimme5 · Finanz</div>
+        </div>
+        <div class="num-item">
+          <div class="num-big">9</div>
+          <div class="num-label">Stati utente</div>
+          <div class="num-sub">4 Nuovo · 1 Fantasma · 1 Pausa · 1 Dormiente · 1 Rischio · 1 Attivo+</div>
+        </div>
+        <div class="num-item">
+          <div class="num-big">1</div>
+          <div class="num-label">Pill per sessione</div>
+          <div class="num-sub">Mai di più</div>
+        </div>
+      </div>
+      <div class="formula">
+        La pillola giusta + persona giusta + momento giusto
+        <strong>= messaggio che viene letto</strong>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 10 GARANZIE -->
+  <div class="section">
+    <div class="section-label">10</div>
+    <div class="section-title">Cosa garantisce il sistema — sempre</div>
+    <div class="guarantee-grid">
+      <div class="guarantee-item">
+        <div class="g-ic"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p><strong>Max 1 pill per sessione.</strong> L'utente non viene sommerso di messaggi. Una pill, un messaggio, un'azione.</p>
+      </div>
+      <div class="guarantee-item">
+        <div class="g-ic"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p><strong>Ogni pill è tappabile.</strong> Tap → schermata di approfondimento. Non è mai solo decorazione.</p>
+      </div>
+      <div class="guarantee-item">
+        <div class="g-ic"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p><strong>Silenzio quando l'utente è fragile.</strong> Dormiente e A Rischio non ricevono pill. Parla il bottom sheet, con tono rassicurante.</p>
+      </div>
+      <div class="guarantee-item">
+        <div class="g-ic"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p><strong>FOMO quantificata, mai accusatoria.</strong> "€240 che avresti versato" non è colpa — è informazione. Nessuna frase del tipo "X giorni che non investi".</p>
+      </div>
+      <div class="guarantee-item">
+        <div class="g-ic"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p><strong>Il greeting è già l'istruzione.</strong> "Benvenuto Filippo" non basta. "Filippo la tua regola è attiva, manca un passo" dice già cosa fare.</p>
+      </div>
+      <div class="guarantee-item">
+        <div class="g-ic"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <p><strong>Continuità dall'onboarding all'app.</strong> L'utente non riceve un'esperienza diversa entrando in app — è la stessa voce, lo stesso tono.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

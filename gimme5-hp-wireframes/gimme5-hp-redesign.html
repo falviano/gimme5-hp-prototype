@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 · HP Redesign · Casistiche Nuovi Utenti</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Archivo:wght@800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:'Inter',sans-serif;color:#fff;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+.topbar{height:44px;background:#0a0a0a;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
+.tb-logo{font-family:'Archivo',sans-serif;font-size:13px;font-weight:900;color:#fff;letter-spacing:-.3px;white-space:nowrap}
+.tb-sep{width:1px;height:18px;background:#222;flex-shrink:0}
+.tb-tag{font-size:9px;font-weight:700;background:#1a1a1a;border:1px solid #2a2a2a;color:#555;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.tb-name{font-size:11px;font-weight:700;color:#999;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-counter{font-size:11px;color:#444;white-space:nowrap;padding:0 4px}
+.tb-btn{width:26px;height:26px;background:#1a1a1a;border:1px solid #252525;border-radius:6px;color:#777;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;user-select:none}
+.tb-btn:hover{background:#222;color:#ccc}
+.layout{flex:1;display:flex;overflow:hidden}
+.sidebar{width:196px;background:#0c0c0c;border-right:1px solid #1a1a1a;overflow-y:auto;flex-shrink:0;padding:6px 0 16px}
+.sl-grp{padding:10px 12px 3px;font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#282828}
+.sl-item{padding:6px 10px 6px 14px;cursor:pointer;border-left:2px solid transparent}
+.sl-item:hover{background:#131313}
+.sl-item.active{background:#161616;border-left-color:#555}
+.sl-num{font-size:8px;font-weight:800;color:#333;display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase}
+.sl-title{font-size:10px;font-weight:600;color:#555;line-height:1.3}
+.sl-item.active .sl-title{color:#ccc}
+.sl-item.active .sl-num{color:#666}
+.sl-sub{font-size:9px;color:#282828;margin-top:1px}
+.sl-item.active .sl-sub{color:#444}
+.phonewrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;background:#161616;border:1px solid #222;border-radius:50%;color:#555;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;user-select:none}
+.nav-arrow:hover{background:#1e1e1e;color:#ccc}
+.nav-arrow.left{left:12px}
+.nav-arrow.right{right:12px}
+.screens{position:relative}
+.scr{display:none}
+.scr.active{display:block}
+.phone{width:320px;background:#1c1c1e;border-radius:46px;padding:10px;box-shadow:0 32px 80px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.05)}
+.screen{background:#f7f7f7;border-radius:36px;overflow:hidden;display:flex;flex-direction:column;height:650px;position:relative}
+
+/* STATUS BAR */
+.sb{height:26px;padding:7px 18px 0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.sb-t{font-size:11px;font-weight:700;color:#111}
+.sb-icons{display:flex;gap:4px;align-items:center}
+.sb-dot{width:4px;height:4px;border-radius:50%;background:#aaa}
+
+/* HEADER DINAMICO */
+.hp-head{padding:12px 16px 8px;flex-shrink:0}
+.hp-head-title{font-size:17px;font-weight:800;color:#111;line-height:1.2;letter-spacing:-.3px;margin-bottom:3px}
+.hp-head-sub{font-size:12px;color:#aaa;line-height:1.3}
+
+/* TOGGLE */
+.toggle{display:flex;background:#e4e4e4;border-radius:20px;padding:2px;margin:0 14px 10px;flex-shrink:0}
+.tg{flex:1;text-align:center;font-size:10px;font-weight:700;padding:5px 0;border-radius:16px;color:#999;cursor:pointer;user-select:none}
+.tg.on{background:#fff;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* PORTAFOGLIO VALORE */
+.porto-val{padding:2px 16px 10px;flex-shrink:0}
+.porto-val-label{font-size:10px;color:#aaa;margin-bottom:2px;display:flex;align-items:center;gap:4px}
+.porto-val-n{font-size:28px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;letter-spacing:-1.2px;line-height:1}
+
+/* CTA OUTLINE */
+.cta-outline{margin:0 14px 10px;border:1.5px dashed #ccc;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;background:#fff;flex-shrink:0}
+.cta-outline-plus{font-size:16px;color:#555;flex-shrink:0}
+.cta-outline-lbl{font-size:12px;font-weight:700;color:#333}
+
+/* PILL DARK (educativa) */
+.pill-dark{margin:0 14px 8px;border-radius:16px;background:#111;padding:16px 14px 14px;position:relative;overflow:hidden;flex-shrink:0}
+.pill-dark-label{font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.pill-dark-title{font-size:18px;font-weight:900;color:#fff;line-height:1.15;letter-spacing:-.3px;margin-bottom:4px;font-family:'Archivo',sans-serif}
+.pill-dark-sub{font-size:10px;color:rgba(255,255,255,.45);line-height:1.4;margin-bottom:28px}
+.pill-dark-brand{font-size:8px;font-weight:800;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.5px}
+.pill-dark-illus{position:absolute;bottom:0;right:0;width:80px;height:70px;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 8px 8px 0}
+.pill-dark-close{position:absolute;top:10px;right:10px;width:20px;height:20px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.5);cursor:pointer}
+.illus-coins{display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+.coin{border-radius:50%;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25)}
+
+/* PILL FOMO (salmon) */
+.pill-fomo{margin:0 14px 8px;border-radius:16px;background:#f0c8b8;padding:14px 14px 12px;position:relative;overflow:hidden;flex-shrink:0}
+.pill-fomo-title{font-size:18px;font-weight:900;color:#1a0800;line-height:1.15;letter-spacing:-.3px;margin-bottom:4px;font-family:'Archivo',sans-serif}
+.pill-fomo-sub{font-size:10px;color:rgba(0,0,0,.5);line-height:1.4;margin-bottom:24px}
+.pill-fomo-brand{font-size:8px;font-weight:800;color:rgba(0,0,0,.25);text-transform:uppercase;letter-spacing:.5px}
+.pill-fomo-close{position:absolute;top:10px;right:10px;width:20px;height:20px;background:rgba(0,0,0,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(0,0,0,.4);cursor:pointer}
+
+/* SEZIONE LABEL */
+.sec-lbl{padding:0 16px;margin-bottom:6px;font-size:10px;font-weight:700;color:#aaa;flex-shrink:0}
+
+/* BOTTOM NAV */
+.bnav{height:56px;border-top:1px solid #e8e8e8;background:#fff;display:flex;align-items:center;justify-content:space-around;flex-shrink:0;padding:0 4px}
+.bn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;flex:1}
+.bn-ic{width:20px;height:14px;background:#ddd;border-radius:3px}
+.bn.on .bn-ic{background:#111}
+.bn-l{font-size:7.5px;font-weight:600;color:#bbb}
+.bn.on .bn-l{color:#111;font-weight:700}
+.bn-plus{width:36px;height:36px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;line-height:1;margin-top:-12px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+
+/* BODY SCROLLABLE */
+.body{flex:1;overflow-y:auto;padding-bottom:4px}
+
+/* OBIETTIVI EMPTY */
+.obj-empty{margin:8px 14px;background:#ebebeb;border-radius:16px;padding:28px 16px;text-align:center}
+.obj-empty-ic{font-size:28px;margin-bottom:10px}
+.obj-empty-title{font-size:13px;font-weight:800;color:#555;margin-bottom:4px}
+.obj-empty-sub{font-size:10px;color:#aaa;line-height:1.5}
+
+/* OBIETTIVO HERO CARD */
+.obj-hero{margin:4px 14px 8px;border-radius:16px;overflow:hidden;position:relative;min-height:160px}
+.obj-hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#5a6a5a 0%,#8a9a7a 100%)}
+.obj-hero-bg::after{content:'📸';position:absolute;top:10px;right:12px;font-size:13px;opacity:.3}
+.obj-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.75) 100%)}
+.obj-hero-inner{position:relative;z-index:1;padding:14px 14px 13px;display:flex;flex-direction:column;min-height:160px}
+.obj-hero-eye{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.6);margin-bottom:4px}
+.obj-hero-name{font-size:19px;font-weight:900;color:#fff;letter-spacing:-.4px;line-height:1.1;margin-bottom:auto;padding-bottom:12px;font-family:'Archivo',sans-serif;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.obj-hero-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.obj-hero-curr{font-size:22px;font-weight:900;color:#fff;font-family:'Archivo',sans-serif;letter-spacing:-1px}
+.obj-hero-tgt{font-size:11px;color:rgba(255,255,255,.6);font-family:'Archivo',sans-serif;font-weight:700}
+.obj-hero-bar{height:4px;background:rgba(255,255,255,.25);border-radius:3px;margin-bottom:5px;overflow:hidden}
+.obj-hero-fill{height:100%;background:#fff;border-radius:3px}
+.obj-hero-proj{font-size:9px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:3px 9px;display:inline-block;margin-bottom:10px}
+.obj-hero-btns{display:flex;gap:6px}
+.obj-hero-btn{flex:1;padding:9px;border-radius:11px;font-size:10px;font-weight:700;text-align:center;cursor:pointer;border:none}
+.obj-hero-btn.p{background:#fff;color:#111}
+.obj-hero-btn.s{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3)}
+
+/* OBIETTIVO COMPACT */
+.obj-compact-card{margin:0 14px 6px;background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #ebebeb;display:flex;align-items:center;gap:10px}
+.obj-compact-ic{font-size:14px;flex-shrink:0}
+.obj-compact-body{flex:1;min-width:0}
+.obj-compact-name{font-size:11px;font-weight:700;color:#111;margin-bottom:3px}
+.obj-compact-bar{height:4px;background:#ebebeb;border-radius:2px;overflow:hidden;margin-bottom:2px}
+.obj-compact-fill{height:100%;background:#777;border-radius:2px}
+.obj-compact-meta{font-size:8.5px;color:#bbb}
+.obj-compact-pct{font-size:10px;font-weight:800;color:#555}
+
+/* PIANO ROW */
+.piano-row{margin:0 14px 6px;background:#fff;border-radius:10px;padding:9px 12px;display:flex;align-items:center;gap:10px;border:1px solid #ebebeb}
+.piano-ic{font-size:13px;flex-shrink:0}
+.piano-body{flex:1}
+.piano-lbl{font-size:10px;font-weight:700;color:#111}
+.piano-sub{font-size:8.5px;color:#aaa;margin-top:1px}
+.piano-badge{font-size:8.5px;font-weight:700;background:#ebebeb;border-radius:6px;padding:2px 8px;color:#555;white-space:nowrap}
+
+/* PORTAFOGLIO VIEW */
+.porto-header{padding:12px 16px 8px;flex-shrink:0}
+.porto-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa;margin-bottom:4px}
+.porto-big{font-size:30px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;letter-spacing:-1.3px;line-height:1;margin-bottom:2px}
+.porto-sub{font-size:10px;color:#aaa}
+.porto-chart{margin:0 14px 8px;height:80px;background:#e8e8e8;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.porto-chart-lbl{font-size:9px;color:#bbb}
+.fondo-row{margin:0 14px 5px;background:#fff;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;border:1px solid #ebebeb}
+.fondo-abbr{width:34px;height:34px;background:#e4e4e4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:900;color:#888;flex-shrink:0;text-align:center;line-height:1.2}
+.fondo-body{flex:1}
+.fondo-name{font-size:10px;font-weight:700;color:#111}
+.fondo-sub{font-size:8.5px;color:#aaa;margin-top:1px}
+.fondo-val{font-size:11px;font-weight:800;color:#333}
+.piano-libero{margin:0 14px 5px;background:#f8f8f8;border-radius:10px;padding:9px 12px;border:1px dashed #d8d8d8;display:flex;align-items:center;gap:8px}
+.pl-dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0}
+.pl-body{flex:1}
+.pl-lbl{font-size:9.5px;font-weight:600;color:#888}
+.pl-sub{font-size:8.5px;color:#bbb;margin-top:1px}
+.porto-nudge{margin:4px 14px 0;background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #ebebeb;display:flex;align-items:center;gap:10px}
+.porto-nudge-body{flex:1}
+.porto-nudge-lbl{font-size:10px;font-weight:700;color:#333}
+.porto-nudge-sub{font-size:8.5px;color:#aaa;margin-top:2px}
+.porto-nudge-cta{font-size:9px;font-weight:700;color:#333;white-space:nowrap;text-decoration:underline}
+.porto-empty{margin:20px 14px;text-align:center}
+.porto-empty-ic{font-size:30px;margin-bottom:10px}
+.porto-empty-title{font-size:13px;font-weight:700;color:#888;margin-bottom:4px}
+.porto-empty-sub{font-size:10px;color:#bbb;line-height:1.5}
+
+/* ALERT */
+.alert-row{margin:4px 14px 6px;background:#fff8ec;border-radius:10px;padding:9px 12px;display:flex;align-items:center;gap:8px;border:1px solid #f0e0c0}
+.alert-ic{font-size:13px}
+.alert-t{font-size:10px;font-weight:700;color:#555;flex:1;line-height:1.3}
+
+/* CELEBRAZIONE */
+.celeb{margin:6px 14px 8px;background:#111;border-radius:14px;padding:14px;text-align:center}
+.celeb-ic{font-size:22px;margin-bottom:6px}
+.celeb-t{font-size:14px;font-weight:900;color:#fff;font-family:'Archivo',sans-serif;margin-bottom:3px}
+.celeb-s{font-size:10px;color:rgba(255,255,255,.45);line-height:1.4}
+
+/* DORMIENTE */
+.sleep-block{margin:6px 14px 8px;background:#f5f5f5;border-radius:14px;padding:18px;text-align:center;border:1px solid #e8e8e8}
+.sleep-ic{font-size:24px;margin-bottom:8px}
+.sleep-t{font-size:14px;font-weight:800;color:#777;margin-bottom:4px}
+.sleep-s{font-size:10px;color:#aaa;line-height:1.4}
+
+/* ── GAUGE SEMICIRCOLO ── */
+.gauge-wrap{flex-shrink:0;padding:0 14px}
+.gauge-flat{padding:14px 0 8px;text-align:center}
+.gauge-flat-lbl{font-size:8px;color:#aaa;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.gauge-flat-val{font-family:'Archivo',sans-serif;font-size:28px;font-weight:900;color:#111;letter-spacing:-1px;line-height:1;margin-bottom:3px}
+.gauge-flat-sub{font-size:8.5px;color:#aaa;margin-bottom:10px}
+.gauge-flat-bar{height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden}
+.gauge-flat-fill{height:100%;background:#333;border-radius:3px}
+.gauge-rend{display:flex;justify-content:center;gap:7px;margin:2px 0 7px;flex-shrink:0}
+.rend-chip{font-size:9px;font-weight:700;padding:2px 9px;border-radius:10px;background:#f0f0f0;color:#555}
+.rend-chip.pos{background:#e6ede6;color:#3a6a3a}
+.rend-chip.neg{background:#ede6e6;color:#8a4040}
+.gauge-btns{display:flex;justify-content:center;gap:22px;margin:0 0 8px;flex-shrink:0}
+.gauge-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.gauge-btn-ic{width:34px;height:34px;border-radius:50%;background:#f0f0f0;border:1px solid #e0e0e0}
+.gauge-btn-l{font-size:7.5px;color:#aaa;font-weight:700;text-align:center}
+
+/* ── OBIETTIVO CARD LARGE (con area immagine) ── */
+.obj-card{margin:0 14px 8px;background:#f0f0f0;border-radius:16px;padding:12px 13px 11px;flex-shrink:0}
+.obj-card-img{height:60px;background:#e0e0e0;border-radius:10px;margin-bottom:10px;position:relative;overflow:hidden}
+.obj-card-img::after{content:'📸';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;opacity:.25}
+.obj-card-name{font-size:16px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;line-height:1.2;margin-bottom:10px}
+.obj-card-progress-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.obj-card-curr{font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif}
+.obj-card-target{font-size:13px;font-weight:700;color:#111;font-family:'Archivo',sans-serif}
+.obj-card-bar{height:5px;background:#d8d8d8;border-radius:3px;overflow:hidden;margin-bottom:5px}
+.obj-card-fill{height:100%;background:#555;border-radius:3px}
+.obj-card-pct-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.obj-card-pct-lbl{font-size:9.5px;color:#666;font-weight:500}
+.obj-card-date{font-size:9.5px;color:#666}
+.obj-card-attrs{display:flex;flex-wrap:wrap;gap:6px}
+.obj-attr{font-size:9px;font-weight:600;color:#333;background:#fff;border:1px solid #d8d8d8;border-radius:20px;padding:4px 10px;display:flex;align-items:center;gap:5px}
+.obj-attr.pausa{background:#fff8ee;border-color:#e8d8b0;color:#886620}
+.obj-attr.neg{background:#fff0f0;border-color:#e8c0c0;color:#882020}
+
+/* ── OBIETTIVO CARD MEDIUM (senza area immagine) ── */
+.obj-card-md{margin:0 14px 8px;background:#f0f0f0;border-radius:16px;padding:12px 13px 11px;flex-shrink:0}
+.obj-card-md .obj-card-name{margin-bottom:8px}
+
+/* ── OBIETTIVO CARD FRAME (small) ── */
+.obj-card-sm{margin:0 14px 6px;background:#f0f0f0;border-radius:14px;padding:10px 12px;flex-shrink:0}
+.obj-card-sm-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.obj-card-sm-name{font-size:10px;font-weight:700;color:#111}
+.obj-card-sm-amounts{font-size:9px;color:#666}
+.obj-card-sm-pct{font-size:22px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;letter-spacing:-1px;line-height:1.1}
+.obj-card-sm-bot{display:flex;justify-content:flex-end;margin-top:2px}
+.obj-card-sm-chip{font-size:8.5px;font-weight:600;color:#333;background:#fff;border:1px solid #d8d8d8;border-radius:20px;padding:3px 9px;display:flex;align-items:center;gap:4px}
+
+/* ── REGOLA/VERS ROWS COMPATTE ── */
+.reg-row{margin:0 14px 4px;background:#fff;border-radius:10px;padding:8px 11px;display:flex;align-items:center;gap:9px;border:1px solid #ebebeb;flex-shrink:0}
+.reg-ic{width:26px;height:26px;border-radius:8px;background:#f0f0f0;flex-shrink:0}
+.reg-body{flex:1}
+.reg-lbl{font-size:9.5px;font-weight:700;color:#222}
+.reg-sub{font-size:8px;color:#aaa;margin-top:1px}
+.reg-badge{font-size:8px;font-weight:700;background:#ebebeb;border-radius:5px;padding:2px 7px;color:#555;white-space:nowrap;flex-shrink:0}
+.reg-badge.on{background:#e6ede6;color:#3a6a3a}
+.vers-row-c{margin:0 14px 4px;background:#f8f8f8;border-radius:10px;padding:7px 11px;display:flex;align-items:center;gap:9px;border:1px solid #ebebeb;flex-shrink:0}
+.vers-dot{width:6px;height:6px;border-radius:50%;background:#ccc;flex-shrink:0}
+.vers-lbl-c{flex:1;font-size:9px;color:#666}
+.vers-val-c{font-size:9px;font-weight:700;color:#333}
+
+/* INFO PANEL */
+.infopanel{width:240px;background:#0c0c0c;border-left:1px solid #1a1a1a;overflow-y:auto;flex-shrink:0;padding:16px}
+.ip-case{font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#333;margin-bottom:5px}
+.ip-title{font-size:13px;font-weight:700;color:#ddd;line-height:1.4;margin-bottom:8px}
+.ip-desc{font-size:10px;color:#484848;line-height:1.7}
+.ip-div{height:1px;background:#181818;margin:12px 0}
+.ip-sec{font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#2a2a2a;margin-bottom:6px}
+.tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;margin-right:3px;margin-bottom:4px}
+.tag.done{background:#141e14;color:#4a7a4a;border:1px solid #1e2e1e}
+.tag.miss{background:#1e1414;color:#7a4a4a;border:1px solid #2e1e1e}
+.ip-cta{font-size:10px;color:#555;line-height:1.8}
+.ip-cta b{color:#777}
+.ip-note{font-size:9px;color:#333;line-height:1.6;font-style:italic}
+
+/* ── ACCORDION FONDO ── */
+.acc-fund{margin:0 14px 5px;background:#fff;border-radius:14px;overflow:hidden;border:1px solid #ebebeb;flex-shrink:0}
+.acc-header{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 13px;cursor:pointer;user-select:none;gap:8px}
+.acc-header-left{flex:1;min-width:0}
+.acc-fund-name{font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;line-height:1.2}
+.acc-fund-sub{font-size:8.5px;color:#aaa;margin-top:2px}
+.acc-header-right{text-align:right;flex-shrink:0}
+.acc-fund-val{font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif}
+.acc-fund-rend{font-size:8.5px;font-weight:700;background:#e8f5e8;color:#2a7a2a;border-radius:20px;padding:2px 7px;margin-top:3px;display:inline-block}
+.acc-fund-rend.neg{background:#fce8e8;color:#7a2a2a}
+.acc-chevron{font-size:10px;color:#bbb;margin-top:2px;transition:transform .2s}
+.acc-body{display:none;border-top:1px solid #f0f0f0}
+.acc-fund.open .acc-body{display:block}
+.acc-fund.open .acc-chevron{transform:rotate(180deg)}
+.acc-row{display:flex;align-items:flex-start;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #f5f5f5;gap:8px}
+.acc-row:last-child{border-bottom:none}
+.acc-row-left{flex:1;min-width:0}
+.acc-row-name{font-size:11px;font-weight:700;color:#111}
+.acc-row-sub{font-size:8.5px;color:#aaa;margin-top:1px}
+.acc-row-right{text-align:right;flex-shrink:0}
+.acc-row-freq{font-size:8.5px;color:#aaa}
+.acc-row-val{font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif}
+.acc-detail-link{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-top:1px solid #f0f0f0;font-size:11px;font-weight:600;color:#333;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-logo">Gimme5</div>
+  <div class="tb-sep"></div>
+  <div class="tb-tag">HP Redesign · Casistiche</div>
+  <div class="tb-sep"></div>
+  <div class="tb-name" id="tb-name">—</div>
+  <div class="tb-counter" id="tb-counter">—</div>
+  <div class="tb-btn" onclick="prev()">‹</div>
+  <div class="tb-btn" onclick="next()">›</div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <div class="sl-grp">Utente nuovo · Obiettivi</div>
+  <div class="sl-item active" data-screen="0" onclick="goTo(0)">
+    <span class="sl-num">Caso 1</span>
+    <div class="sl-title">Regola+Bonifico ✓ · Obj ✗</div>
+    <div class="sl-sub">€50 · "manca un passo"</div>
+  </div>
+  <div class="sl-item" data-screen="1" onclick="goTo(1)">
+    <span class="sl-num">Caso 4</span>
+    <div class="sl-title">Solo fondo · tutto ✗</div>
+    <div class="sl-sub">€0 · FOMO massimo</div>
+  </div>
+  <div class="sl-item" data-screen="2" onclick="goTo(2)">
+    <span class="sl-num">Caso 2</span>
+    <div class="sl-title">Bonifico ✓ · Regola ✗</div>
+    <div class="sl-sub">€10 · "manca solo la regola"</div>
+  </div>
+  <div class="sl-item" data-screen="15" onclick="goTo(15)">
+    <span class="sl-num">Caso 3</span>
+    <div class="sl-title">Obiettivo+Bonifico ✓ · Regola ✗</div>
+    <div class="sl-sub">€0 · "imposta una regola"</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Utente nuovo · Portafoglio</div>
+  <div class="sl-item" data-screen="3" onclick="goTo(3)">
+    <span class="sl-num">Portafoglio €50</span>
+    <div class="sl-title">Fondo + piano libero</div>
+    <div class="sl-sub">nudge obiettivo</div>
+  </div>
+  <div class="sl-item" data-screen="4" onclick="goTo(4)">
+    <span class="sl-num">Portafoglio €0</span>
+    <div class="sl-title">Empty state</div>
+    <div class="sl-sub">Caso 2+4 · nessun versamento</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Engagement</div>
+  <div class="sl-item" data-screen="16" onclick="goTo(16)">
+    <span class="sl-num">FANTASMA</span>
+    <div class="sl-title">7gg inattivo · €0</div>
+    <div class="sl-sub">"Non è troppo tardi"</div>
+  </div>
+  <div class="sl-item" data-screen="17" onclick="goTo(17)">
+    <span class="sl-num">IN PAUSA</span>
+    <div class="sl-title">Regola ferma 60gg</div>
+    <div class="sl-sub">"Hai saltato 2 mesi"</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Post-primo obiettivo</div>
+  <div class="sl-item" data-screen="5" onclick="goTo(5)">
+    <span class="sl-num">GUIDED</span>
+    <div class="sl-title">Obiettivo appena creato</div>
+    <div class="sl-sub">€0 · celebra + CTA versa</div>
+  </div>
+  <div class="sl-item" data-screen="6" onclick="goTo(6)">
+    <span class="sl-num">GUIDED +</span>
+    <div class="sl-title">Obiettivo + prima regola</div>
+    <div class="sl-sub">€0 · piano attivo · aspetta</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Utenti attivi</div>
+  <div class="sl-item" data-screen="7" onclick="goTo(7)">
+    <span class="sl-num">ATTIVO 1</span>
+    <div class="sl-title">1 obiettivo in corso</div>
+    <div class="sl-sub">Hero card + proiezione</div>
+  </div>
+  <div class="sl-item" data-screen="8" onclick="goTo(8)">
+    <span class="sl-num">ATTIVO MULTI · Obiettivi</span>
+    <div class="sl-title">3 obiettivi</div>
+    <div class="sl-sub">Hero + lista compatta</div>
+  </div>
+  <div class="sl-item" data-screen="13" onclick="goTo(13)">
+    <span class="sl-num">ATTIVO MULTI · Portafoglio</span>
+    <div class="sl-title">2 fondi · 3 obj · piano libero</div>
+    <div class="sl-sub">Fondo condiviso + nudge</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Utenti critici</div>
+  <div class="sl-item" data-screen="9" onclick="goTo(9)">
+    <span class="sl-num">DORMIENTE</span>
+    <div class="sl-title">63gg · piano fermo</div>
+    <div class="sl-sub">Gauge + pill "ha lavorato"</div>
+  </div>
+  <div class="sl-item" data-screen="10" onclick="goTo(10)">
+    <span class="sl-num">A RISCHIO</span>
+    <div class="sl-title">Mercati in calo</div>
+    <div class="sl-sub">Gauge + pill rassicurante</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Utente esperto</div>
+  <div class="sl-item" data-screen="18" onclick="goTo(18)">
+    <span class="sl-num">ESPERTO</span>
+    <div class="sl-title">3 fondi · 4 obiettivi</div>
+    <div class="sl-sub">Gauge + layout denso</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Tab Obiettivi</div>
+  <div class="sl-item" data-screen="22" onclick="goTo(22)">
+    <span class="sl-num">OBIETTIVI · Zero</span>
+    <div class="sl-title">Nessun obiettivo</div>
+    <div class="sl-sub">Empty state · CTA crea</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Fondo Detail</div>
+  <div class="sl-item" data-screen="23" onclick="goTo(23)">
+    <span class="sl-num">MOVIMENTI</span>
+    <div class="sl-title">Lista versamenti fondo</div>
+    <div class="sl-sub">Regola diretta vs via obiettivo</div>
+  </div>
+
+</div>
+
+<!-- PHONE AREA -->
+<div class="phonewrap">
+  <div class="nav-arrow left" onclick="prev()">‹</div>
+  <div class="screens">
+
+  <!-- ═══ SCR-0: CASO 1+3+4 A · Vista Obiettivi · €50 ═══ -->
+  <div class="scr active" id="scr-0">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Ciao Filippo, la tua regola<br>è attiva. Manca un passo.</div>
+        <div class="hp-head-sub">Nessun obiettivo ancora</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(3)">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">50,00€</div>
+      </div>
+      <div class="body">
+        <div class="cta-outline">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Crea il tuo primo obiettivo</div>
+        </div>
+        <div class="sec-lbl">Da dove iniziare?</div>
+        <div class="pill-dark">
+          <div class="pill-dark-label">Gimme5 · Educazione</div>
+          <div class="pill-dark-title">I soldi senza<br>meta finiscono</div>
+          <div class="pill-dark-sub">Chi crea un obiettivo riesce a risparmiare il 91% in più</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-illus">
+            <div class="illus-coins">
+              <div class="coin" style="width:28px;height:28px"></div>
+              <div class="coin" style="width:36px;height:36px"></div>
+              <div class="coin" style="width:22px;height:22px"></div>
+            </div>
+          </div>
+          <div class="pill-dark-close">×</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-1: CASO 4 · Solo fondo · €0 ═══ -->
+  <div class="scr" id="scr-1">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Ciao Filippo, il tuo fondo<br>ti aspetta. Iniziamo?</div>
+        <div class="hp-head-sub">Nessun versamento · Nessun obiettivo</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(4)">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">0,00€</div>
+      </div>
+      <div class="body">
+        <div class="cta-outline">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Crea il tuo primo obiettivo</div>
+        </div>
+        <div class="sec-lbl">Da dove iniziare?</div>
+        <div class="pill-dark">
+          <div class="pill-dark-label">Gimme5</div>
+          <div class="pill-dark-title">Inizia con<br>€5. Adesso.</div>
+          <div class="pill-dark-sub">Chi inizia oggi con poco, in un anno ha già qualcosa. Chi aspetta, inizia da zero.</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-illus">
+            <div class="illus-coins">
+              <div class="coin" style="width:22px;height:22px;opacity:.4"></div>
+              <div class="coin" style="width:30px;height:30px;opacity:.6"></div>
+              <div class="coin" style="width:18px;height:18px;opacity:.3"></div>
+            </div>
+          </div>
+          <div class="pill-dark-close">×</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-2: CASO 2 · Bonifico ✓ · Regola ✗ · Obj ✗ ═══ -->
+  <div class="scr" id="scr-2">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Filippo, sei quasi.<br>Manca solo la regola.</div>
+        <div class="hp-head-sub">Bonifico ricevuto · nessuna regola</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(4)">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">10,00€</div>
+      </div>
+      <div class="body">
+        <div class="cta-outline">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Crea il tuo primo obiettivo</div>
+        </div>
+        <div class="sec-lbl">Da dove iniziare?</div>
+        <div class="pill-dark">
+          <div class="pill-dark-label">Gimme5</div>
+          <div class="pill-dark-title">Attiva il versamento<br>automatico</div>
+          <div class="pill-dark-sub">Con €30/mese in 12 mesi avresti già €360 al sicuro. Il tuo piano ti aspetta.</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-illus">
+            <div class="illus-coins">
+              <div class="coin" style="width:26px;height:26px"></div>
+              <div class="coin" style="width:34px;height:34px"></div>
+              <div class="coin" style="width:20px;height:20px"></div>
+            </div>
+          </div>
+          <div class="pill-dark-close">×</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-3: PORTAFOGLIO €50 · piano libero · Caso 1+3 ═══ -->
+  <div class="scr" id="scr-3">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:4px">
+        <div class="hp-head-title">Ciao Filippo, la tua regola<br>è attiva. Manca un passo.</div>
+        <div class="hp-head-sub">Nessun obiettivo ancora</div>
+      </div>
+      <div class="toggle"><div class="tg" onclick="goTo(0)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+      <div class="body">
+        <div class="porto-header" style="padding-top:4px">
+          <div class="porto-title">Il tuo portafoglio</div>
+          <div class="porto-big">50,00€</div>
+          <div class="porto-sub">AcomeA Breve Termine · +0,0% da inizio anno</div>
+        </div>
+        <!-- Grafico 1 fondo, pochi dati — linea corta + area -->
+        <div style="margin:0 14px 8px;background:#e8e8e8;border-radius:12px;padding:10px 10px 6px;overflow:hidden">
+          <svg width="100%" height="52" viewBox="0 0 260 52" preserveAspectRatio="none">
+            <polygon points="160,42 195,34 228,26 260,18 260,52 160,52" fill="rgba(0,0,0,0.07)"/>
+            <polyline points="160,42 195,34 228,26 260,18" fill="none" stroke="#555" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="260" cy="18" r="3" fill="#555"/>
+            <line x1="0" y1="52" x2="260" y2="52" stroke="#ccc" stroke-width="0.5"/>
+          </svg>
+          <div style="display:flex;justify-content:space-between;padding:3px 2px 0">
+            <span style="font-size:7.5px;color:#bbb">Pochi dati · 1 fondo</span>
+            <span style="font-size:7.5px;color:#888">+0,0% YTD</span>
+          </div>
+        </div>
+        <div class="cta-outline" style="margin-top:0">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Versa nel fondo</div>
+        </div>
+        <div style="margin:0 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi fondi</div>
+        <div class="fondo-row" onclick="goTo(23)" style="cursor:pointer">
+          <div class="fondo-abbr">AcomeA<br>BT</div>
+          <div class="fondo-body">
+            <div class="fondo-name">AcomeA Breve Termine</div>
+            <div class="fondo-sub">Rischio basso · 1-3 anni</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+            <div class="fondo-val">50,00€</div>
+            <div style="font-size:8.5px;font-weight:700;background:#e8f5e8;color:#2a7a2a;border-radius:20px;padding:2px 7px">+0,00€</div>
+          </div>
+          <div style="font-size:11px;color:#ccc;margin-left:4px">›</div>
+        </div>
+        <!-- Piano libero visibile -->
+        <div style="margin:4px 14px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">Piani attivi</div>
+        <div class="piano-libero">
+          <div class="pl-dot"></div>
+          <div class="pl-body">
+            <div class="pl-lbl">Piano libero · AcomeA Breve Termine</div>
+            <div class="pl-sub">€30/mese · nessun obiettivo associato</div>
+          </div>
+        </div>
+        <!-- Nudge verso obiettivo -->
+        <div class="porto-nudge" style="margin-top:6px">
+          <div style="font-size:16px">🎯</div>
+          <div class="porto-nudge-body">
+            <div class="porto-nudge-lbl">Dai un obiettivo a questi €50</div>
+            <div class="porto-nudge-sub">I soldi senza meta finiscono</div>
+          </div>
+          <div class="porto-nudge-cta">Crea →</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-4: PORTAFOGLIO €0 · Empty · Caso 2+4 ═══ -->
+  <div class="scr" id="scr-4">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:4px">
+        <div class="hp-head-title" style="font-size:15px">Ciao Filippo, manca un passo.</div>
+        <div class="hp-head-sub">Nessun versamento ancora</div>
+      </div>
+      <div class="toggle"><div class="tg" onclick="goTo(2)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+      <div class="body">
+        <div class="porto-empty">
+          <div class="porto-empty-ic">🌱</div>
+          <div class="porto-empty-title">Nessun investimento ancora</div>
+          <div class="porto-empty-sub">Il tuo fondo è pronto.<br>Manca solo il primo versamento.</div>
+        </div>
+        <div style="margin:0 14px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">Il tuo fondo</div>
+        <div class="fondo-row">
+          <div class="fondo-abbr">AcomeA<br>BT</div>
+          <div class="fondo-body">
+            <div class="fondo-name">AcomeA Breve Termine</div>
+            <div class="fondo-sub">Rischio basso · pronto</div>
+          </div>
+          <div class="fondo-val" style="color:#bbb">—</div>
+        </div>
+        <div class="cta-outline" style="margin-top:10px">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Fai il primo versamento</div>
+        </div>
+        <div style="margin:6px 14px 0;font-size:9px;color:#aaa;text-align:center;line-height:1.5">
+          Minimo €5 · Addebito immediato sul tuo conto
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-5: GUIDED · Primo obiettivo creato · €0 ═══ -->
+  <div class="scr" id="scr-5">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Benvenuto Filippo,<br>il tuo obiettivo è attivo! 🎉</div>
+        <div class="hp-head-sub">Ora inizia a versare</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">0,00€</div>
+      </div>
+      <div class="body">
+        <div class="obj-hero">
+          <div class="obj-hero-bg"></div>
+          <div class="obj-hero-overlay"></div>
+          <div class="obj-hero-inner">
+            <div class="obj-hero-eye">Il tuo obiettivo</div>
+            <div class="obj-hero-name">🏖 Vacanza a Bali</div>
+            <div class="obj-hero-row">
+              <div class="obj-hero-curr">0€</div>
+              <div class="obj-hero-tgt">1.000€</div>
+            </div>
+            <div class="obj-hero-bar"><div class="obj-hero-fill" style="width:0%"></div></div>
+            <div class="obj-hero-proj">Aggiungi una regola per iniziare</div>
+            <div class="obj-hero-btns">
+              <button class="obj-hero-btn p">Versa ora</button>
+              <button class="obj-hero-btn s">Attiva regola</button>
+            </div>
+          </div>
+        </div>
+        <div class="pill-dark" style="margin-top:4px">
+          <div class="pill-dark-label">Gimme5</div>
+          <div class="pill-dark-title">Hai iniziato.<br>Ecco cosa succede ora.</div>
+          <div class="pill-dark-sub">Il tuo primo versamento va direttamente nel fondo scelto, per il tuo obiettivo.</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-close">×</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-6: GUIDED+ · Obiettivo + regola · €0 in attesa ═══ -->
+  <div class="scr" id="scr-6">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Ciao Filippo,<br>tutto è pronto. 🚀</div>
+        <div class="hp-head-sub">La tua regola parte il 1° maggio</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">0,00€</div>
+      </div>
+      <div class="body">
+        <div class="obj-hero">
+          <div class="obj-hero-bg"></div>
+          <div class="obj-hero-overlay"></div>
+          <div class="obj-hero-inner">
+            <div class="obj-hero-eye">Il tuo obiettivo</div>
+            <div class="obj-hero-name">🏖 Vacanza a Bali</div>
+            <div class="obj-hero-row">
+              <div class="obj-hero-curr">0€</div>
+              <div class="obj-hero-tgt">1.000€</div>
+            </div>
+            <div class="obj-hero-bar"><div class="obj-hero-fill" style="width:0%"></div></div>
+            <div class="obj-hero-proj">⏳ Primo versamento: 1 mag · €30</div>
+            <div style="display:flex;gap:6px;margin-bottom:10px">
+              <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,.9);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:4px 10px">▪ AcomeA BT</span>
+              <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,.9);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:4px 10px">🔄 1 regola attiva</span>
+            </div>
+            <div class="obj-hero-btns">
+              <button class="obj-hero-btn p">Anticipa un versamento</button>
+              <button class="obj-hero-btn s">Dettaglio</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-7: ATTIVO 1 · gauge ═══ -->
+  <div class="scr" id="scr-7">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:2px">
+        <div class="hp-head-title">Bentornato Filippo</div>
+        <div class="hp-head-sub">Tutto in ordine · piano attivo</div>
+      </div>
+      <div class="toggle" style="margin-bottom:4px"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(13)">Portafoglio</div></div>
+      <!-- GAUGE -->
+      <div class="gauge-wrap">
+        <div class="gauge-flat">
+          <div class="gauge-flat-lbl">🏖 Vacanza a Bali</div>
+          <div class="gauge-flat-val">340€</div>
+          <div class="gauge-flat-sub">su 1.000€ · 34% · dic 2026</div>
+          <div class="gauge-flat-bar"><div class="gauge-flat-fill" style="width:34%"></div></div>
+        </div>
+      </div>
+      <div class="gauge-rend">
+        <span class="rend-chip pos">+€12,40</span>
+        <span class="rend-chip pos">+3,8% YTD</span>
+      </div>
+      <div class="body">
+        <div style="margin:0 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi obiettivi</div>
+        <div class="obj-card">
+          <div class="obj-card-img"></div>
+          <div class="obj-card-name">🏖 Vacanza a Bali</div>
+          <div class="obj-card-progress-row">
+            <span class="obj-card-curr">340€</span>
+            <span class="obj-card-target">1.000€</span>
+          </div>
+          <div class="obj-card-bar"><div class="obj-card-fill" style="width:34%"></div></div>
+          <div class="obj-card-pct-row">
+            <span class="obj-card-pct-lbl">Sei al 34%</span>
+            <span class="obj-card-date">Dic 2026</span>
+          </div>
+          <div class="obj-card-attrs">
+            <span class="obj-attr">▪ AcomeA BT</span>
+            <span class="obj-attr">🔄 1 regola attiva</span>
+          </div>
+        </div>
+        <div style="margin:2px 14px 4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">Movimenti recenti</div>
+        <div class="vers-row-c">
+          <div class="vers-dot"></div>
+          <div class="vers-lbl-c">Deposito ricorrente · 1 apr</div>
+          <div class="vers-val-c">+€30</div>
+        </div>
+        <div class="vers-row-c">
+          <div class="vers-dot"></div>
+          <div class="vers-lbl-c">Deposito ricorrente · 1 mar</div>
+          <div class="vers-val-c">+€30</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-8: ATTIVO MULTI · gauge · 3 obiettivi ═══ -->
+  <div class="scr" id="scr-8">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:2px">
+        <div class="hp-head-title">Bentornato Filippo,<br>stai andando alla grande!</div>
+        <div class="hp-head-sub">3 obiettivi in corso · tutto attivo</div>
+      </div>
+      <div class="toggle" style="margin-bottom:4px"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(13)">Portafoglio</div></div>
+      <!-- GAUGE: obiettivo principale -->
+      <div class="gauge-wrap">
+        <div class="gauge-flat">
+          <div class="gauge-flat-lbl">Portafoglio totale · 3 obiettivi</div>
+          <div class="gauge-flat-val">1.840€</div>
+          <div class="gauge-flat-sub">+€124 rendimento · tutto attivo</div>
+          <div class="gauge-flat-bar"><div class="gauge-flat-fill" style="width:55%"></div></div>
+        </div>
+      </div>
+      <div class="gauge-rend">
+        <span class="rend-chip pos">+€124,00</span>
+        <span class="rend-chip pos">+12,4K€</span>
+      </div>
+      <div class="body">
+        <div style="margin:0 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi obiettivi</div>
+        <div class="obj-card-sm">
+          <div class="obj-card-sm-top">
+            <span class="obj-card-sm-name">🏖 Vacanza a Bali</span>
+            <span class="obj-card-sm-amounts">340€ su 1.000€</span>
+          </div>
+          <div class="obj-card-sm-pct">34%</div>
+          <div class="obj-card-sm-bot">
+            <span class="obj-card-sm-chip">🔄 1 regola attiva</span>
+          </div>
+        </div>
+        <div class="obj-card-sm">
+          <div class="obj-card-sm-top">
+            <span class="obj-card-sm-name">🏠 Anticipo per la Casa</span>
+            <span class="obj-card-sm-amounts">1.200€ su 2.500€</span>
+          </div>
+          <div class="obj-card-sm-pct">48%</div>
+          <div class="obj-card-sm-bot">
+            <span class="obj-card-sm-chip">🔄 1 regola attiva</span>
+          </div>
+        </div>
+        <div class="obj-card-sm">
+          <div class="obj-card-sm-top">
+            <span class="obj-card-sm-name">🎓 Master 2027</span>
+            <span class="obj-card-sm-amounts">300€ su 2.000€</span>
+          </div>
+          <div class="obj-card-sm-pct">15%</div>
+          <div class="obj-card-sm-bot">
+            <span class="obj-card-sm-chip">🔄 1 regola attiva</span>
+          </div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-9: DORMIENTE · gauge ═══ -->
+  <div class="scr" id="scr-9">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:2px">
+        <div class="hp-head-title">Bentornato Filippo,<br>da quanto tempo!</div>
+        <div class="hp-head-sub">In 63 giorni il tuo piano ha lavorato</div>
+      </div>
+      <div class="toggle" style="margin-bottom:4px"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <!-- GAUGE: dormiente — fill grigio chiaro -->
+      <div class="gauge-wrap">
+        <div class="gauge-flat">
+          <div class="gauge-flat-lbl" style="color:#bbb">🏖 Vacanza a Bali</div>
+          <div class="gauge-flat-val" style="color:#777">187,50€</div>
+          <div class="gauge-flat-sub">su 500€ · 37% · piano fermo 63 gg</div>
+          <div class="gauge-flat-bar"><div class="gauge-flat-fill" style="width:37%;background:#999"></div></div>
+        </div>
+      </div>
+      <div class="gauge-rend">
+        <span class="rend-chip pos">+€8,20</span>
+        <span class="rend-chip" style="background:#f0f0f0;color:#999">-€4,30 mancati</span>
+      </div>
+      <div class="body">
+        <!-- Pill: il piano ha lavorato per te -->
+        <div class="pill-dark" style="margin-bottom:8px">
+          <div class="pill-dark-label">Gimme5</div>
+          <div class="pill-dark-title">Il tuo piano ha<br>lavorato per te!</div>
+          <div class="pill-dark-sub">Con €30 arriveresti a luglio. Riprendi da dove eri rimasto.</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-close">×</div>
+        </div>
+        <div style="margin:0 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi obiettivi</div>
+        <div class="obj-card" style="opacity:.8">
+          <div class="obj-card-img"></div>
+          <div class="obj-card-name" style="color:#888">🏖 Vacanza a Bali</div>
+          <div class="obj-card-progress-row">
+            <span class="obj-card-curr" style="color:#888">187€</span>
+            <span class="obj-card-target" style="color:#bbb">500€</span>
+          </div>
+          <div class="obj-card-bar"><div class="obj-card-fill" style="width:37%;background:#bbb"></div></div>
+          <div class="obj-card-pct-row">
+            <span class="obj-card-pct-lbl">Sei al 37%</span>
+            <span class="obj-card-date">fermo 63 gg</span>
+          </div>
+          <div class="obj-card-attrs">
+            <span class="obj-attr">▪ Eurizon Bilanciato</span>
+            <span class="obj-attr pausa">🔄 1 regola · in pausa</span>
+          </div>
+        </div>
+        <div style="margin:4px 14px 0;font-size:8.5px;color:#bbb;text-align:center;font-style:italic">Nessuna pillola · push ore 19:00</div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-10: A RISCHIO · mercato in calo ═══ -->
+  <div class="scr" id="scr-10">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:2px">
+        <div class="hp-head-title">Ciao Filippo, mercati<br>giù. Niente panico!</div>
+        <div class="hp-head-sub">Il tuo piano continua comunque</div>
+      </div>
+      <div class="toggle" style="margin-bottom:4px"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <!-- GAUGE: a rischio — calo mercato -->
+      <div class="gauge-wrap">
+        <div class="gauge-flat">
+          <div class="gauge-flat-lbl">🏖 Vacanza a Bali</div>
+          <div class="gauge-flat-val">187,50€</div>
+          <div class="gauge-flat-sub">su 500€ · arriva agosto 2025 · -5,6% sett.</div>
+          <div class="gauge-flat-bar"><div class="gauge-flat-fill" style="width:37%;background:#aaa"></div></div>
+        </div>
+      </div>
+      <div class="gauge-rend">
+        <span class="rend-chip neg">-€11,20</span>
+        <span class="rend-chip neg">-5,6% sett.</span>
+      </div>
+      <div class="body">
+        <!-- Pill educativa rassicurante -->
+        <div class="pill-dark" style="margin-bottom:8px">
+          <div class="pill-dark-label">Gimme5 · Educazione</div>
+          <div class="pill-dark-title">I mercati hanno<br>corretto!</div>
+          <div class="pill-dark-sub">Sul tuo portfolio: -5,6% questa settimana. Ma nel lungo periodo il trend è sempre positivo.</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-close">×</div>
+        </div>
+        <div style="margin:0 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi obiettivi</div>
+        <div class="obj-card">
+          <div class="obj-card-img"></div>
+          <div class="obj-card-name">🏖 Vacanza a Bali</div>
+          <div class="obj-card-progress-row">
+            <span class="obj-card-curr">187€</span>
+            <span class="obj-card-target">500€</span>
+          </div>
+          <div class="obj-card-bar"><div class="obj-card-fill" style="width:37%"></div></div>
+          <div class="obj-card-pct-row">
+            <span class="obj-card-pct-lbl">Sei al 37%</span>
+            <span class="obj-card-date">ago 2025</span>
+          </div>
+          <div class="obj-card-attrs">
+            <span class="obj-attr">▪ Eurizon Bilanciato</span>
+            <span class="obj-attr">🔄 1 regola attiva</span>
+            <span class="obj-attr neg">↓ -5,6% sett.</span>
+          </div>
+        </div>
+        <div class="vers-row-c">
+          <div class="vers-dot"></div>
+          <div class="vers-lbl-c">Deposito ricorrente · 1 apr</div>
+          <div class="vers-val-c">+€30</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-11: NAMING ═══ -->
+  <div class="scr" id="scr-11">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Come chiamiamo la "regola"?</div>
+        <div class="hp-head-sub">Il termine attuale è tecnico e non comunica</div>
+      </div>
+      <div class="body">
+        <div style="margin:8px 14px 5px;background:#fff5f5;border-radius:10px;padding:9px 12px;border:1px solid #f0d8d8;display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:13px">❌</div>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#cc6666;margin-bottom:2px">"Regola"</div>
+            <div style="font-size:8.5px;color:#aaa;line-height:1.4">Tecnico, generico. Non spiega cosa fa né perché conta. L'utente non capisce il valore.</div>
+            <div style="font-size:8px;font-weight:700;background:#fde8e8;color:#cc6666;border-radius:4px;padding:1px 6px;margin-top:4px;display:inline-block">Da sostituire</div>
+          </div>
+        </div>
+        <div style="margin:0 14px 5px;background:#fff;border-radius:10px;padding:9px 12px;border:1.5px solid #333;display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:13px">✅</div>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#111;margin-bottom:2px">"Regola automatica"</div>
+            <div style="font-size:8.5px;color:#aaa;line-height:1.4">Mantiene il termine noto agli utenti esistenti. Aggiunge "automatica" per chiarire il meccanismo. Migrazione graduale zero-friction.</div>
+            <div style="font-size:8px;font-weight:700;background:#111;color:#fff;border-radius:4px;padding:1px 6px;margin-top:4px;display:inline-block">Raccomandato · safe</div>
+          </div>
+        </div>
+        <div style="margin:0 14px 5px;background:#fff;border-radius:10px;padding:9px 12px;border:1px solid #e8e8e8;display:flex;gap:8px;align-items:flex-start">
+          <div style="font-size:13px">○</div>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#111;margin-bottom:2px">"Piano automatico"</div>
+            <div style="font-size:8.5px;color:#aaa;line-height:1.4">Più aspirazionale. Ma può confondersi con "obiettivo". Rompe la continuità con gli utenti esistenti.</div>
+            <div style="font-size:8px;font-weight:700;background:#ebebeb;color:#666;border-radius:4px;padding:1px 6px;margin-top:4px;display:inline-block">Alternativa B</div>
+          </div>
+        </div>
+        <div style="margin:6px 14px 0;background:#1a1a1a;border-radius:10px;padding:10px 12px">
+          <div style="font-size:8px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">In UI</div>
+          <div style="font-size:9.5px;color:#666;line-height:1.9">
+            Stato: <span style="color:#ccc">Regola automatica attiva · €30/mese</span><br>
+            Azione: <span style="color:#ccc">Aggiungi una regola automatica</span><br>
+            Gestione: <span style="color:#ccc">Gestisci regole</span><br>
+            Tab: <span style="color:#ccc">nessuno — vive dentro Obiettivi</span>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-12: NAV BAR ═══ -->
+  <div class="scr" id="scr-12">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Nav Bar · Proposta</div>
+        <div class="hp-head-sub">AS-IS vs TO-BE</div>
+      </div>
+      <div class="body">
+        <!-- AS-IS -->
+        <div style="margin:8px 14px 5px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e4e4e4">
+          <div style="padding:6px 12px 4px;background:#f5f5f5;border-bottom:1px solid #ebebeb;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#cc6666">AS-IS</div>
+          <div style="display:flex;padding:8px;justify-content:space-around;align-items:center">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#111;border-radius:2px"></div><div style="font-size:7px;color:#111;font-weight:700">Home</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#ddd;border-radius:2px"></div><div style="font-size:7px;color:#bbb">Operatività</div></div>
+            <div style="width:30px;height:30px;background:#f55a27;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:-8px"><span style="font-size:8px;font-weight:800;color:#fff">5</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#ddd;border-radius:2px"></div><div style="font-size:7px;color:#bbb">Community</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#ddd;border-radius:2px"></div><div style="font-size:7px;color:#bbb">Profilo</div></div>
+          </div>
+          <div style="padding:0 12px 8px;font-size:8.5px;color:#cc6666">⚠ "Operatività" non è comprensibile. Community separa Joink dal core. Manca tab obiettivi dedicata.</div>
+        </div>
+        <!-- TO-BE -->
+        <div style="margin:0 14px 5px;background:#fff;border-radius:12px;overflow:hidden;border:1.5px solid #333">
+          <div style="padding:6px 12px 4px;background:#111;border-bottom:1px solid #222;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#aaa;display:flex;justify-content:space-between"><span>TO-BE · Proposta</span><span style="background:#333;color:#ccc;border-radius:3px;padding:1px 5px">✓</span></div>
+          <div style="display:flex;padding:8px;justify-content:space-around;align-items:center">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#111;border-radius:2px"></div><div style="font-size:7px;color:#111;font-weight:700">Home</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#ddd;border-radius:2px"></div><div style="font-size:7px;color:#bbb">Esplora</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:32px;height:32px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:-10px"><span style="font-size:18px;color:#fff;line-height:1">+</span></div><div style="font-size:7px;color:#bbb;margin-top:3px">Investi</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#ddd;border-radius:2px"></div><div style="font-size:7px;color:#bbb">Obiettivi</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:18px;height:12px;background:#ddd;border-radius:2px"></div><div style="font-size:7px;color:#bbb">Profilo</div></div>
+          </div>
+          <div style="padding:0 12px 8px;font-size:8.5px;color:#555">Home · Esplora · [+]Investi · Obiettivi · Profilo</div>
+        </div>
+        <!-- Note -->
+        <div style="margin:4px 14px 0;background:#1a1a1a;border-radius:10px;padding:10px 12px">
+          <div style="font-size:8px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Note</div>
+          <div style="font-size:9.5px;color:#555;line-height:1.8">
+            Community → <span style="color:#888">dentro Profilo o Esplora</span><br>
+            Operatività → <span style="color:#888">dentro [+] Investi</span><br>
+            Fondi → <span style="color:#888">mai come tab, sempre in Esplora o dentro Obiettivi</span>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-13: ATTIVO MULTI · Vista Portafoglio · 2 fondi / 3 obj / 1 piano libero ═══ -->
+  <div class="scr" id="scr-13">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:4px">
+        <div class="hp-head-title">Bentornato Filippo</div>
+        <div class="hp-head-sub">3 obiettivi attivi · 2 fondi</div>
+      </div>
+      <div class="toggle"><div class="tg" onclick="goTo(8)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+      <div class="body">
+        <div class="porto-header" style="padding-top:4px">
+          <div class="porto-title">Il tuo portafoglio</div>
+          <div class="porto-big">2.800,00€</div>
+          <div class="porto-sub">+46,20€ (+1,7%) dall'inizio · aggiornato oggi</div>
+        </div>
+        <!-- Grafico multi-fondo: linea totale + linee singoli fondi -->
+        <div style="margin:0 14px 8px;background:#fff;border-radius:12px;border:1px solid #ebebeb;padding:10px 10px 6px;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="font-size:7.5px;color:#ccc">Ago</span><span style="font-size:7.5px;color:#ccc">Ott</span><span style="font-size:7.5px;color:#ccc">Dic</span><span style="font-size:7.5px;color:#ccc">Feb</span><span style="font-size:7.5px;color:#ccc">Apr</span>
+          </div>
+          <svg width="100%" height="52" viewBox="0 0 260 52" preserveAspectRatio="none">
+            <polygon points="0,50 32,46 65,42 98,34 130,28 162,20 195,12 228,6 260,2 260,52 0,52" fill="rgba(0,0,0,0.05)"/>
+            <polyline points="0,50 32,46 65,42 98,34 130,28 162,20 195,12 228,6 260,2" fill="none" stroke="#333" stroke-width="1.5" stroke-linejoin="round"/>
+            <polyline points="0,52 32,50 65,48 98,44 130,42 162,38 195,34 228,30 260,28" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3,2"/>
+            <polyline points="0,52 32,50 65,50 98,46 130,38 162,30 195,20 228,12 260,6" fill="none" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+            <circle cx="260" cy="2" r="2.5" fill="#333"/>
+          </svg>
+          <div style="display:flex;gap:10px;padding:4px 2px 0">
+            <div style="display:flex;align-items:center;gap:3px"><div style="width:12px;height:1.5px;background:#333"></div><span style="font-size:7.5px;color:#888">Totale</span></div>
+            <div style="display:flex;align-items:center;gap:3px"><div style="width:12px;border-top:1.5px dashed #999"></div><span style="font-size:7.5px;color:#bbb">AcomeA BT</span></div>
+            <div style="display:flex;align-items:center;gap:3px"><div style="width:12px;border-top:1.5px dashed #bbb"></div><span style="font-size:7.5px;color:#bbb">Vanguard</span></div>
+          </div>
+        </div>
+        <div class="cta-outline" style="margin-top:0">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Versa nel portafoglio</div>
+        </div>
+        <div style="margin:0 14px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi fondi</div>
+
+        <!-- Fondo 1: AcomeA BT -->
+        <div class="fondo-row" onclick="goTo(23)" style="cursor:pointer">
+          <div class="fondo-abbr">AcomeA<br>BT</div>
+          <div class="fondo-body">
+            <div class="fondo-name">AcomeA Breve Termine</div>
+            <div class="fondo-sub">🏖 Vacanza a Bali · 🎓 Master 2027</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+            <div class="fondo-val">1.400€</div>
+            <div style="font-size:8.5px;font-weight:700;background:#e8f5e8;color:#2a7a2a;border-radius:20px;padding:2px 7px">+0,8% YTD</div>
+          </div>
+          <div style="font-size:11px;color:#ccc;margin-left:4px">›</div>
+        </div>
+
+        <!-- Fondo 2: Vanguard Global -->
+        <div class="fondo-row" onclick="goTo(23)" style="cursor:pointer">
+          <div class="fondo-abbr" style="font-size:7px">Vang.<br>Global</div>
+          <div class="fondo-body">
+            <div class="fondo-name">Vanguard Global Stock</div>
+            <div class="fondo-sub">🏠 Anticipo casa</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+            <div class="fondo-val">1.400€</div>
+            <div style="font-size:8.5px;font-weight:700;background:#e8f5e8;color:#2a7a2a;border-radius:20px;padding:2px 7px">+2,9% YTD</div>
+          </div>
+          <div style="font-size:11px;color:#ccc;margin-left:4px">›</div>
+        </div>
+
+        <div style="margin:4px 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">Piani attivi</div>
+        <!-- Regole legate a obiettivi -->
+        <div class="piano-row" style="margin-bottom:5px">
+          <div class="piano-ic">🔄</div>
+          <div class="piano-body">
+            <div class="piano-lbl">3 regole automatiche</div>
+            <div class="piano-sub">€150/mese su obiettivi · 1 mag</div>
+          </div>
+          <div class="piano-badge">Attive</div>
+        </div>
+        <!-- Piano libero: dashed, stesso stile SCR-3 -->
+        <div class="piano-libero">
+          <div class="pl-dot"></div>
+          <div class="pl-body">
+            <div class="pl-lbl">Piano libero · AcomeA Breve Termine</div>
+            <div class="pl-sub">€30/mese · nessun obiettivo associato</div>
+          </div>
+        </div>
+        <!-- Nudge verso obiettivo per il piano libero -->
+        <div class="porto-nudge" style="margin-top:5px">
+          <div style="font-size:16px">🎯</div>
+          <div class="porto-nudge-body">
+            <div class="porto-nudge-lbl">Dai un obiettivo a questo piano</div>
+            <div class="porto-nudge-sub">I soldi senza meta finiscono</div>
+          </div>
+          <div class="porto-nudge-cta">Crea →</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-14: PORTAFOGLIO · Grafico misto · 2 fondi ═══ -->
+  <div class="scr" id="scr-14">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:4px">
+        <div class="hp-head-title">Bentornato Filippo</div>
+        <div class="hp-head-sub">3 obiettivi attivi · 2 fondi</div>
+      </div>
+      <div class="toggle"><div class="tg" onclick="goTo(8)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+      <div class="body">
+        <div class="porto-header" style="padding-top:4px">
+          <div class="porto-title">Il tuo portafoglio</div>
+          <div class="porto-big">2.800,00€</div>
+          <div class="porto-sub">+46,20€ (+1,7%) · da 8 mesi fa</div>
+        </div>
+
+        <!-- Grafico SVG reale -->
+        <div style="margin:0 14px 4px;background:#fff;border-radius:12px;border:1px solid #ebebeb;padding:10px 10px 6px;overflow:hidden">
+          <!-- Labels mesi -->
+          <div style="display:flex;justify-content:space-between;padding:0 2px;margin-bottom:3px">
+            <span style="font-size:7.5px;color:#ccc">Ago</span>
+            <span style="font-size:7.5px;color:#ccc">Ott</span>
+            <span style="font-size:7.5px;color:#ccc">Dic</span>
+            <span style="font-size:7.5px;color:#ccc">Feb</span>
+            <span style="font-size:7.5px;color:#ccc">Apr</span>
+          </div>
+          <svg width="100%" height="58" viewBox="0 0 260 58" preserveAspectRatio="none">
+            <!-- Area fill aggregato -->
+            <polygon points="0,52 32,48 65,44 98,36 130,30 162,22 195,14 228,8 260,4 260,58 0,58"
+                     fill="rgba(0,0,0,0.05)"/>
+            <!-- Linea aggregata totale -->
+            <polyline points="0,52 32,48 65,44 98,36 130,30 162,22 195,14 228,8 260,4"
+                      fill="none" stroke="#333" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- Linea fondo 1 (AcomeA BT) — tratteggiata, più leggera -->
+            <polyline points="0,54 32,52 65,50 98,46 130,44 162,40 195,36 228,33 260,30"
+                      fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3,2"/>
+            <!-- Linea fondo 2 (Vanguard) — tratteggiata, ancora più leggera -->
+            <polyline points="0,58 32,56 65,54 98,50 130,44 162,36 195,26 228,18 260,12"
+                      fill="none" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+            <!-- Dot finale sul totale -->
+            <circle cx="260" cy="4" r="3" fill="#333"/>
+          </svg>
+          <!-- Legenda -->
+          <div style="display:flex;gap:12px;padding:4px 2px 0">
+            <div style="display:flex;align-items:center;gap:4px">
+              <div style="width:14px;height:1.5px;background:#333"></div>
+              <span style="font-size:7.5px;color:#888">Totale</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <div style="width:14px;height:1px;background:#999;border-top:1px dashed #999"></div>
+              <span style="font-size:7.5px;color:#bbb">AcomeA BT</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <div style="width:14px;height:1px;background:#bbb;border-top:1px dashed #bbb"></div>
+              <span style="font-size:7.5px;color:#bbb">Vanguard Global</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Versa -->
+        <div class="cta-outline">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Versa nel portafoglio</div>
+        </div>
+
+        <!-- Allocation breakdown -->
+        <div style="margin:0 14px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">Allocazione</div>
+        <div style="margin:0 14px 8px;background:#fff;border-radius:12px;border:1px solid #ebebeb;padding:10px 12px">
+          <!-- Fondo 1 -->
+          <div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="font-size:9.5px;font-weight:700;color:#333">AcomeA Breve Termine</span>
+              <span style="font-size:9.5px;color:#888">1.400€ · 50%</span>
+            </div>
+            <div style="height:5px;background:#e8e8e8;border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:50%;background:#555;border-radius:3px"></div>
+            </div>
+          </div>
+          <!-- Fondo 2 -->
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="font-size:9.5px;font-weight:700;color:#333">Vanguard Global Stock</span>
+              <span style="font-size:9.5px;color:#888">1.400€ · 50%</span>
+            </div>
+            <div style="height:5px;background:#e8e8e8;border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:50%;background:#aaa;border-radius:3px"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin:0 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi fondi</div>
+        <div class="fondo-row">
+          <div class="fondo-abbr">AcomeA<br>BT</div>
+          <div class="fondo-body">
+            <div class="fondo-name">AcomeA Breve Termine</div>
+            <div class="fondo-sub">Rischio basso · +0,8% YTD</div>
+          </div>
+          <div class="fondo-val">1.400€</div>
+        </div>
+        <div class="fondo-row">
+          <div class="fondo-abbr" style="font-size:7px">Vang.<br>Global</div>
+          <div class="fondo-body">
+            <div class="fondo-name">Vanguard Global Stock</div>
+            <div class="fondo-sub">Rischio medio · +2,9% YTD</div>
+          </div>
+          <div class="fondo-val">1.400€</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-15: CASO 3 · Obiettivo ✓ · Bonifico ✓ · Regola ✗ ═══ -->
+  <div class="scr" id="scr-15">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Benvenuto Filippo, per<br>iniziare a risparmiare<br>imposta una regola</div>
+        <div class="hp-head-sub">Obiettivo creato · bonifico ricevuto</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(4)">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">0,00€</div>
+      </div>
+      <div class="body">
+        <div class="cta-outline">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Attiva la regola automatica</div>
+        </div>
+        <div class="sec-lbl">Inizia adesso!</div>
+        <div class="pill-fomo">
+          <div class="pill-dark-label" style="color:rgba(0,0,0,.35);margin-bottom:6px">Gimme5</div>
+          <div class="pill-fomo-title">Inizia adesso!</div>
+          <div class="pill-fomo-sub">Con €50/mese in 6 mesi avresti già €300 al sicuro per il tuo obiettivo.</div>
+          <div class="pill-fomo-brand">powered by GIMME5</div>
+          <div class="pill-fomo-close">×</div>
+        </div>
+        <div class="fondo-row">
+          <div class="fondo-abbr" style="font-size:7px">Eurizon<br>Bil.</div>
+          <div class="fondo-body">
+            <div class="fondo-name">Eurizon Bilanciato</div>
+            <div class="fondo-sub">Rischio basso · pronto</div>
+          </div>
+          <div class="fondo-val" style="color:#bbb">—</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-16: CASO FANTASMA · 7gg · €0 ═══ -->
+  <div class="scr" id="scr-16">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Ehi Filippo, 7 giorni<br>senza farlo. Ma tranquillo,<br>non è troppo tardi.</div>
+        <div class="hp-head-sub">Nessun versamento ancora</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(4)">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">0,00€</div>
+      </div>
+      <div class="body">
+        <div class="cta-outline">
+          <div class="cta-outline-plus">+</div>
+          <div class="cta-outline-lbl">Inizia a risparmiare</div>
+        </div>
+        <div class="sec-lbl">Da dove iniziare?</div>
+        <div class="pill-dark">
+          <div class="pill-dark-label">Gimme5</div>
+          <div class="pill-dark-title">Inizia adesso!</div>
+          <div class="pill-dark-sub">Chi inizia oggi con €5 al mese, in un anno ha già qualcosa. Chi aspetta, riparte da zero.</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-illus">
+            <div class="illus-coins">
+              <div class="coin" style="width:24px;height:24px;opacity:.4"></div>
+              <div class="coin" style="width:32px;height:32px;opacity:.6"></div>
+              <div class="coin" style="width:18px;height:18px;opacity:.3"></div>
+            </div>
+          </div>
+          <div class="pill-dark-close">×</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-17: IN PAUSA · regola ferma da 60gg ═══ -->
+  <div class="scr" id="scr-17">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head">
+        <div class="hp-head-title">Bentornato Filippo, il tuo<br>risparmio è in pausa<br>da 60 gg</div>
+        <div class="hp-head-sub">Hai saltato la scadenza di 60 gg</div>
+      </div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="porto-val">
+        <div class="porto-val-label">Il tuo portafoglio 👁</div>
+        <div class="porto-val-n">0,00€</div>
+      </div>
+      <div class="body">
+        <div class="cta-outline" style="border-color:#d8c8a8">
+          <div class="cta-outline-plus" style="color:#888">↺</div>
+          <div class="cta-outline-lbl">Riprendi il piano automatico</div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-ic">⏸</div>
+          <div class="alert-t">Regola ferma da 60 giorni · hai saltato 2 mesi</div>
+        </div>
+        <div class="pill-fomo">
+          <div class="pill-dark-label" style="color:rgba(0,0,0,.35);margin-bottom:6px">Gimme5</div>
+          <div class="pill-fomo-title">Hai saltato 2 mesi.<br>Riprendi!</div>
+          <div class="pill-fomo-sub">In questi 2 mesi avresti già accumulato €60. È ancora tutto recuperabile.</div>
+          <div class="pill-fomo-brand">powered by GIMME5</div>
+          <div class="pill-fomo-close">×</div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-18: UTENTE ESPERTO · gauge · multi-fondo denso ═══ -->
+  <div class="scr" id="scr-18">
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-head" style="padding-bottom:2px">
+        <div class="hp-head-title">Bentornato Filippo,<br>stai lavorando alla grande!</div>
+        <div class="hp-head-sub">3 fondi · 4 obiettivi · tutto attivo</div>
+      </div>
+      <div class="toggle" style="margin-bottom:4px"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(13)">Portafoglio</div></div>
+      <!-- GAUGE: esperto -->
+      <div class="gauge-wrap">
+        <div class="gauge-flat">
+          <div class="gauge-flat-lbl">Portafoglio totale · 4 obiettivi</div>
+          <div class="gauge-flat-val">8.420€</div>
+          <div class="gauge-flat-sub">3 fondi · +€432 rendimento</div>
+          <div class="gauge-flat-bar"><div class="gauge-flat-fill" style="width:80%"></div></div>
+        </div>
+      </div>
+      <div class="gauge-rend">
+        <span class="rend-chip pos">+€432,00</span>
+        <span class="rend-chip pos">+€5.000 obiettivo</span>
+      </div>
+      <div class="body">
+        <div style="margin:0 14px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">I tuoi obiettivi</div>
+        <div class="obj-card">
+          <div class="obj-card-img"></div>
+          <div class="obj-card-name">🏠 Anticipo per la Casa</div>
+          <div class="obj-card-progress-row">
+            <span class="obj-card-curr">8.500€</span>
+            <span class="obj-card-target">10.000€</span>
+          </div>
+          <div class="obj-card-bar"><div class="obj-card-fill" style="width:85%"></div></div>
+          <div class="obj-card-pct-row">
+            <span class="obj-card-pct-lbl">Sei al 85%</span>
+            <span class="obj-card-date">Mar 2027</span>
+          </div>
+          <div class="obj-card-attrs">
+            <span class="obj-attr">▪ Eurizon Bilanciato · +2,1%</span>
+            <span class="obj-attr">🔄 €200/mese · attivo</span>
+          </div>
+        </div>
+        <div class="obj-card">
+          <div class="obj-card-img"></div>
+          <div class="obj-card-name">🎓 Università figlia</div>
+          <div class="obj-card-progress-row">
+            <span class="obj-card-curr">5.000€</span>
+            <span class="obj-card-target">10.000€</span>
+          </div>
+          <div class="obj-card-bar"><div class="obj-card-fill" style="width:50%"></div></div>
+          <div class="obj-card-pct-row">
+            <span class="obj-card-pct-lbl">Sei al 50%</span>
+            <span class="obj-card-date">Set 2031</span>
+          </div>
+          <div class="obj-card-attrs">
+            <span class="obj-attr">▪ BlackRock Bond Sicav · +4,7%</span>
+            <span class="obj-attr">🔄 €150/mese · attivo</span>
+          </div>
+        </div>
+        <div class="obj-card">
+          <div class="obj-card-img"></div>
+          <div class="obj-card-name">🏖 Pensione anticipata</div>
+          <div class="obj-card-progress-row">
+            <span class="obj-card-curr">3.420€</span>
+            <span class="obj-card-target">20.000€</span>
+          </div>
+          <div class="obj-card-bar"><div class="obj-card-fill" style="width:17%"></div></div>
+          <div class="obj-card-pct-row">
+            <span class="obj-card-pct-lbl">Sei al 17%</span>
+            <span class="obj-card-date">Dic 2045</span>
+          </div>
+          <div class="obj-card-attrs">
+            <span class="obj-attr">▪ Vanguard Global Stock · +2,9%</span>
+            <span class="obj-attr">🔄 €100/mese · attivo</span>
+          </div>
+        </div>
+        <!-- Pill asset allocation -->
+        <div style="margin:0 14px 5px;background:#f8f8f8;border-radius:12px;padding:10px 12px;border:1px solid #ebebeb;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:9.5px;font-weight:700;color:#333">Sei nel top 15% degli utenti</div>
+            <div style="font-size:8px;color:#aaa;margin-top:1px">Asset allocation: rivedila</div>
+          </div>
+          <div style="font-size:9px;color:#555;font-weight:700;text-decoration:underline;cursor:pointer">Vedi →</div>
+        </div>
+        <div class="reg-row">
+          <div class="reg-ic"></div>
+          <div class="reg-body"><div class="reg-lbl">Regola automatica</div><div class="reg-sub">3 fondi · €450/mese tot.</div></div>
+          <div class="reg-badge on">Attivo</div>
+        </div>
+        <div class="vers-row-c"><div class="vers-dot"></div><div class="vers-lbl-c">Versamento manuale · 10 apr</div><div class="vers-val-c">+€500</div></div>
+        <div class="vers-row-c"><div class="vers-dot"></div><div class="vers-lbl-c">Versamento manuale · 2 mar</div><div class="vers-val-c">+€300</div></div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-19: CREA OBIETTIVO — Step 1/3 · Nome + emoji ═══ -->
+  <div class="scr" id="scr-19">
+    <div class="phone"><div class="screen" style="background:#f6f6f6;position:relative;overflow:hidden">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <!-- NavBar -->
+      <div style="display:flex;align-items:center;padding:8px 14px 6px;gap:8px;flex-shrink:0">
+        <div style="width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #e8e8e8;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer">←</div>
+        <div style="flex:1;text-align:center;font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;color:#111">Nuovo obiettivo</div>
+        <div style="width:28px"></div>
+      </div>
+      <!-- Step bar -->
+      <div style="display:flex;gap:4px;margin:0 14px 14px;flex-shrink:0">
+        <div style="flex:1;height:3px;background:#111;border-radius:2px"></div>
+        <div style="flex:1;height:3px;background:#e0e0e0;border-radius:2px"></div>
+        <div style="flex:1;height:3px;background:#e0e0e0;border-radius:2px"></div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding-bottom:80px">
+        <div style="margin:0 14px 14px">
+          <div style="font-size:17px;font-weight:900;font-family:'Archivo',sans-serif;color:#111;line-height:1.2;margin-bottom:3px">Cosa stai<br>risparmiando?</div>
+          <div style="font-size:10px;color:#aaa">Scegli l'emoji e dai un nome all'obiettivo</div>
+        </div>
+        <!-- Emoji grid -->
+        <div style="margin:0 14px 14px;display:grid;grid-template-columns:repeat(5,1fr);gap:7px">
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:2px solid #111">🏖</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">🏠</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">🎓</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">🚗</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">💍</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">👶</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">🌍</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">🛡️</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">💼</div>
+          <div style="aspect-ratio:1;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid #ebebeb">✨</div>
+        </div>
+        <!-- Name field -->
+        <div style="margin:0 14px 14px;background:#fff;border-radius:12px;border:1.5px solid #111;padding:11px 14px">
+          <div style="font-size:8px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Nome obiettivo</div>
+          <div style="font-size:16px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">Vacanza a Bali<span style="display:inline-block;width:1.5px;height:16px;background:#111;vertical-align:middle;margin-left:2px;animation:blink 1s infinite"></span></div>
+        </div>
+        <!-- Suggeriti -->
+        <div style="margin:0 14px 7px;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px">Suggeriti</div>
+        <div style="margin:0 14px;display:flex;flex-wrap:wrap;gap:6px">
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:5px 12px;color:#555">Fondo emergenza</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:5px 12px;color:#555">Casa</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:5px 12px;color:#555">Pensione</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:5px 12px;color:#555">Università</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:5px 12px;color:#555">Matrimonio</div>
+        </div>
+      </div>
+      <!-- CTA -->
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px 22px;background:linear-gradient(to bottom,rgba(246,246,246,0),#f6f6f6 35%)">
+        <button onclick="goTo(20)" style="width:100%;background:#111;color:#fff;border:none;border-radius:14px;padding:14px;font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;cursor:pointer">Continua →</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-20: CREA OBIETTIVO — Step 2/3 · Importo + orizzonte ═══ -->
+  <div class="scr" id="scr-20">
+    <div class="phone"><div class="screen" style="background:#f6f6f6;position:relative;overflow:hidden">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div style="display:flex;align-items:center;padding:8px 14px 6px;gap:8px;flex-shrink:0">
+        <div onclick="goTo(19)" style="width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #e8e8e8;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer">←</div>
+        <div style="flex:1;text-align:center;font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;color:#111">Nuovo obiettivo</div>
+        <div style="width:28px"></div>
+      </div>
+      <div style="display:flex;gap:4px;margin:0 14px 14px;flex-shrink:0">
+        <div style="flex:1;height:3px;background:#111;border-radius:2px"></div>
+        <div style="flex:1;height:3px;background:#111;border-radius:2px"></div>
+        <div style="flex:1;height:3px;background:#e0e0e0;border-radius:2px"></div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding-bottom:80px">
+        <div style="margin:0 14px 16px">
+          <div style="font-size:17px;font-weight:900;font-family:'Archivo',sans-serif;color:#111;line-height:1.2;margin-bottom:3px">Quanto vuoi<br>risparmiare?</div>
+          <div style="font-size:10px;color:#aaa">Per 🏖 Vacanza a Bali</div>
+        </div>
+        <!-- Importo grande -->
+        <div style="margin:0 14px 16px;background:#fff;border-radius:14px;border:1.5px solid #111;padding:16px 14px;text-align:center">
+          <div style="font-size:8px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Importo target</div>
+          <div style="font-size:36px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;letter-spacing:-1.5px;line-height:1">1.000€</div>
+          <!-- Tasto numerico simulato -->
+          <div style="display:flex;justify-content:center;gap:10px;margin-top:10px">
+            <div style="width:28px;height:18px;background:#f2f2f2;border-radius:5px"></div>
+            <div style="width:28px;height:18px;background:#f2f2f2;border-radius:5px"></div>
+            <div style="width:28px;height:18px;background:#f2f2f2;border-radius:5px"></div>
+            <div style="width:28px;height:18px;background:#f2f2f2;border-radius:5px"></div>
+          </div>
+        </div>
+        <!-- Orizzonte temporale -->
+        <div style="margin:0 14px 10px;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px">Entro quando?</div>
+        <div style="margin:0 14px 14px;display:grid;grid-template-columns:1fr 1fr;gap:7px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #ebebeb;padding:10px 12px;text-align:center">
+            <div style="font-size:13px;font-weight:800;color:#333;font-family:'Archivo',sans-serif">1 anno</div>
+            <div style="font-size:8px;color:#bbb;margin-top:2px">dic 2026</div>
+          </div>
+          <div style="background:#111;border-radius:12px;border:1.5px solid #111;padding:10px 12px;text-align:center">
+            <div style="font-size:13px;font-weight:800;color:#fff;font-family:'Archivo',sans-serif">2 anni</div>
+            <div style="font-size:8px;color:#888;margin-top:2px">apr 2028</div>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #ebebeb;padding:10px 12px;text-align:center">
+            <div style="font-size:13px;font-weight:800;color:#333;font-family:'Archivo',sans-serif">5 anni</div>
+            <div style="font-size:8px;color:#bbb;margin-top:2px">apr 2031</div>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #ebebeb;padding:10px 12px;text-align:center">
+            <div style="font-size:13px;font-weight:800;color:#333;font-family:'Archivo',sans-serif">Personalizza</div>
+            <div style="font-size:8px;color:#bbb;margin-top:2px">scegli data</div>
+          </div>
+        </div>
+        <!-- Proiezione -->
+        <div style="margin:0 14px;background:#f2f2f2;border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:10px">
+          <div style="font-size:18px">📈</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#333">Con €42/mese ci arrivi in 2 anni</div>
+            <div style="font-size:8.5px;color:#aaa;margin-top:1px">Stima basata su rendimento storico medio</div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px 22px;background:linear-gradient(to bottom,rgba(246,246,246,0),#f6f6f6 35%)">
+        <button onclick="goTo(21)" style="width:100%;background:#111;color:#fff;border:none;border-radius:14px;padding:14px;font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;cursor:pointer">Continua →</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-21: CREA OBIETTIVO — Step 3/3 · Fondo + regola ═══ -->
+  <div class="scr" id="scr-21">
+    <div class="phone"><div class="screen" style="background:#f6f6f6;position:relative;overflow:hidden">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div style="display:flex;align-items:center;padding:8px 14px 6px;gap:8px;flex-shrink:0">
+        <div onclick="goTo(20)" style="width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #e8e8e8;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer">←</div>
+        <div style="flex:1;text-align:center;font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;color:#111">Nuovo obiettivo</div>
+        <div style="width:28px"></div>
+      </div>
+      <div style="display:flex;gap:4px;margin:0 14px 14px;flex-shrink:0">
+        <div style="flex:1;height:3px;background:#111;border-radius:2px"></div>
+        <div style="flex:1;height:3px;background:#111;border-radius:2px"></div>
+        <div style="flex:1;height:3px;background:#111;border-radius:2px"></div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding-bottom:90px">
+        <div style="margin:0 14px 14px">
+          <div style="font-size:17px;font-weight:900;font-family:'Archivo',sans-serif;color:#111;line-height:1.2;margin-bottom:3px">Dove vuoi<br>far crescere i soldi?</div>
+          <div style="font-size:10px;color:#aaa">Per 🏖 Vacanza a Bali · 1.000€ · 2 anni</div>
+        </div>
+        <!-- Fondo consigliato -->
+        <div style="margin:0 14px 5px;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px">Consigliato per te</div>
+        <div style="margin:0 14px 10px;background:#fff;border-radius:14px;border:1.5px solid #111;padding:12px 13px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px">
+            <div style="width:40px;height:40px;border-radius:10px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#f55a27;flex-shrink:0;font-family:'Archivo',sans-serif">AcomeA<br>BT</div>
+            <div style="flex:1">
+              <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">AcomeA Breve Termine</div>
+              <div style="font-size:8.5px;color:#aaa;margin-top:2px">Rischio basso · orizzonte 1-3 anni</div>
+            </div>
+            <div style="font-size:8px;font-weight:700;background:#111;color:#fff;border-radius:6px;padding:2px 7px;flex-shrink:0">✓ Scelto</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <div style="flex:1;background:#f8f8f8;border-radius:8px;padding:6px 8px;text-align:center">
+              <div style="font-size:9px;font-weight:700;color:#333">+3,2%</div>
+              <div style="font-size:7.5px;color:#aaa">rendim. medio</div>
+            </div>
+            <div style="flex:1;background:#f8f8f8;border-radius:8px;padding:6px 8px;text-align:center">
+              <div style="font-size:9px;font-weight:700;color:#333">Basso</div>
+              <div style="font-size:7.5px;color:#aaa">rischio</div>
+            </div>
+            <div style="flex:1;background:#f8f8f8;border-radius:8px;padding:6px 8px;text-align:center">
+              <div style="font-size:9px;font-weight:700;color:#333">2 anni</div>
+              <div style="font-size:7.5px;color:#aaa">orizzonte min.</div>
+            </div>
+          </div>
+        </div>
+        <!-- Altri fondi -->
+        <div style="margin:0 14px 14px;background:#fff;border-radius:12px;border:1px solid #ebebeb;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;cursor:pointer">
+          <div style="font-size:10px;font-weight:700;color:#555">Vedi altri fondi disponibili</div>
+          <div style="font-size:11px;color:#bbb">›</div>
+        </div>
+        <!-- Regola automatica -->
+        <div style="margin:0 14px 5px;font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px">Regola automatica</div>
+        <div style="margin:0 14px 8px;background:#fff;border-radius:14px;border:1px solid #ebebeb;padding:12px 13px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#111">Investi subito ricorrente</div>
+              <div style="font-size:8.5px;color:#aaa;margin-top:1px">Addebito automatico mensile</div>
+            </div>
+            <!-- Toggle ON -->
+            <div style="width:36px;height:20px;background:#111;border-radius:10px;position:relative;flex-shrink:0">
+              <div style="width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px"></div>
+            </div>
+          </div>
+          <!-- Amount row -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0 0;border-top:1px solid #f0f0f0">
+            <div style="font-size:10px;font-weight:700;color:#555">Importo mensile</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:22px;height:22px;background:#f2f2f2;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#555;font-weight:300">−</div>
+              <div style="font-size:14px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;min-width:32px;text-align:center">€42</div>
+              <div style="width:22px;height:22px;background:#f2f2f2;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#555;font-weight:300">+</div>
+            </div>
+          </div>
+          <div style="font-size:8.5px;color:#aaa;margin-top:6px;padding-top:6px;border-top:1px solid #f0f0f0">Prossimo addebito: 1 maggio · €42 da conto corrente</div>
+        </div>
+        <!-- Riepilogo -->
+        <div style="margin:0 14px;background:#1a1a1a;border-radius:14px;padding:12px 13px">
+          <div style="font-size:8px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Riepilogo</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:9.5px;color:#888">Obiettivo</span>
+            <span style="font-size:9.5px;color:#ccc;font-weight:700">🏖 Vacanza a Bali</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:9.5px;color:#888">Target</span>
+            <span style="font-size:9.5px;color:#ccc;font-weight:700">1.000€ · apr 2028</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:9.5px;color:#888">Fondo</span>
+            <span style="font-size:9.5px;color:#ccc;font-weight:700">AcomeA Breve Termine</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="font-size:9.5px;color:#888">Regola</span>
+            <span style="font-size:9.5px;color:#ccc;font-weight:700">€42/mese · dal 1 mag</span>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px 22px;background:linear-gradient(to bottom,rgba(246,246,246,0),#f6f6f6 35%)">
+        <button style="width:100%;background:#111;color:#fff;border:none;border-radius:14px;padding:14px;font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;cursor:pointer">Crea obiettivo ✓</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-23: FONDO DETAIL — Lista movimenti ═══ -->
+  <div class="scr" id="scr-23">
+    <div class="phone"><div class="screen" style="background:#f6f6f6;position:relative">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <!-- Nav back -->
+      <div style="display:flex;align-items:center;padding:8px 14px 6px;gap:8px;flex-shrink:0">
+        <div style="width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #e8e8e8;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer">←</div>
+        <div style="flex:1;text-align:center;font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;color:#111">Eurizon Bilanciato</div>
+        <div style="width:28px"></div>
+      </div>
+      <!-- Fund summary card -->
+      <div style="margin:0 14px 10px;background:#fff;border-radius:16px;padding:13px 14px;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+          <div style="width:38px;height:38px;border-radius:10px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:900;color:#f55a27;flex-shrink:0;font-family:'Archivo',sans-serif;text-align:center;line-height:1.3">EUR<br>BIL</div>
+          <div>
+            <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">Eurizon Bilanciato</div>
+            <div style="font-size:8.5px;color:#aaa;margin-top:1px">Rischio medio · orizzonte 3-5 anni</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div>
+            <div style="font-size:8px;color:#aaa;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">Valore attuale</div>
+            <div style="font-size:22px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;letter-spacing:-1px">527,50€</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:8.5px;color:#aaa;margin-bottom:2px">+€27,50 rendimento</div>
+            <div style="font-size:10px;font-weight:700;color:#3a6a3a">+5,5% YTD</div>
+          </div>
+        </div>
+      </div>
+      <!-- Section label -->
+      <div style="margin:0 14px 5px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa;flex-shrink:0">Movimenti</div>
+      <!-- Scrollable list -->
+      <div style="flex:1;overflow-y:auto;padding-bottom:80px">
+        <div style="margin:0 14px;background:#fff;border-radius:16px;overflow:hidden">
+
+          <!-- ① via obiettivo: 2 righe (tipo leggero + nome obiettivo bold) -->
+          <div style="padding:11px 13px;border-bottom:1px solid #f2f2f2;display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:9.5px;font-weight:500;color:#bbb;line-height:1.2">Risparmio automatico</div>
+              <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;margin-top:1px;line-height:1.2">🚗 Acquisto automobile</div>
+              <div style="font-size:8.5px;color:#bbb;margin-top:3px">1 apr 2026</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:8.5px;color:#bbb;margin-bottom:2px">🔄 €50/mese</div>
+              <div style="font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">+€50,00</div>
+            </div>
+          </div>
+
+          <!-- ② piano libero: 1 riga bold (nessun obiettivo) -->
+          <div style="padding:11px 13px;border-bottom:1px solid #f2f2f2;display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;line-height:1.2">Risparmio automatico</div>
+              <div style="font-size:8.5px;color:#bbb;margin-top:3px">1 apr 2026</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:8.5px;color:#bbb;margin-bottom:2px">🔄 €50/mese</div>
+              <div style="font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">+€50,00</div>
+            </div>
+          </div>
+
+          <!-- ③ via obiettivo -->
+          <div style="padding:11px 13px;border-bottom:1px solid #f2f2f2;display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:9.5px;font-weight:500;color:#bbb;line-height:1.2">Risparmio automatico</div>
+              <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;margin-top:1px;line-height:1.2">🚗 Acquisto automobile</div>
+              <div style="font-size:8.5px;color:#bbb;margin-top:3px">1 mar 2026</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:8.5px;color:#bbb;margin-bottom:2px">🔄 €50/mese</div>
+              <div style="font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">+€50,00</div>
+            </div>
+          </div>
+
+          <!-- ④ piano libero -->
+          <div style="padding:11px 13px;border-bottom:1px solid #f2f2f2;display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;line-height:1.2">Risparmio automatico</div>
+              <div style="font-size:8.5px;color:#bbb;margin-top:3px">1 mar 2026</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:8.5px;color:#bbb;margin-bottom:2px">🔄 €50/mese</div>
+              <div style="font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">+€50,00</div>
+            </div>
+          </div>
+
+          <!-- ⑤ via obiettivo -->
+          <div style="padding:11px 13px;border-bottom:1px solid #f2f2f2;display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:9.5px;font-weight:500;color:#bbb;line-height:1.2">Risparmio automatico</div>
+              <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;margin-top:1px;line-height:1.2">🚗 Acquisto automobile</div>
+              <div style="font-size:8.5px;color:#bbb;margin-top:3px">1 feb 2026</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:8.5px;color:#bbb;margin-bottom:2px">🔄 €50/mese</div>
+              <div style="font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">+€50,00</div>
+            </div>
+          </div>
+
+          <!-- ⑥ bonifico primo versamento -->
+          <div style="padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;font-weight:800;color:#111;font-family:'Archivo',sans-serif;line-height:1.2">Bonifico</div>
+              <div style="font-size:8.5px;color:#bbb;margin-top:3px">15 gen 2026 · primo versamento</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:13px;font-weight:800;color:#111;font-family:'Archivo',sans-serif">+€200,00</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Nav bar -->
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ═══ SCR-22: TAB OBIETTIVI — Pagina zero ═══ -->
+  <div class="scr" id="scr-22">
+    <div class="phone"><div class="screen" style="background:#f6f6f6;position:relative">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <!-- Page header -->
+      <div style="padding:8px 16px 10px;flex-shrink:0">
+        <div style="font-size:22px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;letter-spacing:-.5px">I tuoi obiettivi</div>
+      </div>
+      <!-- Scrollable body -->
+      <div style="flex:1;overflow-y:auto;padding-bottom:80px">
+        <!-- Empty state card -->
+        <div style="margin:0 14px 18px;background:#fff;border-radius:20px;padding:28px 16px 22px;text-align:center">
+          <div style="width:72px;height:72px;border-radius:20px;background:#f0f0f0;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:28px">🎯</div>
+          <div style="font-size:15px;font-weight:900;color:#111;font-family:'Archivo',sans-serif;margin-bottom:6px">Nessun obiettivo ancora</div>
+          <div style="font-size:11px;color:#aaa;line-height:1.5;margin:0 auto 20px;max-width:200px">Crea il tuo primo obiettivo e inizia a risparmiare con un piano automatico.</div>
+          <button onclick="goTo(19)" style="width:100%;background:#111;color:#fff;border:none;border-radius:12px;padding:13px;font-size:12px;font-weight:800;font-family:'Archivo',sans-serif;cursor:pointer">+ Crea obiettivo</button>
+        </div>
+        <!-- Da dove iniziare -->
+        <div style="margin:0 14px 8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#aaa">Da dove iniziare?</div>
+        <div style="margin:0 14px 16px;display:flex;flex-wrap:wrap;gap:7px">
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:6px 12px;color:#555;cursor:pointer">🏖 Vacanza</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:6px 12px;color:#555;cursor:pointer">🏠 Casa</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:6px 12px;color:#555;cursor:pointer">🎓 Università</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:6px 12px;color:#555;cursor:pointer">💍 Matrimonio</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:6px 12px;color:#555;cursor:pointer">🆘 Fondo emergenza</div>
+          <div style="font-size:10px;font-weight:600;background:#fff;border:1px solid #e8e8e8;border-radius:20px;padding:6px 12px;color:#555;cursor:pointer">👴 Pensione</div>
+        </div>
+        <!-- Pill educativa aspirazionale -->
+        <div class="pill-dark" style="margin:0 14px">
+          <div class="pill-dark-label">Gimme5 · Educazione</div>
+          <div class="pill-dark-title">Chi ha un obiettivo<br>risparmia 3× di più</div>
+          <div class="pill-dark-sub">Dare un nome a quello che vuoi cambia tutto. Provaci.</div>
+          <div class="pill-dark-brand">powered by GIMME5</div>
+          <div class="pill-dark-close">×</div>
+        </div>
+      </div>
+      <!-- Nav bar — Obiettivi active -->
+      <div class="bnav">
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-plus">+</div><div class="bn-l" style="margin-top:4px">Investi</div></div>
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  </div><!-- /screens -->
+  <div class="nav-arrow right" onclick="next()">›</div>
+</div><!-- /phonewrap -->
+
+<div class="infopanel" id="infopanel"></div>
+
+</div><!-- /layout -->
+
+<script>
+const CASES = [
+  {
+    num:'Caso 1', title:'Regola+Bonifico ✓ · Obiettivo ✗ · €50',
+    desc:'Ha completato regola E bonifico. I soldi ci sono. Manca solo l\'obiettivo. Messaggio: "sei quasi lì, manca un passo".',
+    done:['Fondo','Regola','Bonifico'], miss:['Obiettivo'],
+    cta:'<b>CTA:</b> + Crea il tuo primo obiettivo<br><b>Pill:</b> "I soldi senza meta finiscono"',
+    note:'Regola: Obiettivi tab vuota → CTA sempre "Crea obiettivo". La pill dark è FOMO soft educational.'
+  },
+  {
+    num:'Caso 4', title:'Solo fondo · tutto ✗ · €0',
+    desc:'Utente più freddo. Solo fondo scelto, saltato tutto il resto. FOMO massimo.',
+    done:['Fondo'], miss:['Regola','Bonifico','Obiettivo'],
+    cta:'<b>CTA:</b> + Crea il tuo primo obiettivo<br><b>Pill:</b> "Inizia con €5. Adesso."',
+    note:'Portafoglio €0 onesto, crea urgenza. Pill usa FOMO temporale.'
+  },
+  {
+    num:'Caso 2', title:'Bonifico ✓ · Regola ✗ · Obiettivo ✗ · €10',
+    desc:'Ha fatto il bonifico ma ha saltato la regola in onboarding. I soldi ci sono (€10). Manca la regola automatica.',
+    done:['Fondo','Bonifico ricevuto'], miss:['Regola','Obiettivo'],
+    cta:'<b>CTA:</b> + Crea il tuo primo obiettivo (Obiettivi tab = crea obiettivo)<br><b>Pill dark:</b> "Attiva il versamento automatico"',
+    note:'Questo caso era invertito nella versione precedente (Regola ✓ / Bonifico ✗). La pill suggerisce di attivare la regola automatica come prossimo passo.'
+  },
+  {
+    num:'Portafoglio €50', title:'Vista Portafoglio · Casi 1+3 · Piano libero',
+    desc:'Quando l\'utente switcha su Portafoglio nella home (Casi 1+3). Ha €50 nel fondo. Nessun obiettivo. Il piano libero è visibile come riga anonima. Il nudge verso obiettivo è soft.',
+    done:['Fondo','€50 investiti','Piano libero visibile'], miss:['Obiettivo'],
+    cta:'Fondo visibile come card · Piano libero come riga dashed · Nudge: "Dai un obiettivo a questi €50"',
+    note:'Piano libero = regola su fondo senza obiettivo. Non va nascosto — è trasparente. Ma viene mostrato come stato incompleto con nudge passivo verso la creazione di un obiettivo.'
+  },
+  {
+    num:'Portafoglio €0', title:'Vista Portafoglio · Casi 2+4 · Empty state',
+    desc:'Quando l\'utente switcha su Portafoglio senza aver versato ancora. €0. Il fondo è pronto ma vuoto. Empty state con CTA diretta: fai il primo versamento.',
+    done:['Fondo pronto'], miss:['Versamento'],
+    cta:'Empty state emotivo · Fondo chip visibile · CTA: + Fai il primo versamento · nota "Minimo €5"',
+    note:'Mostrare il fondo anche con €0 è importante: l\'utente vede che l\'infrastruttura esiste. Non è empty totale — è "pronto ma vuoto".'
+  },
+  {
+    num:'GUIDED', title:'Primo obiettivo creato · €0 · no regola',
+    desc:'Momento più critico del journey: ha appena creato il primo obiettivo ma non ha ancora versato né attivato una regola. Va celebrato e subito guidato alle 2 azioni mancanti.',
+    done:['Fondo','Obiettivo creato'], miss:['Versamento','Regola'],
+    cta:'Header celebrativo · Hero card obiettivo con 0% · <b>2 CTA:</b> "Versa ora" + "Attiva regola" · Pill: "Hai iniziato. Ecco cosa succede ora."',
+    note:'Le 2 CTA sono equivalenti — l\'utente sceglie da dove partire. La pill è rassicurante, non urgente: spiega cosa succede con il primo versamento.'
+  },
+  {
+    num:'GUIDED +', title:'Obiettivo + regola attiva · €0 in attesa',
+    desc:'Ha creato obiettivo e attivato la regola. I soldi non ci sono ancora (addebito non ancora avvenuto). Setup completo — è solo questione di tempo.',
+    done:['Fondo','Obiettivo','Regola attiva'], miss:['Primo versamento'],
+    cta:'Header positivo "tutto è pronto" · Proiezione: "Primo versamento: 1 mag" · CTA secondaria: "Anticipa un versamento"',
+    note:'Stato di attesa positivo. Non c\'è nessuna azione urgente. La CTA "Anticipa un versamento" è optional — per chi vuole partire prima del ciclo automatico.'
+  },
+  {
+    num:'ATTIVO 1', title:'1 obiettivo · piano attivo · steady state',
+    desc:'Setup completo. €340 investiti. Piano automatico attivo. Home è solo stato — l\'obiettivo è il protagonista con proiezione temporale emotiva.',
+    done:['Tutto completato'], miss:[],
+    cta:'Hero card obiettivo con % + proiezione temporale<br>"A questo ritmo ci arrivi a dicembre 2026"<br>Piano visibile sotto · Nessuna CTA forzata',
+    note:'La proiezione "a questo ritmo" è il cuore emotivo. Risponde alla domanda reale: "ci arrivo?". Deve essere sempre visibile per gli utenti attivi.'
+  },
+  {
+    num:'ATTIVO MULTI', title:'3 obiettivi · piano attivo',
+    desc:'Utente con 3 obiettivi. L\'obiettivo con la % più alta (o scadenza più vicina) diventa hero. Gli altri 2 in lista compatta sotto.',
+    done:['3 obiettivi attivi','3 regole'], miss:[],
+    cta:'Hero = obiettivo prioritario<br>Lista compatta per gli altri 2<br>"3 regole attive · €180/mese tot."',
+    note:'Ordine default: per % di completamento decrescente. Alternativa: per scadenza crescente. Da definire con il cliente.'
+  },
+  {
+    num:'PORTAFOGLIO GRAFICO', title:'Vista Portafoglio · grafico misto 2 fondi',
+    desc:'Mostra come appare il grafico aggregato quando ci sono più fondi. Linea solida = totale portafoglio. Linee tratteggiate = contributo di ogni singolo fondo. Allocation breakdown con barre %.',
+    done:['Grafico SVG aggregato','Legenda fondi','Allocation bars','CTA Versa'], miss:[],
+    cta:'CTA: + Versa nel portafoglio (regola: Portafoglio tab → sempre Versa)<br>Legenda: Totale (solido) · AcomeA BT (tratteggiato) · Vanguard (tratteggiato)<br>Allocation: barre % con valore €',
+    note:'Le linee tratteggiate dei singoli fondi permettono di capire quale fondo sta performando meglio. La linea totale è sempre la più prominente. In futuro: tappando su un fondo nel grafico si isola quella linea.'
+  },
+  {
+    num:'DORMIENTE', title:'63gg inattivo · gauge · piano fermo',
+    desc:'Ha soldi investiti ma il piano è fermo da 63 giorni. Gauge con arc grigio (non scuro). Pill: "il tuo piano ha lavorato per te" — rassicurante, non urgente.',
+    done:['Fondo','Obiettivo','€187 investiti'], miss:['Attività recente'],
+    cta:'<b>Gauge:</b> arc grigio #999 · valore €187,50<br><b>Pill dark:</b> "Il tuo piano ha lavorato per te!"<br><b>Bottoni gauge:</b> Riprendi · Riattiva · Gestisci',
+    note:'Nessuna pill aggressiva. Push ore 19:00 solo. L\'arc più chiaro del normale segnala lo stato di pausa senza allarmare.'
+  },
+  {
+    num:'A RISCHIO', title:'Mercati in calo · gauge · pill educativa',
+    desc:'Mercati in calo questa settimana. Il gauge mostra il calo con rend chip negativi (rosati). Pill dark rassicurante: "i mercati hanno corretto — è normale".',
+    done:['Fondo','Obiettivo','Regola attiva'], miss:['Performance positiva'],
+    cta:'<b>Gauge:</b> rend chip neg (-5,6%)<br><b>Pill dark:</b> "I mercati hanno corretto!"<br><b>Copy:</b> "Nel lungo periodo il trend è sempre positivo"',
+    note:'Non "a rischio" nel senso di regola sospesa — è a rischio percepito per il mercato. La pill educativa è obbligatoria per MiFID II in questi contesti.'
+  },
+  {
+    num:'Caso 3', title:'Obiettivo+Bonifico ✓ · Regola ✗ · €0',
+    desc:'Ha creato un obiettivo e fatto il bonifico ma non ha impostato nessuna regola automatica. Il messaggio è diretto: "imposta una regola per iniziare".',
+    done:['Fondo','Obiettivo','Bonifico'], miss:['Regola'],
+    cta:'<b>CTA:</b> + Attiva la regola automatica<br><b>Pill fomo:</b> "Inizia adesso! Con €50/mese…"<br>Fondo chip visibile anche a €0',
+    note:'Variante della Figma con obiettivo "risparmiare" vs "guadagnare" (la seconda è MiFID II borderline). Nel wireframe B&W la differenza è solo nel copy del header.'
+  },
+  {
+    num:'FANTASMA', title:'7gg inattivo · €0 · nessuna azione',
+    desc:'Utente che si è registrato ma non ha fatto nulla per 7 giorni. €0, nessuna regola, nessun obiettivo. Tono soft, non aggressivo.',
+    done:['Fondo scelto'], miss:['Tutto il resto'],
+    cta:'<b>Header:</b> "Ehi Filippo, 7 giorni senza farlo. Non è troppo tardi."<br><b>CTA:</b> + Inizia a risparmiare<br><b>Pill:</b> "Chi inizia oggi, in un anno ha già qualcosa"',
+    note:'No push aggressivi per il fantasma. Tono invitante, non pressante. La pill è dark (educativa) non fomo (salmon).'
+  },
+  {
+    num:'IN PAUSA', title:'Regola ferma 60gg · €0',
+    desc:'L\'utente aveva una regola attiva ma si è fermata da 60 giorni. Ha saltato 2 mesi di versamenti. FOMO quantificato.',
+    done:['Fondo','Regola (sospesa)'], miss:['Versamenti ultimi 60gg'],
+    cta:'<b>CTA:</b> Riprendi il piano automatico<br><b>Alert:</b> "Regola ferma da 60 giorni"<br><b>Pill fomo:</b> "Hai saltato 2 mesi. Avresti già €60 in più."',
+    note:'Diverso da DORMIENTE (che ha già soldi investiti). IN PAUSA è chi non ha mai versato o ha azzerato. L\'urgenza è sul tempo perso, non sul portafoglio.'
+  },
+  {
+    num:'ATTIVO MULTI · Portafoglio', title:'2 fondi · 3 obiettivi · piano libero',
+    desc:'Il caso estremo: utente maturo con più obiettivi che condividono lo stesso fondo. AcomeA BT è usato sia da Bali che da Master 2027. Vista Portafoglio deve mostrare la complessità senza perderla.',
+    done:['2 fondi attivi','3 obiettivi','3 regole','€2.600 investiti'], miss:[],
+    cta:'Fondo come riga primaria · Obiettivi come sub-righe indentate<br>Totale aggregato + rendimento YTD per fondo<br>Piani: "3 regole attive · €180/mese"',
+    note:'Decisione chiave: in Vista Portafoglio il fondo è il protagonista (con rendimento %). Gli obiettivi appaiono come attributi sotto ogni fondo. Un fondo condiviso da 2 obiettivi mostra entrambi come sub-righe — ognuno col suo valore allocato e % di avanzamento.'
+  },
+  {
+    num:'NAMING', title:'"Regola" → "Regola automatica"',
+    desc:'Raccomandazione: mantieni "regola" ma aggiungi "automatica". Zero friction per gli utenti esistenti. Chiarisce il meccanismo senza rompere la continuità.',
+    done:['4 opzioni analizzate'], miss:['Approvazione cliente'],
+    cta:'"Regola automatica" = raccomandato<br>"Piano automatico" = alternativa B<br>In UI: "Regola automatica attiva · €30/mese"',
+    note:'Non rinominare da zero — rischio di confondere gli utenti esistenti. L\'aggiunta di "automatica" è sufficiente per rendere il termine comprensibile ai nuovi.'
+  },
+  {
+    num:'NAV BAR', title:'Home · Esplora · [+] · Obiettivi · Profilo',
+    desc:'Proposta: sostituire Operatività con Obiettivi (tab dedicata ai goal), spostare Community dentro Profilo o Esplora, mantenere il [+] centrale con label "Investi".',
+    done:['5 tab definitivi'], miss:['Approvazione cliente'],
+    cta:'Home = stato · Esplora = discovery · [+]Investi = azioni · Obiettivi = centro · Profilo = gestione',
+    note:'Operatività → dentro [+] Investi. Community → dentro Profilo o Esplora. Fondi mai come tab — sempre attributo di Obiettivi o sezione di Esplora.'
+  },
+  {
+    num:'ESPERTO', title:'3 fondi · 4 obiettivi · gauge · layout denso',
+    desc:'Utente maturo con portafoglio diversificato. 3 fondi, 4 obiettivi, regola automatica + versamenti manuali. Gauge al ~80% del target.',
+    done:['3 fondi attivi','4 obiettivi','Regola automatica'], miss:[],
+    cta:'<b>Gauge:</b> arc scuro 80% · €8.420 totale<br><b>Pill:</b> "Sei nel top 15% degli utenti"<br><b>Bottone gauge:</b> Alloca (asset allocation)',
+    note:'Layout denso: fondi con sub-righe obiettivi, regola automatica €450/mese, versamenti manuali visibili. "Top 15%" è un nudge aspirazionale non pressante.'
+  },
+  {
+    num:'CREA OBIETTIVO · 1/3', title:'Nome + emoji',
+    desc:'Primo step del flow di creazione obiettivo. L\'utente sceglie l\'emoji e il nome. Suggeriti: fondo emergenza, casa, pensione, università, matrimonio.',
+    done:['Emoji selezionata','Nome inserito'], miss:['Importo','Fondo','Regola'],
+    cta:'Step 1 di 3 · Emoji grid + campo nome + chip suggeriti<br>CTA: "Continua →"',
+    note:'L\'emoji scelta diventa identificatore visivo permanente dell\'obiettivo ovunque nell\'app. Il nome è completamente libero — i suggeriti sono solo per chi è in bianco.'
+  },
+  {
+    num:'CREA OBIETTIVO · 2/3', title:'Importo + orizzonte temporale',
+    desc:'L\'utente imposta quanto vuole risparmiare e in quanto tempo. La proiezione mensile viene calcolata automaticamente: "Con €X/mese ci arrivi in Y anni".',
+    done:['Nome obiettivo'], miss:['Importo','Scadenza','Fondo','Regola'],
+    cta:'Step 2 di 3 · Importo grande editabile + 4 opzioni orizzonte temporale<br>Proiezione: "Con €42/mese ci arrivi in 2 anni"<br>CTA: "Continua →"',
+    note:'Le 4 opzioni di orizzonte (1 anno, 2 anni, 5 anni, personalizza) coprono il 90% dei casi. "Personalizza" apre un date picker nativo. La proiezione usa il rendimento storico medio del fondo consigliato.'
+  },
+  {
+    num:'CREA OBIETTIVO · 3/3', title:'Fondo + regola + conferma',
+    desc:'Step finale: il fondo viene consigliato in base all\'orizzonte temporale scelto. La regola automatica è pre-compilata con l\'importo mensile calcolato. Riepilogo completo prima della conferma.',
+    done:['Nome','Importo','Scadenza'], miss:['Conferma'],
+    cta:'Step 3 di 3 · Fondo consigliato (✓ Scelto) + stat box (rendimento, rischio, orizzonte)<br>Regola toggle ON + stepper importo mensile<br>Riepilogo dark · CTA: "Crea obiettivo ✓"',
+    note:'Il fondo consigliato è selezionato automaticamente in base all\'orizzonte: <2 anni → rischio basso, 2-5 anni → rischio medio-basso, >5 anni → rischio medio. L\'utente può sempre vedere altri fondi.'
+  },
+  {
+    num:'OBIETTIVI · Pagina zero', title:'Tab dedicata · nessun obiettivo',
+    desc:'Vista della tab Obiettivi quando l\'utente non ha ancora creato nessun goal. Empty state motivazionale con CTA diretta, chips ispirazionali per tipo di obiettivo e pill educativa aspirazionale.',
+    done:['Fondo scelto (opzionale)'], miss:['Obiettivi'],
+    cta:'<b>CTA:</b> "+ Crea obiettivo" dentro la card empty state<br><b>Chips:</b> Vacanza · Casa · Università · Matrimonio · Fondo emergenza · Pensione<br><b>Pill:</b> "Chi ha un obiettivo risparmia 3× di più" (educativa, non fomo)',
+    note:'Questa è la schermata del TAB Obiettivi, non la Home. Nav bar con Obiettivi evidenziato. Niente gauge, niente toggle Home/Portafoglio. La pill è aspirazionale — nessuna pressione. I chips ispirazionali avviano il flow di creazione con il tipo preselezionato.'
+  },
+  {
+    num:'MOVIMENTI', title:'Lista versamenti fondo · 2 varianti riga',
+    desc:'Dettaglio fondo con lista movimenti. Differenzia visivamente versamenti da regola diretta (piano libero) e versamenti tramite obiettivo. Stesso fondo, origini diverse.',
+    done:['Fondo','Movimenti storici'], miss:[],
+    cta:'<b>Riga 1 riga (piano libero):</b> titolo bold "Risparmio automatico" · nessuna seconda riga<br><b>Riga 2 righe (via obiettivo):</b> "Risparmio automatico" leggero sopra + "🚗 Acquisto automobile" bold sotto<br><b>Bonifico:</b> riga singola senza ricorrenza',
+    note:'La differenziazione è puramente tipografica — nessun colore, nessun badge. La riga in più con il nome dell\'obiettivo è il segnale. Chi non ha obiettivi vede solo righe singole. Il trattino "-" (variante Figma) è stato eliminato: quando non c\'è obiettivo la riga scompare, non sostituita con un segnaposto vuoto.'
+  },
+];
+
+const SIDEBAR_ORDER = [0,1,2,15,3,4,16,17,5,6,7,8,13,9,10,18,19,20,21,22,23];
+let navPos = 0, current = 0;
+
+function goTo(idx) {
+  document.getElementById('scr-'+current).classList.remove('active');
+  const ps = document.querySelector(`.sl-item[data-screen="${current}"]`);
+  if(ps) ps.classList.remove('active');
+  current = idx;
+  navPos = SIDEBAR_ORDER.indexOf(idx);
+  if(navPos < 0) navPos = 0;
+  document.getElementById('scr-'+current).classList.add('active');
+  const ns = document.querySelector(`.sl-item[data-screen="${current}"]`);
+  if(ns) ns.classList.add('active');
+  updateMeta();
+}
+function next(){ navPos=(navPos+1)%SIDEBAR_ORDER.length; goTo(SIDEBAR_ORDER[navPos]); }
+function prev(){ navPos=(navPos-1+SIDEBAR_ORDER.length)%SIDEBAR_ORDER.length; goTo(SIDEBAR_ORDER[navPos]); }
+
+function updateMeta() {
+  const c = CASES[current] || {num:'—',title:'—',desc:'',done:[],miss:[],cta:'—',note:'—'};
+  document.getElementById('tb-name').textContent = c.num+' · '+c.title;
+  document.getElementById('tb-counter').textContent = (navPos+1)+' / '+SIDEBAR_ORDER.length;
+  const done = c.done.map(t=>`<span class="tag done">${t}</span>`).join('');
+  const miss = c.miss.map(t=>`<span class="tag miss">${t}</span>`).join('');
+  document.getElementById('infopanel').innerHTML = `
+    <div class="ip-case">${c.num}</div>
+    <div class="ip-title">${c.title}</div>
+    <div class="ip-desc">${c.desc}</div>
+    ${(done||miss)?'<div class="ip-div"></div>':''}
+    ${done?`<div class="ip-sec">Completato</div><div style="margin-bottom:8px">${done}</div>`:''}
+    ${miss?`<div class="ip-sec">Mancante</div><div style="margin-bottom:8px">${miss}</div>`:''}
+    <div class="ip-div"></div>
+    <div class="ip-sec">Decisioni di design</div>
+    <div class="ip-cta" style="margin-bottom:12px">${c.cta}</div>
+    <div class="ip-sec">Note</div>
+    <div class="ip-note">${c.note}</div>
+  `;
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') next();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') prev();
+});
+updateMeta();
+</script>
+</body>
+</html>

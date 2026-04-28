@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Brand */
+  --g5-primary:        #f55a27;
+  --g5-primary-dark:   #e6410b;
+  --g5-primary-dim:    #fdd6c9;
+  --g5-primary-tint:   #fef4f0;
+  --g5-primary-deep:   #6b1e05;
+  --g5-fund-bg:        #33110A;
+
+  /* Neutrals */
+  --g5-black:          #000000;
+  --g5-near-black:     #0f0f0f;
+  --g5-dark:           #1e1e1e;
+  --g5-bg:             #f5f5f5;
+  --g5-bg-card:        #ffffff;
+  --g5-surface:        #f6f6f6;
+
+  /* Text */
+  --g5-text:           #000000;
+  --g5-text-secondary: #5c5c5c;
+  --g5-text-muted:     #3a3a3a;
+  --g5-text-light:     #717171;
+  --g5-text-cream:     #fdfcf4;
+
+  /* Borders */
+  --g5-border:         #d0d0d0;
+  --g5-border-light:   #e8e8e8;
+
+  /* Semantic */
+  --g5-green:          #15803d;
+  --g5-green-bg:       #dcfce7;
+  --g5-red:            #ba1a1a;
+  --g5-red-bg:         #ffdad6;
+  --g5-amber:          #92400e;
+
+  /* Radius */
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;
+  --r-xl:   20px;
+  --r-pill: 999px;
+
+  /* DS page tokens */
+  --ds-bg:       #0a0a0a;
+  --ds-surface:  #111111;
+  --ds-surface2: #1a1a1a;
+  --ds-border:   #222222;
+  --ds-text:     #f0f0f0;
+  --ds-muted:    #666666;
+  --ds-accent:   #f55a27;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--ds-bg);
+  color: var(--ds-text);
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   DS LAYOUT
+══════════════════════════════════════════════════════════ */
+.ds-header {
+  padding: 48px 56px 40px;
+  border-bottom: 1px solid var(--ds-border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+.ds-header-left h1 {
+  font-family: 'Archivo', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  line-height: 1;
+}
+.ds-header-left h1 span { color: var(--g5-primary); }
+.ds-header-left p { font-size: 13px; color: var(--ds-muted); margin-top: 8px; }
+.ds-header-meta { display: flex; gap: 8px; align-items: center; }
+.ds-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--ds-surface2);
+  color: var(--ds-muted);
+  border: 1px solid var(--ds-border);
+}
+.ds-badge.active {
+  background: rgba(245,90,39,0.15);
+  color: var(--g5-primary);
+  border-color: rgba(245,90,39,0.3);
+}
+
+.ds-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ds-border);
+  padding: 0 56px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.ds-nav a {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ds-muted);
+  text-decoration: none;
+  padding: 14px 16px;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.ds-nav a:hover { color: var(--ds-text); }
+.ds-nav a.active { color: var(--g5-primary); border-bottom-color: var(--g5-primary); }
+
+.ds-body { max-width: 1320px; margin: 0 auto; padding: 64px 56px; }
+.ds-chapter { margin-bottom: 96px; }
+.ds-chapter-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--g5-primary);
+  margin-bottom: 6px;
+}
+.ds-chapter-title {
+  font-family: 'Archivo', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.ds-chapter-desc {
+  font-size: 13px;
+  color: var(--ds-muted);
+  margin-bottom: 40px;
+  max-width: 540px;
+}
+.ds-divider {
+  border: none;
+  border-top: 1px solid var(--ds-border);
+  margin: 48px 0;
+}
+
+.ds-section { margin-bottom: 56px; }
+.ds-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+/* ══════════════════════════════════════════════════════════
+   CANVAS — white "phone frame" area for component previews
+══════════════════════════════════════════════════════════ */
+.canvas {
+  background: var(--g5-bg);
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid var(--ds-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+}
+.canvas.white { background: #fff; }
+.canvas.dark  { background: #111; }
+.canvas.center { justify-content: center; }
+.canvas.col { flex-direction: column; gap: 12px; }
+
+/* Code label under component */
+.comp-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--ds-muted);
+  margin-top: 6px;
+  font-family: 'Inter', monospace;
+}
+.comp-wrap { display: flex; flex-direction: column; align-items: flex-start; }
+.comp-wrap.stretch { width: 100%; }
+
+/* ══════════════════════════════════════════════════════════
+   ① COLORS
+══════════════════════════════════════════════════════════ */
+.color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 12px; }
+.color-swatch {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--ds-border);
+}
+.color-swatch-block { height: 64px; }
+.color-swatch-info { padding: 10px 12px; background: var(--ds-surface2); }
+.color-swatch-name { font-size: 11px; font-weight: 700; color: #e0e0e0; }
+.color-swatch-hex  { font-size: 11px; color: var(--ds-muted); font-family: monospace; margin-top: 2px; }
+
+/* ══════════════════════════════════════════════════════════
+   ② TYPOGRAPHY
+══════════════════════════════════════════════════════════ */
+.type-row {
+  padding: 20px 24px;
+  background: var(--ds-surface);
+  border-radius: 10px;
+  border: 1px solid var(--ds-border);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+.type-row-specimen { color: #fff; flex: 1; min-width: 0; }
+.type-row-meta { font-size: 11px; color: var(--ds-muted); white-space: nowrap; font-family: monospace; text-align: right; }
+.type-row-meta span { display: block; }
+
+/* ══════════════════════════════════════════════════════════
+   ③ SPACING & RADIUS
+══════════════════════════════════════════════════════════ */
+.token-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 16px;
+  background: var(--ds-surface);
+  border-radius: 8px;
+  border: 1px solid var(--ds-border);
+  margin-bottom: 6px;
+}
+.token-name  { font-size: 12px; font-weight: 700; color: var(--g5-primary); font-family: monospace; width: 80px; }
+.token-value { font-size: 11px; color: var(--ds-muted); font-family: monospace; width: 60px; }
+.token-visual { flex: 1; }
+.spacing-bar { height: 6px; background: var(--g5-primary); border-radius: 3px; opacity: 0.8; }
+.radius-box { border: 2px solid var(--g5-primary); width: 48px; height: 48px; opacity: 0.8; }
+
+/* ══════════════════════════════════════════════════════════
+   GIMME5 COMPONENT STYLES (exact from prototype)
+══════════════════════════════════════════════════════════ */
+
+/* Buttons */
+.btn {
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Archivo', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .15s;
+  white-space: nowrap;
+}
+.btn-full { width: 100%; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+/* Primary */
+.bp { background: #f55a27; color: #000000; }
+/* Dark */
+.bt { background: #1e1e1e; color: #fdfcf4; }
+/* Outlined */
+.bt-light { background: transparent; color: #0f0f0f; border: 1.5px solid #0f0f0f; }
+/* On dark surface */
+.bt-dark { background: #0f0f0f; color: #ffffff; }
+/* Ghost / tertiary */
+.bs { background: transparent; color: #1a1a1a; font-weight: 500; font-size: 14px; }
+/* Tinted ghost */
+.bgh { background: #FFE4DB; color: #33110A; }
+/* Disabled primary state */
+.bp-dis { background: #d0d0d0; color: #888888; cursor: not-allowed; }
+/* Disabled dark state */
+.bt-dis { background: #c8c8c8; color: #888888; cursor: not-allowed; }
+
+/* Inputs */
+.if {
+  padding: 13px 16px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+  color: #000;
+  transition: border-color .15s;
+}
+.if:focus { border-color: #000000; box-shadow: 0 0 0 1.5px #000000; }
+.if.filled { border-color: #000000; }
+.if.error  { border-color: #ba1a1a; box-shadow: 0 0 0 1.5px #ba1a1a; }
+.il {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: #0f0f0f;
+  display: block;
+  margin-bottom: 6px;
+}
+.ig { display: flex; flex-direction: column; gap: 0; }
+
+/* Chip */
+.chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1.5px solid #d8d8d8;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #fff;
+  color: #444;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.chip.sel {
+  background: #fef4f0;
+  color: #7a3010;
+  border-color: #f9c4ac;
+  font-weight: 600;
+}
+.chip-dark {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Checkbox */
+.dcheckbox {
+  width: 16px; height: 16px;
+  border: 2px solid #c8c8c8;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+.dcheckbox.chk { background: #f55a27; border-color: #f55a27; color: #0f0f0f; }
+
+/* Card base */
+.g5-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1.5px solid transparent;
+}
+.g5-card.selected { border-color: #f55a27; box-shadow: 0 0 0 1.5px #f55a27; }
+
+/* Radio dot */
+.radio-dot {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid #c8c8c8;
+  display: flex; align-items: center; justify-content: center;
+}
+.radio-dot.active { border-color: #f55a27; }
+.radio-dot-inner { width: 6px; height: 6px; border-radius: 50%; background: #f55a27; }
+
+/* Badge pill */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  background: #f2f2f2;
+  color: #3a3a3a;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* Alert / info box */
+.g5-info {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #fff;
+  font-size: 12px;
+  color: #3a3a3a;
+  line-height: 1.5;
+}
+.g5-alert-orange {
+  background: #fef4f0;
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+/* Progress bar */
+.g5-progress-track {
+  width: 100%;
+  height: 4px;
+  background: #e8e8e8;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.g5-progress-fill {
+  height: 100%;
+  background: #f55a27;
+  border-radius: 2px;
+}
+.g5-progress-fill.green { background: #15803d; }
+
+/* Stepper / progress dots */
+.step-bar { display: flex; gap: 4px; }
+.step-seg { flex: 1; height: 2px; border-radius: 1px; background: #cdcdcd; }
+.step-seg.done { background: #f55a27; }
+
+/* Nav bar */
+.g5-nav {
+  background: #fff;
+  border-top: 1px solid #ece9e3;
+  display: flex;
+  padding-bottom: 20px;
+}
+.g5-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 0 0;
+  font-size: 10px;
+  font-weight: 500;
+  color: #3a3a3a;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.g5-nav-item.active { color: #f55a27; font-weight: 700; }
+.g5-nav-plus {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: #f55a27;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: -12px;
+  font-size: 24px;
+  font-weight: 300;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(245,90,39,.4);
+  flex-shrink: 0;
+}
+
+/* Fund icon avatar */
+.fund-avatar {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: #33110A;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #F55A27;
+  font-family: 'Archivo', sans-serif;
+  flex-shrink: 0;
+}
+
+/* Spinner */
+.spinner {
+  width: 44px; height: 44px;
+  border: 3px solid #000;
+  border-top-color: #f55a27;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Toast */
+.g5-toast {
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.3);
+}
+
+/* Sheet handle */
+.sheet-handle {
+  width: 36px; height: 4px;
+  border-radius: 2px;
+  background: #d0d0d0;
+  margin: 0 auto 16px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   DS-SPECIFIC HELPERS
+══════════════════════════════════════════════════════════ */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.four-col  { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+
+.ds-sub {
+  font-size: 12px;
+  color: var(--ds-muted);
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+.prop-table { width: 100%; border-collapse: collapse; }
+.prop-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--ds-border);
+}
+.prop-table td {
+  font-size: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ds-border);
+  color: #ccc;
+}
+.prop-table td:first-child { font-family: monospace; color: var(--g5-primary); }
+.prop-table tr:last-child td { border-bottom: none; }
+.prop-table-wrap {
+  background: var(--ds-surface);
+  border-radius: 10px;
+  border: 1px solid var(--ds-border);
+  overflow: hidden;
+  margin-top: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<header class="ds-header">
+  <div class="ds-header-left">
+    <h1>Gimme5 <span>Design System</span></h1>
+    <p>Foundation · Components · Patterns — fonte di verità per il prototipo React/Tailwind</p>
+  </div>
+  <div class="ds-header-meta">
+    <span class="ds-badge active">v2.0</span>
+    <span class="ds-badge">Archivo + Inter</span>
+    <span class="ds-badge">Tailwind CSS</span>
+    <span class="ds-badge">Aprile 2026</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════ NAV ═══════════════════════ -->
+<nav class="ds-nav">
+  <a href="#colors" class="active">Colori</a>
+  <a href="#typography">Tipografia</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#buttons">Bottoni</a>
+  <a href="#inputs">Inputs</a>
+  <a href="#chips">Chips & Badge</a>
+  <a href="#cards">Cards</a>
+  <a href="#navigation">Navigazione</a>
+  <a href="#feedback">Feedback</a>
+  <a href="#patterns">Pattern</a>
+</nav>
+
+<div class="ds-body">
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 1 — FOUNDATION: COLORS
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="colors">
+  <div class="ds-chapter-label">Foundation</div>
+  <div class="ds-chapter-title">Colori</div>
+  <div class="ds-chapter-desc">Tutti i token di colore usati nel prototipo. Il colore primario è #f55a27 — non #FF6B35 della versione precedente.</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Brand</div>
+    <div class="color-grid">
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#f55a27"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Primary</div><div class="color-swatch-hex">#f55a27</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#e6410b"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Primary Dark</div><div class="color-swatch-hex">#e6410b</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#fdd6c9"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Primary Dim</div><div class="color-swatch-hex">#fdd6c9</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#fef4f0"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Primary Tint</div><div class="color-swatch-hex">#fef4f0</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#FFE4DB"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Ghost Tint</div><div class="color-swatch-hex">#FFE4DB</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#6b1e05"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Primary Deep</div><div class="color-swatch-hex">#6b1e05</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#33110A"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Fund BG</div><div class="color-swatch-hex">#33110A</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Neutrals</div>
+    <div class="color-grid">
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#000000"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Black / Text</div><div class="color-swatch-hex">#000000</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#0f0f0f"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Near Black</div><div class="color-swatch-hex">#0f0f0f</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#1e1e1e"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Dark</div><div class="color-swatch-hex">#1e1e1e</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#3a3a3a"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Text Muted</div><div class="color-swatch-hex">#3a3a3a</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#5c5c5c"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Text Secondary</div><div class="color-swatch-hex">#5c5c5c</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#717171"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Text Light</div><div class="color-swatch-hex">#717171</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#cdcdcd;"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Border</div><div class="color-swatch-hex">#cdcdcd</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#d0d0d0;"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Input Border</div><div class="color-swatch-hex">#d0d0d0</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#e8e8e8; border:1px solid #ddd"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Border Light</div><div class="color-swatch-hex">#e8e8e8</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#f2f2f2; border:1px solid #ddd"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Tag BG</div><div class="color-swatch-hex">#f2f2f2</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#f5f5f5; border:1px solid #ddd"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">App BG</div><div class="color-swatch-hex">#f5f5f5</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#fdfcf4; border:1px solid #ddd"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Cream</div><div class="color-swatch-hex">#fdfcf4</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Semantic</div>
+    <div class="color-grid">
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#15803d"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Green / Gain</div><div class="color-swatch-hex">#15803d</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#146c2e"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Green Dark</div><div class="color-swatch-hex">#146c2e</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#b7f1c5; border:1px solid #ddd"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Green Container</div><div class="color-swatch-hex">#b7f1c5</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#ba1a1a"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Red / Loss</div><div class="color-swatch-hex">#ba1a1a</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#ffdad6; border:1px solid #ddd"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Red Container</div><div class="color-swatch-hex">#ffdad6</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:#dc2626"></div>
+        <div class="color-swatch-info"><div class="color-swatch-name">Destructive</div><div class="color-swatch-hex">#dc2626</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 2 — TYPOGRAPHY
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="typography">
+  <div class="ds-chapter-label">Foundation</div>
+  <div class="ds-chapter-title">Tipografia</div>
+  <div class="ds-chapter-desc">Archivo per i titoli (extrabold/bold), Inter per il corpo. Non usare altri font.</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Scale</div>
+
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Archivo',sans-serif;font-size:40px;font-weight:700;letter-spacing:-1px;line-height:1.1">Display</div>
+      <div class="type-row-meta"><span>Archivo</span><span>700 · 40px</span><span>text-display</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Archivo',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.5px;line-height:1.15">Heading 1</div>
+      <div class="type-row-meta"><span>Archivo</span><span>800 · 32px · -0.5px</span><span>h1</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Archivo',sans-serif;font-size:24px;font-weight:600;line-height:1.15">Heading 2</div>
+      <div class="type-row-meta"><span>Archivo</span><span>600 · 24px</span><span>h2</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Archivo',sans-serif;font-size:20px;font-weight:600;line-height:1.2">Heading 3</div>
+      <div class="type-row-meta"><span>Archivo</span><span>600 · 20px</span><span>h3</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Archivo',sans-serif;font-size:18px;font-weight:700">Title Medium</div>
+      <div class="type-row-meta"><span>Archivo</span><span>700 · 18px</span><span>title-md</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Archivo',sans-serif;font-size:16px;font-weight:600">Label / Button</div>
+      <div class="type-row-meta"><span>Archivo</span><span>600 · 16px</span><span>text-label / .btn</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Inter',sans-serif;font-size:16px;font-weight:400;color:#ccc">Body — Il tuo portafoglio Gimme5 oggi</div>
+      <div class="type-row-meta"><span>Inter</span><span>400 · 16px</span><span>body / .sub</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Inter',sans-serif;font-size:14px;font-weight:400;color:#ccc">Body SM — Prossimo versamento · Lunedì</div>
+      <div class="type-row-meta"><span>Inter</span><span>400 · 14px</span><span>text-body-sm</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Inter',sans-serif;font-size:12px;font-weight:400;color:#ccc">Caption — Usa sempre la causale indicata</div>
+      <div class="type-row-meta"><span>Inter</span><span>400 · 12px</span><span>text-caption</span></div>
+    </div>
+    <div class="type-row">
+      <div class="type-row-specimen" style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888">OVERLINE LABEL</div>
+      <div class="type-row-meta"><span>Inter</span><span>700 · 10px · 1.5px</span><span>section label</span></div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Pesi disponibili</div>
+    <div class="canvas white" style="flex-direction:column;gap:8px">
+      <div style="font-family:'Archivo',sans-serif;font-size:22px;font-weight:400;color:#000">Archivo Regular 400</div>
+      <div style="font-family:'Archivo',sans-serif;font-size:22px;font-weight:500;color:#000">Archivo Medium 500</div>
+      <div style="font-family:'Archivo',sans-serif;font-size:22px;font-weight:600;color:#000">Archivo SemiBold 600</div>
+      <div style="font-family:'Archivo',sans-serif;font-size:22px;font-weight:700;color:#000">Archivo Bold 700</div>
+      <div style="font-family:'Archivo',sans-serif;font-size:22px;font-weight:800;color:#000">Archivo ExtraBold 800</div>
+      <hr style="border:none;border-top:1px solid #e8e8e8;width:100%">
+      <div style="font-family:'Inter',sans-serif;font-size:16px;font-weight:300;color:#3a3a3a">Inter Light 300</div>
+      <div style="font-family:'Inter',sans-serif;font-size:16px;font-weight:400;color:#3a3a3a">Inter Regular 400</div>
+      <div style="font-family:'Inter',sans-serif;font-size:16px;font-weight:500;color:#3a3a3a">Inter Medium 500</div>
+      <div style="font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:#3a3a3a">Inter SemiBold 600</div>
+      <div style="font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#3a3a3a">Inter Bold 700</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 3 — SPACING & RADIUS
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="spacing">
+  <div class="ds-chapter-label">Foundation</div>
+  <div class="ds-chapter-title">Spacing & Border Radius</div>
+  <div class="ds-chapter-desc">Base unit 4px (Tailwind default). Border radius coerenti da 8px a pill.</div>
+
+  <div class="two-col">
+    <div>
+      <div class="ds-section-title">Spacing</div>
+      <div class="token-row"><span class="token-name">4px</span><span class="token-value">gap-1</span><div class="token-visual"><div class="spacing-bar" style="width:4px"></div></div></div>
+      <div class="token-row"><span class="token-name">8px</span><span class="token-value">gap-2</span><div class="token-visual"><div class="spacing-bar" style="width:8px"></div></div></div>
+      <div class="token-row"><span class="token-name">12px</span><span class="token-value">gap-3</span><div class="token-visual"><div class="spacing-bar" style="width:12px"></div></div></div>
+      <div class="token-row"><span class="token-name">16px</span><span class="token-value">p-4 / px-4</span><div class="token-visual"><div class="spacing-bar" style="width:16px"></div></div></div>
+      <div class="token-row"><span class="token-name">20px</span><span class="token-value">px-5</span><div class="token-visual"><div class="spacing-bar" style="width:20px"></div></div></div>
+      <div class="token-row"><span class="token-name">24px</span><span class="token-value">p-6 / gap-6</span><div class="token-visual"><div class="spacing-bar" style="width:24px"></div></div></div>
+      <div class="token-row"><span class="token-name">32px</span><span class="token-value">p-8</span><div class="token-visual"><div class="spacing-bar" style="width:32px"></div></div></div>
+    </div>
+    <div>
+      <div class="ds-section-title">Border Radius</div>
+      <div class="token-row"><span class="token-name">8px</span><span class="token-value">rounded-lg</span><div class="token-visual"><div class="radius-box" style="border-radius:8px"></div></div></div>
+      <div class="token-row"><span class="token-name">12px</span><span class="token-value">rounded-[12px]</span><div class="token-visual"><div class="radius-box" style="border-radius:12px"></div></div></div>
+      <div class="token-row"><span class="token-name">16px</span><span class="token-value">rounded-[16px]</span><div class="token-visual"><div class="radius-box" style="border-radius:16px"></div></div></div>
+      <div class="token-row"><span class="token-name">20px</span><span class="token-value">rounded-xl</span><div class="token-visual"><div class="radius-box" style="border-radius:20px"></div></div></div>
+      <div class="token-row"><span class="token-name">24px</span><span class="token-value">rounded-3xl</span><div class="token-visual"><div class="radius-box" style="border-radius:24px"></div></div></div>
+      <div class="token-row"><span class="token-name">999px</span><span class="token-value">rounded-full</span><div class="token-visual"><div class="radius-box" style="border-radius:999px;height:48px;width:80px"></div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 4 — BUTTONS
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="buttons">
+  <div class="ds-chapter-label">Components</div>
+  <div class="ds-chapter-title">Bottoni</div>
+  <div class="ds-chapter-desc">Tutti i bottoni sono height 46px, border-radius 999px, font Archivo 600 16px. La classe base è <code style="color:#f55a27">.btn</code>.</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Varianti</div>
+    <div class="canvas" style="align-items:flex-start;flex-wrap:wrap;gap:24px">
+
+      <div class="comp-wrap">
+        <button class="btn bp" style="min-width:200px">Prosegui</button>
+        <div class="comp-label">.btn .bp — Primary</div>
+        <div class="ds-sub" style="margin-top:2px">bg #f55a27 · text #000</div>
+      </div>
+
+      <div class="comp-wrap">
+        <button class="btn bt" style="min-width:200px">Conferma</button>
+        <div class="comp-label">.btn .bt — Dark</div>
+        <div class="ds-sub" style="margin-top:2px">bg #1e1e1e · text #fdfcf4</div>
+      </div>
+
+      <div class="comp-wrap">
+        <button class="btn bt-light" style="min-width:200px">Esplora tutti i fondi</button>
+        <div class="comp-label">.btn .bt-light — Outlined</div>
+        <div class="ds-sub" style="margin-top:2px">border #0f0f0f · bg transparent</div>
+      </div>
+
+      <div class="comp-wrap" style="background:#1a1a1a;padding:16px;border-radius:12px">
+        <button class="btn bt-dark" style="min-width:200px">Accedi</button>
+        <div class="comp-label" style="color:#666">.btn .bt-dark — On dark</div>
+        <div class="ds-sub" style="margin-top:2px;color:#555">bg #0f0f0f · text #fff</div>
+      </div>
+
+      <div class="comp-wrap">
+        <button class="btn bgh" style="min-width:200px">Copia IBAN</button>
+        <div class="comp-label">.btn .bgh — Ghost tinted</div>
+        <div class="ds-sub" style="margin-top:2px">bg #FFE4DB · text #33110A</div>
+      </div>
+
+      <div class="comp-wrap">
+        <button class="btn bs">Non ora</button>
+        <div class="comp-label">.btn .bs — Tertiary / text</div>
+        <div class="ds-sub" style="margin-top:2px">transparent · text #1a1a1a · 14px</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Stati disabilitati</div>
+    <div class="canvas" style="gap:24px;flex-wrap:wrap">
+      <div class="comp-wrap">
+        <button class="btn bp-dis" style="min-width:200px" disabled>Prosegui</button>
+        <div class="comp-label">.bp disabled — #d0d0d0 / #888</div>
+      </div>
+      <div class="comp-wrap">
+        <button class="btn bt-dis" style="min-width:200px" disabled>Conferma</button>
+        <div class="comp-label">.bt disabled — #c8c8c8 / #888</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Full width (bottom CTA)</div>
+    <div class="canvas" style="max-width:390px;flex-direction:column">
+      <button class="btn bp btn-full">Ho salvato le coordinate</button>
+      <button class="btn bs btn-full" style="text-align:center">Condividi le coordinate</button>
+    </div>
+  </div>
+
+  <div class="prop-table-wrap">
+    <table class="prop-table">
+      <thead><tr><th>Classe</th><th>Uso</th><th>BG</th><th>Testo</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>.btn .bp</td><td>Primary action</td><td>#f55a27</td><td>#000000</td><td>CTA principale</td></tr>
+        <tr><td>.btn .bt</td><td>Secondary dark</td><td>#1e1e1e</td><td>#fdfcf4</td><td>Seconda CTA</td></tr>
+        <tr><td>.btn .bt-light</td><td>Outlined</td><td>transparent</td><td>#0f0f0f</td><td>border 1.5px #0f0f0f</td></tr>
+        <tr><td>.btn .bt-dark</td><td>On dark bg</td><td>#0f0f0f</td><td>#ffffff</td><td>Sopra sheet scuro</td></tr>
+        <tr><td>.btn .bgh</td><td>Ghost tinted</td><td>#FFE4DB</td><td>#33110A</td><td>Copia/azione secondaria</td></tr>
+        <tr><td>.btn .bs</td><td>Tertiary / link</td><td>transparent</td><td>#1a1a1a</td><td>14px / 500 weight</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 5 — INPUTS
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="inputs">
+  <div class="ds-chapter-label">Components</div>
+  <div class="ds-chapter-title">Inputs</div>
+  <div class="ds-chapter-desc">Classe base <code style="color:#f55a27">.if</code>, label con <code style="color:#f55a27">.il</code>, gruppo con <code style="color:#f55a27">.ig</code>.</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Varianti</div>
+    <div class="canvas white" style="flex-direction:column;max-width:480px;gap:20px">
+
+      <div class="comp-wrap stretch">
+        <label class="il">Nome</label>
+        <input class="if" type="text" placeholder="Es. Marco">
+        <div class="comp-label">.if — Default / empty</div>
+      </div>
+
+      <div class="comp-wrap stretch">
+        <label class="il">Cognome</label>
+        <input class="if filled" type="text" value="Rossi">
+        <div class="comp-label">.if .filled — Compilato (border #000)</div>
+      </div>
+
+      <div class="comp-wrap stretch">
+        <label class="il">Email</label>
+        <input class="if" type="email" placeholder="mario@email.it" style="border-color:#000;box-shadow:0 0 0 1.5px #000">
+        <div class="comp-label">.if :focus — Focus (ring + border #000)</div>
+      </div>
+
+      <div class="comp-wrap stretch">
+        <label class="il">Codice fiscale</label>
+        <input class="if error" type="text" value="RSSMRC99A01H501X">
+        <div class="comp-label">.if .error — Errore (border + ring #ba1a1a)</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="prop-table-wrap">
+    <table class="prop-table">
+      <thead><tr><th>Classe</th><th>Stato</th><th>Border</th><th>Shadow</th></tr></thead>
+      <tbody>
+        <tr><td>.if</td><td>Default</td><td>#d0d0d0</td><td>nessuna</td></tr>
+        <tr><td>.if :placeholder-shown</td><td>Vuoto</td><td>#d0d0d0</td><td>nessuna</td></tr>
+        <tr><td>.if .filled / :not(:placeholder-shown)</td><td>Compilato</td><td>#000000</td><td>nessuna</td></tr>
+        <tr><td>.if :focus</td><td>Focus</td><td>#000000</td><td>0 0 0 1.5px #000</td></tr>
+        <tr><td>.if .error</td><td>Errore</td><td>#ba1a1a</td><td>0 0 0 1.5px #ba1a1a</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 6 — CHIPS & BADGE
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="chips">
+  <div class="ds-chapter-label">Components</div>
+  <div class="ds-chapter-title">Chips, Tag & Badge</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Filter chips</div>
+    <div class="canvas" style="gap:8px;flex-wrap:wrap">
+      <span class="chip">Bilanciato</span>
+      <span class="chip">ESG</span>
+      <span class="chip sel">Mettere da parte ✕</span>
+      <span class="chip sel">2–5 anni ✕</span>
+      <span class="chip sel">Prudente ✕</span>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">.chip — default · .chip.sel — attivo (bg #fef4f0 · text #7a3010 · border #f9c4ac)</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Active filter chip (su lista fondi)</div>
+    <div class="canvas" style="gap:8px;flex-wrap:wrap">
+      <span class="chip-dark">ESG <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      <span class="chip-dark">Prudente <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">.chip-dark — filtro attivo nella lista fondi · bg #000 · text #fff · 600</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Tag pill (sulle card fondo)</div>
+    <div class="canvas" style="gap:8px;flex-wrap:wrap">
+      <span class="tag-pill">Azionario</span>
+      <span class="tag-pill">Rischio Basso</span>
+      <span class="tag-pill">3–5 anni</span>
+      <span class="tag-pill" style="background:#b7f1c5;color:#002109">ESG</span>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">.tag-pill — bg #f2f2f2 · 12px · rounded-full</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Checkbox custom</div>
+    <div class="canvas white" style="gap:16px;align-items:center">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="dcheckbox"></div>
+        <span style="font-size:13px;color:#000">Non selezionato</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="dcheckbox chk">✓</div>
+        <span style="font-size:13px;color:#000">Selezionato</span>
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">.dcheckbox · .dcheckbox.chk — bg #f55a27</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Radio button</div>
+    <div class="canvas white" style="gap:16px;align-items:center">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="radio-dot"></div>
+        <span style="font-size:13px;color:#000">Non selezionato</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="radio-dot active"><div class="radio-dot-inner"></div></div>
+        <span style="font-size:13px;color:#000">Selezionato</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 7 — CARDS
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="cards">
+  <div class="ds-chapter-label">Components</div>
+  <div class="ds-chapter-title">Cards</div>
+  <div class="ds-chapter-desc">Tutte le card usano bg #fff, border-radius 16px. La card selezionata ha border #f55a27 + box-shadow.</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Card fondo</div>
+    <div class="canvas" style="justify-content:flex-start">
+      <!-- Card non selezionata -->
+      <div class="g5-card" style="padding:16px;width:280px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+              <div class="fund-avatar">G5G</div>
+              <div style="font-size:16px;font-weight:700;font-family:'Archivo',sans-serif;color:#000">G5 Globale</div>
+            </div>
+            <div style="font-size:14px;color:#5c5c5c;margin-bottom:10px">Fondo bilanciato globale, adatto a orizzonti di medio termine.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+              <span class="tag-pill">Bilanciato</span>
+              <span class="tag-pill">Rischio Medio</span>
+              <span class="tag-pill">3–5 anni</span>
+            </div>
+            <div style="font-size:12px;font-weight:500;color:#15803d">+8,2% ultimi 5 anni</div>
+          </div>
+          <div class="radio-dot" style="margin-left:12px;flex-shrink:0"></div>
+        </div>
+        <div style="border-top:1px solid #e8e8e8;margin-top:12px;padding-top:10px">
+          <button type="button" style="font-size:14px;color:#000;font-weight:500;text-decoration:underline;background:none;border:none;cursor:pointer;padding:0">Dettagli fondo</button>
+        </div>
+      </div>
+
+      <!-- Card selezionata -->
+      <div class="g5-card selected" style="padding:16px;width:280px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+              <div class="fund-avatar">G5E</div>
+              <div style="font-size:16px;font-weight:700;font-family:'Archivo',sans-serif;color:#000">G5 Europa</div>
+            </div>
+            <div style="font-size:14px;color:#5c5c5c;margin-bottom:10px">Fondo azionario europeo, dinamico e a lungo termine.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+              <span class="tag-pill" style="background:#b7f1c5;color:#002109">ESG</span>
+              <span class="tag-pill">Rischio Alto</span>
+              <span class="tag-pill">Oltre 5 anni</span>
+            </div>
+            <div style="font-size:12px;font-weight:500;color:#15803d">+11,4% ultimi 5 anni</div>
+          </div>
+          <div class="radio-dot active" style="margin-left:12px;flex-shrink:0"><div class="radio-dot-inner"></div></div>
+        </div>
+        <div style="border-top:1px solid #e8e8e8;margin-top:12px;padding-top:10px">
+          <button type="button" style="font-size:14px;color:#000;font-weight:500;text-decoration:underline;background:none;border:none;cursor:pointer;padding:0">Dettagli fondo</button>
+        </div>
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">Left: card default · Right: card selezionata — border #f55a27 + box-shadow 0 0 0 1.5px #f55a27</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Card portfolio / regola attiva</div>
+    <div class="canvas white" style="justify-content:flex-start">
+      <div style="background:#fff;border-radius:16px;overflow:hidden;width:320px;border:1px solid #e8e8e8">
+        <div style="padding:16px;display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;border-radius:16px;background:#fef4f0;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:700;color:#000">G5 Globale</div>
+            <div style="font-size:12px;color:#3a3a3a;margin-top:2px">Bilanciato · €100 / mensile</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:16px;font-weight:500;font-family:'Archivo',sans-serif;color:#000">1.200 €</div>
+            <div style="font-size:12px;font-weight:600;color:#15803d;margin-top:2px">+8,2%</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e8e8e8;padding:10px 16px;display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;color:#3a3a3a">Prossimo versamento</div>
+          <div style="font-size:12px;font-weight:700;color:#000">1° del mese · €100</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Card alert / info</div>
+    <div class="canvas" style="flex-direction:column;max-width:480px;gap:12px">
+
+      <!-- Bonifico pending -->
+      <div style="background:#fff;border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f55a27">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:#000;margin-bottom:2px">In attesa del tuo bonifico</div>
+          <div style="font-size:12px;color:#3a3a3a;line-height:1.5">Il piano è pronto — effettua il primo versamento per iniziare.</div>
+          <div style="font-size:12px;font-weight:600;color:#f55a27;margin-top:6px">Vedi le coordinate →</div>
+        </div>
+        <div style="width:36px;height:36px;border-radius:50%;background:#fef4f0;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+      </div>
+      <div class="comp-label">Card alert — border-left 3px #f55a27</div>
+
+      <!-- Verifica identità -->
+      <div style="background:#fef4f0;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+        <div style="width:44px;height:44px;border-radius:16px;background:#f55a27;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:#6b1e05;margin-bottom:2px">Completa la verifica identità</div>
+          <div style="font-size:12px;color:#92400e;line-height:1.5">Per operare senza limiti, circa 7 minuti.</div>
+        </div>
+      </div>
+      <div class="comp-label">Card KYC alert — bg #fef4f0</div>
+
+      <!-- Info tip -->
+      <div class="g5-info">
+        <svg aria-hidden="true" style="flex-shrink:0;margin-top:1px" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5c5c5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Usa sempre la causale indicata: senza di essa non possiamo abbinare il bonifico al tuo conto.</span>
+      </div>
+      <div class="comp-label">Info box — bg #fff · border-radius 16px</div>
+
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Copy row (coordinate bancarie)</div>
+    <div class="canvas white" style="flex-direction:column;max-width:480px;padding:0">
+      <div style="border-radius:16px;overflow:hidden;border:1px solid #e8e8e8">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid #e8e8e8">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:#3a3a3a;margin-bottom:2px">Intestatario</div>
+            <div style="font-size:14px;font-weight:600;color:#000">Gimme5 S.p.A.</div>
+          </div>
+          <button class="btn bgh" style="height:32px;font-size:12px;padding:0 12px">Copia</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid #e8e8e8">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:#3a3a3a;margin-bottom:2px">IBAN</div>
+            <div style="font-size:14px;font-weight:600;color:#000;font-family:monospace">IT60 X054 2811 1010 …</div>
+          </div>
+          <button class="btn bgh" style="height:32px;font-size:12px;padding:0 12px">Copia</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:#3a3a3a;margin-bottom:2px">Causale · usa esattamente questa</div>
+            <div style="font-size:14px;font-weight:600;color:#f55a27;font-family:monospace">G5-MAR-2026-54821</div>
+          </div>
+          <button class="btn bgh" style="height:32px;font-size:12px;padding:0 12px">Copia</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 8 — NAVIGATION
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="navigation">
+  <div class="ds-chapter-label">Components</div>
+  <div class="ds-chapter-title">Navigazione</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Bottom Nav Bar (5 tab)</div>
+    <div class="canvas white" style="padding:0;max-width:390px;flex-direction:column;gap:0">
+      <nav class="g5-nav" style="width:100%">
+        <button class="g5-nav-item active">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </button>
+        <button class="g5-nav-item">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Obiettivi
+        </button>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding-top:4px">
+          <div class="g5-nav-plus">+</div>
+        </div>
+        <button class="g5-nav-item">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Esplora
+        </button>
+        <button class="g5-nav-item">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profilo
+        </button>
+      </nav>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">5 tab · [+] cerchio arancione centrato · Tab attivo = #f55a27 bold · Tab inattivo = #3a3a3a · pb-[20px] per safe area</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Top Nav Bar</div>
+    <div class="canvas white" style="padding:0;max-width:390px;flex-direction:column">
+      <!-- NavBar con back -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;background:#fff;border-bottom:1px solid #e8e8e8">
+        <button style="width:36px;height:36px;border-radius:50%;background:#f6f6f6;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 5-7 7 7 7"/></svg>
+        </button>
+        <div style="flex:1;text-align:center">
+          <div style="font-size:15px;font-weight:700;font-family:'Archivo',sans-serif;color:#000">Attivazione</div>
+          <div style="font-size:11px;color:#5c5c5c">2 di 2</div>
+        </div>
+        <div style="width:36px"></div>
+      </div>
+      <!-- Stepper -->
+      <div style="display:flex;gap:4px;padding:0 16px 12px;padding-top:8px;background:#fff">
+        <div style="flex:1;height:2px;background:#f55a27;border-radius:1px"></div>
+        <div style="flex:1;height:2px;background:#f55a27;border-radius:1px"></div>
+        <div style="flex:1;height:2px;background:#cdcdcd;border-radius:1px"></div>
+        <div style="flex:1;height:2px;background:#cdcdcd;border-radius:1px"></div>
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">bg trasparente o #f6f6f6 (senza border-b) · con stepper progress sotto · back button 36px circle bg #f6f6f6</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Progress stepper (onboarding)</div>
+    <div class="canvas" style="flex-direction:column;max-width:390px;gap:16px">
+      <div>
+        <div class="step-bar" style="gap:4px">
+          <div class="step-seg done"></div>
+          <div class="step-seg"></div>
+          <div class="step-seg"></div>
+          <div class="step-seg"></div>
+        </div>
+        <div class="comp-label" style="margin-top:6px">Step 1/4</div>
+      </div>
+      <div>
+        <div class="step-bar" style="gap:4px">
+          <div class="step-seg done"></div>
+          <div class="step-seg done"></div>
+          <div class="step-seg done"></div>
+          <div class="step-seg"></div>
+        </div>
+        <div class="comp-label" style="margin-top:6px">Step 3/4</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Attivazione progress (2 step)</div>
+    <div class="canvas" style="max-width:390px">
+      <div style="display:flex;gap:4px;width:100%">
+        <div style="flex:1;height:4px;background:#f55a27;border-radius:2px"></div>
+        <div style="flex:1;height:4px;background:#f55a27;border-radius:2px"></div>
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">Attivazione progress: 2 barre, 4px height, bg #f55a27 quando completata</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 9 — FEEDBACK (Toast, Spinner, Sheet)
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="feedback">
+  <div class="ds-chapter-label">Components</div>
+  <div class="ds-chapter-title">Feedback & Overlay</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Toast</div>
+    <div class="canvas center" style="background:#333;min-height:80px">
+      <div class="g5-toast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Causale copiata
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">bg #1a1a1a · text #fff · border-radius 24px · appare in basso al centro</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Spinner</div>
+    <div class="canvas center" style="min-height:100px">
+      <div class="spinner"></div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">44px · border 3px #000 · border-top #f55a27 · spin 1s linear infinite</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Bottom Sheet</div>
+    <div class="canvas white" style="padding:0;max-width:390px;flex-direction:column">
+      <div style="background:#fff;border-radius:24px 24px 0 0;padding:16px 24px 32px">
+        <div class="sheet-handle"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="width:44px;height:44px;border-radius:12px;background:#fff;border:1.5px solid #d0d0d0;display:flex;align-items:center;justify-content:center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <button style="width:32px;height:32px;border-radius:50%;background:#f6f6f6;border:none;font-size:13px;color:#5c5c5c;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+        </div>
+        <div style="font-size:18px;font-weight:700;color:#000;margin-bottom:8px">Attiva le notifiche</div>
+        <p style="font-size:14px;color:#5c5c5c;line-height:1.6;margin-bottom:24px">Ricevi aggiornamenti sui versamenti e novità. Puoi disattivarle in qualsiasi momento.</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn bp btn-full">Attiva notifiche</button>
+          <button class="btn bs btn-full" style="text-align:center">Non ora</button>
+        </div>
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">bg #fff · border-radius 24px 24px 0 0 · handle 36px grigio · backdrop blur black/45</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Progress bar</div>
+    <div class="canvas white" style="flex-direction:column;gap:16px;max-width:480px">
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:12px;font-weight:600;color:#000">Progresso verso obiettivo</span>
+          <span style="font-size:12px;font-weight:700;color:#f55a27">65%</span>
+        </div>
+        <div class="g5-progress-track">
+          <div class="g5-progress-fill" style="width:65%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="g5-progress-track">
+          <div class="g5-progress-fill green" style="width:100%"></div>
+        </div>
+        <div class="comp-label" style="margin-top:4px">Completato — bg #15803d</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Avatar utente</div>
+    <div class="canvas" style="gap:16px;align-items:center">
+      <div style="width:42px;height:42px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#f55a27;font-family:'Archivo',sans-serif">MR</div>
+      <div style="width:48px;height:48px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#f55a27;font-family:'Archivo',sans-serif">FM</div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">bg #000 · text #f55a27 · Archivo 700 · border-radius 50%</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Fund avatar</div>
+    <div class="canvas" style="gap:12px;align-items:center">
+      <div class="fund-avatar">G5G</div>
+      <div class="fund-avatar">G5E</div>
+      <div class="fund-avatar">OBL</div>
+      <div class="fund-avatar" style="font-size:10px">CASH</div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">44×44 · border-radius 12px · bg #33110A · text #F55A27 · Archivo 800</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════
+  CHAPTER 10 — PATTERNS
+════════════════════════════════════════════════════════ -->
+<section class="ds-chapter" id="patterns">
+  <div class="ds-chapter-label">Patterns</div>
+  <div class="ds-chapter-title">Pattern ricorrenti</div>
+  <div class="ds-chapter-desc">Combinazioni di componenti che formano pattern UI riconoscibili nell'app.</div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Header Home</div>
+    <div class="canvas white" style="padding:0;max-width:390px">
+      <div style="background:#fff;padding:16px 20px 12px;display:flex;justify-content:space-between;align-items:center;width:100%">
+        <div>
+          <div style="font-size:24px;font-weight:700;font-family:'Archivo',sans-serif;color:#000;letter-spacing:-0.3px">Ciao Marco</div>
+          <div style="font-size:14px;color:#5c5c5c;margin-top:2px">Il tuo portafoglio Gimme5 oggi</div>
+        </div>
+        <div style="width:42px;height:42px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#f55a27;font-family:'Archivo',sans-serif">MR</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Titolo + Sottotitolo (schermata)</div>
+    <div class="canvas" style="max-width:390px;flex-direction:column;gap:4px">
+      <div style="color:#fff">
+        <div style="font-family:'Archivo',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.5px;line-height:1.15;color:#fff;margin-bottom:8px">Quanto vuoi versare?</div>
+        <div style="font-size:16px;color:#b0b0b0;line-height:1.5">Puoi cambiarlo in qualsiasi momento.</div>
+      </div>
+    </div>
+    <div class="canvas white" style="max-width:390px;flex-direction:column;gap:4px;margin-top:8px">
+      <div>
+        <div style="font-family:'Archivo',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.5px;line-height:1.15;color:#000;margin-bottom:8px">Salva le coordinate</div>
+        <div style="font-size:16px;color:#5c5c5c;line-height:1.5">Usa questi dati per il primo bonifico.</div>
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">h1 Archivo 800 32px · .sub Inter 400 16px #5c5c5c · gap 8px</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Floating Bottom CTA</div>
+    <div class="canvas" style="max-width:390px;flex-direction:column;padding:0">
+      <div style="position:relative;overflow:hidden;border-radius:12px">
+        <div style="height:60px;background:linear-gradient(to bottom,rgba(246,246,246,0),rgba(246,246,246,0.95));pointer-events:none"></div>
+        <div style="background:#f6f6f6;padding:0 16px 24px;display:flex;flex-direction:column;gap:10px">
+          <button class="btn bp btn-full">Prosegui con questo fondo</button>
+          <button class="btn btn-full" style="background:#fff;color:#111;border:1px solid #111;font-weight:700">Esplora tutti i fondi</button>
+        </div>
+      </div>
+    </div>
+    <div class="ds-sub" style="margin-top:8px">Gradient overlay transparent → bg · px-4 pt-6 pb-[32px] · pointer-events-none sul gradient</div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Pillola educativa (layer contestuale)</div>
+    <div class="canvas" style="max-width:480px;flex-direction:column;gap:10px">
+      <div style="background:#fff;border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
+        <div style="font-size:20px;flex-shrink:0">💡</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#000;margin-bottom:2px">I mercati oscillano, è normale</div>
+          <div style="font-size:12px;color:#5c5c5c;line-height:1.5">Investire regolarmente riduce l'impatto delle fluttuazioni nel tempo.</div>
+        </div>
+        <button style="background:none;border:none;font-size:16px;color:#5c5c5c;cursor:pointer;flex-shrink:0;padding:0">✕</button>
+      </div>
+      <div class="comp-label">Pillola educativa — contestuale, non in sezione fissa</div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="ds-section-title">Codice promo</div>
+    <div class="canvas" style="max-width:480px">
+      <div style="background:#fef4f0;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:8px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span style="font-size:12px;font-weight:600;color:#6b1e05">Codice <strong>WELCOME10</strong> applicato — attivo al primo versamento</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--ds-border);padding:32px 0;text-align:center;color:var(--ds-muted);font-size:12px">
+  Gimme5 Design System — fonte di verità del prototipo React/Tailwind · Aprile 2026
+</div>
+
+</div><!-- /ds-body -->
+
+<script>
+// Nav highlight on scroll
+const sections = document.querySelectorAll('.ds-chapter')
+const navLinks = document.querySelectorAll('.ds-nav a')
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'))
+      const link = document.querySelector(`.ds-nav a[href="#${e.target.id}"]`)
+      if (link) link.classList.add('active')
+    }
+  })
+}, { threshold: 0.2 })
+sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>

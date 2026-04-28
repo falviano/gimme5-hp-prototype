@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 — Strategia Pillole Educative</title>
+<style>
+  :root {
+    --orange: #FF6B35;
+    --navy: #1a1a2e;
+    --green: #16A34A;
+    --amber: #D97706;
+    --red: #DC2626;
+    --blue: #2563EB;
+    --bg: #F5F5F7;
+    --white: #ffffff;
+    --text: #111;
+    --muted: #666;
+    --border: #E5E7EB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    background: var(--navy);
+    color: white;
+    padding: 60px 48px 48px;
+    border-bottom: 4px solid var(--orange);
+  }
+  .cover-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .cover p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.4px;
+  }
+
+  /* ─── LAYOUT ─── */
+  .page { max-width: 1200px; margin: 0 auto; padding: 56px 48px; }
+  .section { margin-bottom: 56px; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .section-intro {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 640px;
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  /* ─── CARD BASE ─── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .card-body {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ─── PROBLEMA / SOLUZIONE ─── */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 0;
+  }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+  .split-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .split-card.bad { border-left: 4px solid var(--red); }
+  .split-card.good { border-left: 4px solid var(--green); }
+  .split-card .sc-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .split-card.bad .sc-label { color: var(--red); }
+  .split-card.good .sc-label { color: var(--green); }
+  .split-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .split-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .split-card ul li {
+    font-size: 14px;
+    color: var(--muted);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .split-card ul li:last-child { border-bottom: none; }
+  .split-card ul li::before {
+    margin-right: 8px;
+  }
+  .split-card.bad ul li::before { content: "✗"; color: var(--red); }
+  .split-card.good ul li::before { content: "✓"; color: var(--green); }
+
+  /* ─── FORMATO PILLOLA ─── */
+  .pill-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pill-demo {
+    border-radius: 18px;
+    padding: 20px 22px;
+    color: white;
+    background: var(--orange);
+    position: relative;
+    overflow: hidden;
+  }
+  .pill-demo.md {
+    background: linear-gradient(135deg, var(--orange) 0%, #E8520A 100%);
+    padding: 16px 18px;
+    min-height: 100px;
+  }
+  .pill-demo.sm {
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255,107,53,0.3);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 0;
+  }
+  .pill-demo.finanz {
+    background: linear-gradient(135deg, #1B4FFF 0%, #0A2FB3 100%);
+    padding: 16px 18px;
+    min-height: 100px;
+  }
+  .pill-tag {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .pill-title-lg {
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .pill-title-md {
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .pill-body-text {
+    font-size: 13px;
+    opacity: 0.85;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .pill-cta {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 20px;
+  }
+  .pill-sm-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .pill-sm-text {
+    flex: 1;
+  }
+  .pill-sm-text .t1 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+  .pill-sm-text .t2 {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .pill-sm-arrow {
+    font-size: 16px;
+    color: var(--orange);
+  }
+  .pill-size-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .pill-size-label .size-name {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--orange);
+    min-width: 32px;
+  }
+  .pill-size-label .size-desc {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ─── SEGMENTI ─── */
+  .segments-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 640px) { .segments-grid { grid-template-columns: 1fr; } }
+  .seg-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .seg-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .seg-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .seg-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+  .seg-trigger { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .seg-pill-size {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--navy);
+  }
+  .seg-pill-content { font-size: 12px; color: var(--muted); margin-top: 6px; font-style: italic; }
+
+  /* ─── REGOLE ─── */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) { .rules-grid { grid-template-columns: 1fr; } }
+  .rule-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .rule-card.always { border-top: 3px solid var(--green); }
+  .rule-card.never { border-top: 3px solid var(--red); }
+  .rule-card.timing { border-top: 3px solid var(--amber); }
+  .rule-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .rule-card.always .rule-label { color: var(--green); }
+  .rule-card.never .rule-label { color: var(--red); }
+  .rule-card.timing .rule-label { color: var(--amber); }
+  .rule-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .rule-card ul li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    line-height: 1.45;
+  }
+  .rule-card ul li:last-child { border-bottom: none; }
+
+  /* ─── TRIGGER ─── */
+  .trigger-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .trigger-row {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 36px 1fr 80px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  @media (max-width: 640px) { .trigger-row { grid-template-columns: 1fr; } }
+  .t-num {
+    width: 32px;
+    height: 32px;
+    background: var(--navy);
+    color: white;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .t-name { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .t-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .t-delay {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--amber);
+    text-align: center;
+    background: rgba(217,119,6,0.08);
+    border-radius: 8px;
+    padding: 4px 8px;
+    line-height: 1.4;
+  }
+  .t-copy { font-size: 12px; color: var(--muted); font-style: italic; line-height: 1.5; }
+
+  /* ─── HP MUTATION ─── */
+  .hp-flow {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .hp-flow-header {
+    background: var(--navy);
+    color: white;
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .hp-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 100px;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+  .hp-row:last-child { border-bottom: none; }
+  .hp-state-cell {
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .hp-state-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .hp-state-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .hp-content-cell {
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .hp-what {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .hp-pill-cell {
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .hp-pill-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .hp-pill-tag.lg { background: rgba(255,107,53,0.12); color: var(--orange); }
+  .hp-pill-tag.md { background: rgba(37,99,235,0.1); color: var(--blue); }
+  .hp-pill-tag.sm { background: var(--bg); color: var(--navy); }
+  .hp-pill-tag.none { background: rgba(220,38,38,0.08); color: var(--red); }
+
+  /* ─── FLUSSO ONBOARDING ─── */
+  .fork-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 640px) { .fork-grid { grid-template-columns: 1fr; } }
+  .fork-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+  }
+  .fork-num {
+    width: 28px;
+    height: 28px;
+    background: var(--navy);
+    color: white;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .fork-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .fork-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+  .fork-hp {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(255,107,53,0.1);
+    color: var(--orange);
+    display: inline-block;
+  }
+
+  /* ─── INTRO STAT ─── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 640px) { .stat-row { grid-template-columns: 1fr 1fr; } }
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--navy);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-num span { color: var(--orange); }
+  .stat-label { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* ─── INSIGHT BOX ─── */
+  .insight {
+    background: rgba(255,107,53,0.06);
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .insight p {
+    font-size: 14px;
+    color: var(--navy);
+    line-height: 1.65;
+  }
+  .insight strong { color: var(--orange); }
+
+  /* ─── DIVIDER ─── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ─── TIMELINE ─── */
+  .tl-grid { display: flex; flex-direction: column; gap: 0; }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tl-row:first-child { border-top: 1px solid var(--border); }
+  .tl-time {
+    padding: 16px 16px 16px 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--navy);
+    border-right: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .tl-time span { display: block; font-size: 10px; font-weight: 400; color: var(--muted); margin-top: 2px; }
+  .tl-paths {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .tl-path {
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .tl-path:last-child { border-right: none; }
+  .tl-path-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .tl-path-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .tl-path-text strong { color: var(--navy); font-weight: 700; }
+  .tl-path-pill {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 5px;
+  }
+
+  /* ─── GARANZIE ─── */
+  .guarantee-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) { .guarantee-grid { grid-template-columns: 1fr; } }
+  .guarantee-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .guarantee-card.always { border-top: 3px solid var(--green); }
+  .guarantee-card.never  { border-top: 3px solid var(--red); }
+  .guarantee-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .guarantee-card.always .guarantee-label { color: var(--green); }
+  .guarantee-card.never  .guarantee-label { color: var(--red); }
+  .guarantee-card ul { list-style: none; padding: 0; }
+  .guarantee-card ul li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    line-height: 1.45;
+  }
+  .guarantee-card ul li:last-child { border-bottom: none; }
+  .guarantee-card.always ul li span { color: var(--green); }
+  .guarantee-card.never  ul li span { color: var(--red); }
+
+  /* ─── WIREFRAME CLIENTI BLOCK ─── */
+  .wf-block-header {
+    background: var(--orange);
+    padding: 32px 36px 28px;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    margin-top: 16px;
+  }
+  .wf-block-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+  .wf-block-header h2 { font-size: 26px; font-weight: 900; color: #fff; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 6px; }
+  .wf-block-header p { font-size: 13px; color: rgba(255,255,255,0.8); max-width: 560px; line-height: 1.6; }
+  .wf-section { margin-bottom: 56px; }
+  .wf-section-tag { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; }
+  .wf-section-title { font-size: 20px; font-weight: 800; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 6px; }
+  .wf-section-sub { font-size: 13px; color: var(--muted); max-width: 600px; line-height: 1.6; margin-bottom: 24px; }
+
+  /* hp-card grid */
+  .hp-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .hp-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .hp-card-top { padding: 16px 16px 12px; }
+  .hp-card-state { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .hp-card-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .hp-card-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .hp-card-sub { font-size: 11px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+  .hp-card-pill { border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+  .hp-card-pill.orange { background: linear-gradient(140deg, var(--orange) 0%, #E8520A 100%); }
+  .hp-card-pill.blue { background: linear-gradient(140deg, #1B4FFF 0%, #0A2FB3 100%); }
+  .hp-card-pill.indigo { background: linear-gradient(140deg, #6366F1 0%, #4F46E5 100%); }
+  .hp-card-pill.gray { background: var(--bg); border: 1px solid var(--border); }
+  .hcp-tag { font-size: 8px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 4px; }
+  .hcp-tag.dark { color: var(--muted); }
+  .hcp-title { font-size: 13px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 5px; }
+  .hcp-title.dark { color: var(--navy); }
+  .hcp-body { font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.45; margin-bottom: 8px; }
+  .hcp-body.dark { color: var(--muted); }
+  .hcp-cta { display: inline-block; background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.32); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .hcp-cta.dark { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .hp-card-size { padding: 8px 16px 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .hp-card-size-tag { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 20px; }
+  .hp-card-size-tag.lg { background: rgba(255,107,53,0.12); color: var(--orange); }
+  .hp-card-size-tag.lg-i { background: rgba(99,102,241,0.12); color: #6366F1; }
+  .hp-card-size-tag.md { background: rgba(37,99,235,0.1); color: var(--blue); }
+  .hp-card-size-tag.sm { background: var(--bg); color: var(--navy); }
+  .hp-card-size-src { font-size: 10px; color: var(--muted); }
+
+  /* hp-card tracker (bonifico pendente) */
+  .hcp-tracker { margin-bottom: 8px; }
+  .hcp-trk-lbl { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.65); text-transform: uppercase; margin-bottom: 6px; }
+  .hcp-trk-steps { display: flex; align-items: center; gap: 0; }
+  .hcp-tdot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); background: transparent; flex-shrink: 0; }
+  .hcp-tdot.done { background: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.9); }
+  .hcp-tdot.act { background: transparent; border-color: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,0.25); }
+  .hcp-tline { flex: 1; height: 1.5px; background: rgba(255,255,255,0.25); }
+  .hcp-tline.done { background: rgba(255,255,255,0.7); }
+  .hcp-trk-labels { display: flex; justify-content: space-between; margin-top: 3px; }
+  .hcp-trk-lbl-item { font-size: 7px; color: rgba(255,255,255,0.65); }
+  .hcp-trk-lbl-item.done { color: rgba(255,255,255,0.9); font-weight: 700; }
+  .hcp-trk-lbl-item.act { color: #fff; font-weight: 700; }
+
+  /* flow diagram */
+  .flow-container-wf { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px; overflow-x: auto; }
+  .flow-cols { display: flex; gap: 20px; align-items: flex-start; min-width: 720px; }
+  .flow-col-wf { flex: 1; }
+  .flow-col-ttl { font-size: 8px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; text-align: center; }
+  .fnode { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; text-align: center; font-size: 11px; font-weight: 600; color: var(--navy); }
+  .fnode.o { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.3); color: var(--orange); }
+  .fnode.g { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.3); color: var(--green); }
+  .fnode.b { background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.3); color: var(--blue); }
+  .fnode.r { background: rgba(220,38,38,0.08); border-color: rgba(220,38,38,0.3); color: var(--red); }
+  .fnode.n { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .fnode.i { background: rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.3); color: #6366F1; }
+  .fnode.am { border: 1px solid var(--amber); background: rgba(217,119,6,0.06); color: var(--amber); }
+  .fnode.rd { border: 1px solid var(--red); background: rgba(220,38,38,0.06); color: var(--red); }
+  .fadd { text-align: center; color: var(--muted); font-size: 12px; margin: 4px 0; }
+
+  /* timeline */
+  .timeline-wf { position: relative; padding-left: 28px; }
+  .timeline-wf::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-item-wf { position: relative; margin-bottom: 14px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; }
+  .tl-item-wf::before { content: ''; position: absolute; left: -23px; top: 16px; width: 10px; height: 10px; border-radius: 50%; background: var(--orange); border: 2px solid var(--bg); }
+  .tl-item-wf.i::before { background: #6366F1; }
+  .tl-step-wf { font-size: 8px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 3px; }
+  .tl-step-wf.i { color: #6366F1; }
+  .tl-title-wf { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .tl-desc-wf { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .tl-pill-wf { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: rgba(255,107,53,0.1); color: var(--orange); margin-top: 6px; }
+  .tl-pill-wf.i { background: rgba(99,102,241,0.1); color: #6366F1; }
+
+  /* two-col info */
+  .twocol-wf { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .twocol-wf { grid-template-columns: 1fr; } }
+  .icardwf { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .icardwf-title { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+  .icardwf ul { list-style: none; padding: 0; }
+  .icardwf ul li { font-size: 12px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; line-height: 1.45; align-items: flex-start; }
+  .icardwf ul li:last-child { border-bottom: none; }
+
+  /* ─── FOOTER ─── */
+  .doc-footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Gimme5 · Sprint 2 · Pillole Educative</div>
+  <h1>Come funzionano<br>le pillole educative</h1>
+  <p>Strategia completa: cosa sono, perché servono, come appaiono, quando cambiano. Un documento per capire tutto senza tecnicismi.</p>
+  <div class="cover-meta">
+    <div class="badge">Per uso interno</div>
+    <div class="badge">Aprile 2026</div>
+    <div class="badge">Focus: Pillole + Homepage</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- SEZIONE 1: IL PROBLEMA OGGI -->
+  <div class="section">
+    <div class="section-label">01 · Il punto di partenza</div>
+    <div class="section-title">Come funziona oggi l'educazione finanziaria in app</div>
+    <div class="section-intro">Gimme5 ha già una sezione "Explora" con contenuti formativi. Ma il modo in cui questi contenuti vengono mostrati non è ottimale — e questo ha un impatto diretto sulla fidelizzazione.</div>
+
+    <div class="split">
+      <div class="split-card bad">
+        <div class="sc-label">Oggi · AS-IS</div>
+        <h3>Come funziona adesso</h3>
+        <ul>
+          <li>I contenuti sono articoli di blog taggati</li>
+          <li>Appaiono nella sezione "Explora" separata dalla home</li>
+          <li>Non dipendono da chi sei o cosa hai fatto</li>
+          <li>Non usano i tuoi dati reali (es. quanto hai versato)</li>
+          <li>Tutti vedono le stesse cose, sempre</li>
+          <li>Non c'è timing: appaiono quando vai tu, non quando serve</li>
+        </ul>
+      </div>
+      <div class="split-card good">
+        <div class="sc-label">Obiettivo · TO-BE</div>
+        <h3>Come deve funzionare</h3>
+        <ul>
+          <li>I contenuti appaiono in homepage, dove l'utente arriva ogni giorno</li>
+          <li>Dipendono dal comportamento dell'utente (cosa ha fatto, quando)</li>
+          <li>Usano dati reali: "Hai versato €420 — arrivi prima di 2 mesi"</li>
+          <li>Cambiano man mano che l'utente impara e diventa più attivo</li>
+          <li>Arrivano al momento giusto, non in modo casuale</li>
+          <li>Vengono da due fonti: Gimme5 (prodotto) + Finanz (cultura finanziaria)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEZIONE 2: COSA SONO LE PILLOLE -->
+  <div class="section">
+    <div class="section-label">02 · La soluzione</div>
+    <div class="section-title">Cosa sono le pillole educative</div>
+    <div class="section-intro">Una pillola è un micro-contenuto che compare in homepage nel momento giusto, con il messaggio giusto, per la persona giusta. Non è una notifica, non è un articolo, non è una pubblicità.</div>
+
+    <div class="insight">
+      <p><strong>La logica chiave:</strong> una pillola non insegna in astratto. Parla all'utente dei suoi soldi, della sua situazione, in quel momento preciso. "Hai saltato un versamento — ecco cosa succede al tuo obiettivo" è diverso da "Cos'è un PAC".</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Due fonti di contenuto</div>
+      <div class="card-body">
+        <strong style="color:var(--orange)">Gimme5</strong> — pillole sul prodotto: come funziona la regola di risparmio, cosa è un fondo, cosa cambia se salti un versamento, perché il tempo conta più del mercato.<br><br>
+        <strong style="color:var(--blue)">Finanz</strong> — pillole di cultura finanziaria generica: cos'è l'inflazione, come funziona un ETF, perché diversificare. Finanz è un partner informativo — NON è un prodotto, NON è un piano separato, NON è una scelta che fa l'utente. È semplicemente una seconda voce editoriale con la stessa interfaccia.
+      </div>
+    </div>
+  </div>
+
+  <!-- SEZIONE 3: I 3 FORMATI -->
+  <div class="section">
+    <div class="section-label">03 · I formati</div>
+    <div class="section-title">3 formati × 2 fonti — tutte le combinazioni</div>
+    <div class="section-intro">Le pillole hanno 3 dimensioni — Grande, Media, Piccola. <strong>Entrambe le fonti (Gimme5 e Finanz) le usano tutte e tre.</strong> La dimensione dipende dal livello dell'utente, non dalla fonte. Le pill possono anche apparire affiancate (es. due SM) o alternarsi tra sessioni.</div>
+
+    <div class="insight">
+      <p><strong>La regola:</strong> la dimensione dice "quanto sei avanzato". La fonte dice "di cosa parliamo". Sono due assi indipendenti. Un utente esperto può vedere una SM di Gimme5 affiancata a una SM di Finanz.</p>
+    </div>
+
+    <!-- Tabella 3×2 -->
+    <div style="overflow-x:auto;margin-bottom:24px;">
+      <table style="width:100%;border-collapse:separate;border-spacing:12px;">
+        <thead>
+          <tr>
+            <th style="width:80px"></th>
+            <th style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--orange);padding-bottom:8px;text-align:left">Gimme5<br><span style="font-size:10px;font-weight:400;color:var(--muted);letter-spacing:0">Educazione prodotto</span></th>
+            <th style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--blue);padding-bottom:8px;text-align:left">Finanz<br><span style="font-size:10px;font-weight:400;color:var(--muted);letter-spacing:0">Cultura finanziaria</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- LG ROW -->
+          <tr>
+            <td style="vertical-align:middle;padding-right:8px;">
+              <div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--navy);background:var(--bg);border-radius:8px;padding:6px 10px;text-align:center">LG</div>
+              <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;line-height:1.3">Utenti nuovi</div>
+            </td>
+            <td style="vertical-align:top">
+              <div class="pill-demo" style="min-height:120px">
+                <div class="pill-tag">Gimme5 · Risparmio</div>
+                <div class="pill-title-lg" style="font-size:20px">Risparmia €1 al giorno.<br>Senza pensarci.</div>
+                <div class="pill-body-text">La regola automatica preleva ogni giorno la cifra che scegli. Funziona mentre dormi.</div>
+                <div class="pill-cta">Scopri come →</div>
+              </div>
+            </td>
+            <td style="vertical-align:top">
+              <div class="pill-demo finanz" style="min-height:120px">
+                <div class="pill-tag" style="color:rgba(255,255,255,0.6)">Finanz · Le basi</div>
+                <div class="pill-title-lg" style="font-size:20px">Perché il tempo vale più dei soldi.</div>
+                <div class="pill-body-text">Chi inizia a 25 anni con €50/mese arriva a €80.000 a 65. Chi inizia a 35 anni: €38.000.</div>
+                <div class="pill-cta">Leggi in 2 min →</div>
+              </div>
+            </td>
+          </tr>
+          <!-- MD ROW -->
+          <tr>
+            <td style="vertical-align:middle;padding-right:8px;">
+              <div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--navy);background:var(--bg);border-radius:8px;padding:6px 10px;text-align:center">MD</div>
+              <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;line-height:1.3">Utenti attivi</div>
+            </td>
+            <td style="vertical-align:top">
+              <div class="pill-demo md">
+                <div class="pill-tag">Gimme5 · Il tuo obiettivo</div>
+                <div class="pill-title-md">Hai versato €420. Arrivi 2 mesi prima del previsto.</div>
+                <div class="pill-body-text">La regola sta lavorando. Continua così.</div>
+                <div class="pill-cta">Vedi l'obiettivo →</div>
+              </div>
+            </td>
+            <td style="vertical-align:top">
+              <div class="pill-demo finanz">
+                <div class="pill-tag" style="color:rgba(255,255,255,0.6)">Finanz · Cultura finanziaria</div>
+                <div class="pill-title-md">Cos'è l'inflazione e perché erode i risparmi.</div>
+                <div class="pill-body-text">Non è solo un numero. Impatta quello che puoi comprare tra 10 anni.</div>
+                <div class="pill-cta">Leggi in 3 min →</div>
+              </div>
+            </td>
+          </tr>
+          <!-- SM ROW -->
+          <tr>
+            <td style="vertical-align:middle;padding-right:8px;">
+              <div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--navy);background:var(--bg);border-radius:8px;padding:6px 10px;text-align:center">SM</div>
+              <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:4px;line-height:1.3">Utenti esperti</div>
+            </td>
+            <td style="vertical-align:top">
+              <div class="pill-demo sm">
+                <div class="pill-sm-icon">🔄</div>
+                <div class="pill-sm-text">
+                  <div class="t1">Hai saltato un versamento — ecco l'impatto reale</div>
+                  <div class="t2">Gimme5 · 2 min</div>
+                </div>
+                <div class="pill-sm-arrow">›</div>
+              </div>
+            </td>
+            <td style="vertical-align:top">
+              <div class="pill-demo sm" style="border-color:rgba(27,79,255,0.25)">
+                <div class="pill-sm-icon" style="background:#1B4FFF">📊</div>
+                <div class="pill-sm-text">
+                  <div class="t1">Asset allocation: cosa cambia dopo i 40</div>
+                  <div class="t2">Finanz · 5 min</div>
+                </div>
+                <div class="pill-sm-arrow">›</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ESEMPIO AFFIANCATE -->
+    <div class="card">
+      <div class="card-title">Esempio: 2 pillole SM affiancate</div>
+      <div class="card-body" style="margin-bottom:14px">Gli utenti esperti possono vedere due pillole piccole nella stessa sessione — una di Gimme5 e una di Finanz — affiancate o in colonna stretta. Massimo 2 pill per sessione in questo caso.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="pill-demo sm">
+          <div class="pill-sm-icon">🔄</div>
+          <div class="pill-sm-text">
+            <div class="t1">Versamento riuscito — stai andando bene</div>
+            <div class="t2">Gimme5</div>
+          </div>
+          <div class="pill-sm-arrow">›</div>
+        </div>
+        <div class="pill-demo sm" style="border-color:rgba(27,79,255,0.25)">
+          <div class="pill-sm-icon" style="background:#1B4FFF">📊</div>
+          <div class="pill-sm-text">
+            <div class="t1">Cos'è un ETF — spiegato in 3 righe</div>
+            <div class="t2">Finanz</div>
+          </div>
+          <div class="pill-sm-arrow">›</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SEZIONE 4: I SEGMENTI E LA HP -->
+  <div class="section">
+    <div class="section-label">04 · I segmenti utente</div>
+    <div class="section-title">Chi è l'utente e cosa vede in homepage</div>
+    <div class="section-intro">L'app capisce in quale "stato" si trova l'utente in base ai suoi comportamenti — e cambia la homepage di conseguenza. Ci sono <strong>7 stati principali</strong>. Ogni stato ha una pillola diversa, di dimensione diversa.</div>
+
+    <div class="hp-flow">
+      <div class="hp-flow-header">7 stati dell'utente → cosa vede in homepage</div>
+
+      <div class="hp-row">
+        <div class="hp-state-cell">
+          <div style="width:8px;height:8px;border-radius:50%;background:#6366F1;margin-bottom:6px;"></div>
+          <div class="hp-state-name">Bonifico Pendente</div>
+          <div class="hp-state-sub">Percorso B · saldo €0</div>
+        </div>
+        <div class="hp-content-cell">
+          <div class="hp-what">Ha completato l'onboarding scegliendo il bonifico manuale ma <strong>nessun versamento è ancora arrivato</strong>. Saldo €0. È lo stato più delicato: l'utente ha fatto tutto giusto ma non vede ancora nulla. La HP mostra un tracker visivo dei passi, tono rassicurante, nessuna pressione — e una pillola indigo che guida al bonifico o riempie l'attesa con contenuto utile.</div>
+        </div>
+        <div class="hp-pill-cell">
+          <div class="hp-pill-tag lg" style="background:rgba(99,102,241,0.12);color:#6366F1;">LG</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Gimme5 · indigo</div>
+        </div>
+      </div>
+
+      <div class="hp-row">
+        <div class="hp-state-cell">
+          <div style="width:8px;height:8px;border-radius:50%;background:#6B7280;margin-bottom:6px;"></div>
+          <div class="hp-state-name">Nuovo A</div>
+          <div class="hp-state-sub">Percorso C · primo versamento ricevuto, nessuna regola</div>
+        </div>
+        <div class="hp-content-cell">
+          <div class="hp-what">Ha completato l'onboarding e il primo versamento è già stato ricevuto, ma non ha ancora attivato nessuna regola automatica. Il saldo è positivo. La homepage deve motivarlo a fare quel passo.</div>
+        </div>
+        <div class="hp-pill-cell">
+          <div class="hp-pill-tag lg">LG</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Gimme5</div>
+        </div>
+      </div>
+
+      <div class="hp-row">
+        <div class="hp-state-cell">
+          <div style="width:8px;height:8px;border-radius:50%;background:#16A34A;margin-bottom:6px;"></div>
+          <div class="hp-state-name">Nuovo RID</div>
+          <div class="hp-state-sub">PAC + regola attiva</div>
+        </div>
+        <div class="hp-content-cell">
+          <div class="hp-what">Ha attivato la regola automatica durante l'onboarding. Il sistema sta già lavorando. La homepage deve rassicurarlo, spiegargli cosa sta succedendo, e creare abitudine positiva.</div>
+        </div>
+        <div class="hp-pill-cell">
+          <div class="hp-pill-tag lg">LG</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Gimme5</div>
+        </div>
+      </div>
+
+      <div class="hp-row">
+        <div class="hp-state-cell">
+          <div style="width:8px;height:8px;border-radius:50%;background:#9CA3AF;margin-bottom:6px;"></div>
+          <div class="hp-state-name">Dormiente</div>
+          <div class="hp-state-sub">Nessuna attività +30gg</div>
+        </div>
+        <div class="hp-content-cell">
+          <div class="hp-what">Non apre l'app da un mese o più. Ha un PAC attivo ma non ci pensa. La homepage deve richiamare l'attenzione senza essere aggressiva — un messaggio che parla dei suoi progressi, non che lo sgride.</div>
+        </div>
+        <div class="hp-pill-cell">
+          <div class="hp-pill-tag md">MD</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Gimme5</div>
+        </div>
+      </div>
+
+      <div class="hp-row">
+        <div class="hp-state-cell">
+          <div style="width:8px;height:8px;border-radius:50%;background:#DC2626;margin-bottom:6px;"></div>
+          <div class="hp-state-name">A Rischio</div>
+          <div class="hp-state-sub">Segnali di abbandono</div>
+        </div>
+        <div class="hp-content-cell">
+          <div class="hp-what">Sta mostrando segnali di voler uscire: versamenti saltati, ha cercato come disdire, comportamento ansioso. La homepage deve essere leggera, rassicurante — NON bombardarlo di messaggi.</div>
+        </div>
+        <div class="hp-pill-cell">
+          <div class="hp-pill-tag sm">SM</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">o nessuna</div>
+        </div>
+      </div>
+
+      <div class="hp-row">
+        <div class="hp-state-cell">
+          <div style="width:8px;height:8px;border-radius:50%;background:#2563EB;margin-bottom:6px;"></div>
+          <div class="hp-state-name">Attivo</div>
+          <div class="hp-state-sub">Utente regolare</div>
+        </div>
+        <div class="hp-content-cell">
+          <div class="hp-what">Apre l'app regolarmente, versamenti in regola, sa già come funziona. Può ricevere contenuti più profondi — anche di cultura finanziaria (Finanz) — perché ha le basi.</div>
+        </div>
+        <div class="hp-pill-cell">
+          <div class="hp-pill-tag md">MD</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Gimme5 / Finanz</div>
+        </div>
+      </div>
+
+      <div class="hp-row">
+        <div class="hp-state-cell">
+          <div style="width:8px;height:8px;border-radius:50%;background:#D97706;margin-bottom:6px;"></div>
+          <div class="hp-state-name">Esperto</div>
+          <div class="hp-state-sub">Alta conoscenza, multi-fondo</div>
+        </div>
+        <div class="hp-content-cell">
+          <div class="hp-what">Usa l'app da tempo, ha più fondi, capisce già tutto. Le pillole grandi sarebbero ridondanti. Vede solo suggerimenti discreti e avanzati — contenuti Finanz su mercati, asset allocation, strategie.</div>
+        </div>
+        <div class="hp-pill-cell">
+          <div class="hp-pill-tag sm">SM</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Finanz</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEZIONE 5: ONBOARDING FORK -->
+  <div class="section">
+    <div class="section-label">05 · Il bivio dall'onboarding</div>
+    <div class="section-title">Come l'onboarding decide la prima HP</div>
+    <div class="section-intro">Alla fine dell'onboarding ci sono 3 percorsi possibili. Ognuno porta a una homepage diversa con una pillola diversa. È il primo momento in cui il sistema capisce chi è l'utente.</div>
+
+    <div class="fork-grid">
+      <div class="fork-card" style="border-top:3px solid var(--green)">
+        <div class="fork-num">A</div>
+        <div class="fork-title">PAC + Regola automatica</div>
+        <div class="fork-desc">Ha attivato il versamento automatico (RID/SEPA) durante l'onboarding. Il sistema è già operativo. Il primo addebito avverrà automaticamente alla data prevista.</div>
+        <div class="fork-hp">→ HP: <strong>Nuovo RID</strong> · Pillola LG arancio</div>
+      </div>
+      <div class="fork-card" style="border-top:3px solid #6366F1">
+        <div class="fork-num">B</div>
+        <div class="fork-title">PAC + Bonifico manuale</div>
+        <div class="fork-desc">Ha scelto il trasferimento manuale. <strong>Saldo €0.</strong> Non ha ancora inviato il bonifico oppure lo ha inviato ma non è ancora arrivato. È lo stato più critico per il drop: l'utente si aspetta che "funzioni" ma non vede nulla.</div>
+        <div class="fork-hp">→ HP: <strong>Bonifico Pendente</strong> · Pillola LG indigo · tracker passi</div>
+      </div>
+      <div class="fork-card" style="border-top:3px solid var(--amber)">
+        <div class="fork-num">C</div>
+        <div class="fork-title">PAC + Skip (nessuna azione)</div>
+        <div class="fork-desc">Ha saltato la configurazione del versamento. Il piano esiste ma non ha ancora né regola né bonifico. Rientra come "Nuovo A" dopo il primo versamento ricevuto.</div>
+        <div class="fork-hp">→ HP: <strong>Nuovo A</strong> (post primo versamento) · Pillola LG arancio</div>
+      </div>
+    </div>
+
+    <div class="insight" style="margin-top:20px">
+      <p><strong>Percorso B — il caso più trascurato:</strong> tra la fine dell'onboarding e la ricezione del primo bonifico possono passare 2–5 giorni. In questo periodo l'utente vede saldo €0 e non capisce se "ha funzionato". Senza uno stato dedicato, questo momento produce abbandono silenzioso. La HP deve colmare l'attesa con un tracker visivo, tono paziente e contenuto utile — non pressione.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SEZIONE 6: I TRIGGER -->
+  <div class="section">
+    <div class="section-label">06 · Quando appaiono le pillole</div>
+    <div class="section-title">7 eventi che attivano una pillola</div>
+    <div class="section-intro">Una pillola non viene mostrata in modo casuale. Appare solo quando succede qualcosa di specifico nella vita dell'utente. E non viene mostrata subito — c'è sempre un ritardo intenzionale. Il T0 è l'unica eccezione: scatta immediatamente al completamento dell'onboarding via bonifico.</div>
+
+    <div class="insight">
+      <p><strong>La regola più importante:</strong> le pillole appaiono sempre con ritardo. Non in tempo reale. Il sistema aspetta ore o giorni prima di rispondere a un evento — perché un messaggio immediato sembra ansioso, uno ritardato sembra ponderato.</p>
+    </div>
+
+    <div class="trigger-list">
+      <div class="trigger-row" style="border-left:3px solid #6366F1">
+        <div class="t-num" style="background:#6366F1">T0</div>
+        <div>
+          <div class="t-name">Onboarding completato · saldo €0 (Percorso B)</div>
+          <div class="t-desc">L'utente ha scelto il bonifico manuale e ha chiuso l'onboarding ma non ha ancora versato nulla — oppure ha inviato il bonifico ma non è ancora arrivato. Saldo €0. <strong>Nessun messaggio urgente.</strong> La HP entra subito in stato "Bonifico Pendente" con tracker passi.</div>
+        </div>
+        <div class="t-delay" style="color:#6366F1;background:rgba(99,102,241,0.08)">Immediato<br>(nessun ritardo)</div>
+        <div class="t-copy">"Il tuo piano è pronto. Aspettiamo insieme." / "Invia il bonifico quando vuoi — anche solo €10 per iniziare."<br><br>Dopo 2 giorni senza bonifico → reminder MD: "Quando vuoi — anche solo €10 per iniziare."</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T1</div>
+        <div>
+          <div class="t-name">Primo accesso post-onboarding (Percorso A o C)</div>
+          <div class="t-desc">L'utente apre l'app per la prima volta dopo aver completato il piano con regola attiva o dopo aver saltato la configurazione. <em>Non si applica al Percorso B — quello è T0.</em></div>
+        </div>
+        <div class="t-delay">Ritardo<br>6 ore</div>
+        <div class="t-copy">"Il tuo piano è attivo. Il tempo è il tuo vantaggio più grande."</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T2</div>
+        <div>
+          <div class="t-name">Primo versamento ricevuto</div>
+          <div class="t-desc">Il bonifico o l'addebito automatico è andato a buon fine per la prima volta. Per gli utenti in stato "Bonifico Pendente" questo evento li porta in stato "Nuovo A" o "Nuovo RID".</div>
+        </div>
+        <div class="t-delay">Ritardo<br>48 ore</div>
+        <div class="t-copy">"Il tuo primo €30 è al lavoro. Così si inizia."</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T3</div>
+        <div>
+          <div class="t-name">Versamento saltato</div>
+          <div class="t-desc">Un versamento programmato non è andato a buon fine (conto non coperto, errore tecnico).</div>
+        </div>
+        <div class="t-delay">Ritardo<br>24 ore</div>
+        <div class="t-copy">"Un versamento mancato non cambia tutto. Ecco quanto impatta davvero."</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T4</div>
+        <div>
+          <div class="t-name">Milestone raggiunta</div>
+          <div class="t-desc">L'utente ha raggiunto una soglia: €100, €500, €1000 versati, o 30/90/365 giorni consecutivi.</div>
+        </div>
+        <div class="t-delay">Ritardo<br>2 ore</div>
+        <div class="t-copy">"€500 versati. Sei nel 20% più costante dei nostri utenti."</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T5</div>
+        <div>
+          <div class="t-name">Inattività prolungata</div>
+          <div class="t-desc">L'utente non apre l'app da 30 giorni (o 60 giorni per gli utenti dormant storici).</div>
+        </div>
+        <div class="t-delay">Ritardo<br>72 ore</div>
+        <div class="t-copy">"Anche se non guardi, il tuo piano ha lavorato per te questo mese."</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T6</div>
+        <div>
+          <div class="t-name">Calo del mercato</div>
+          <div class="t-desc">Il mercato scende di più del 3% in un giorno. Utenti con bassa stabilità emotiva rischiano di uscire.</div>
+        </div>
+        <div class="t-delay">Silenzio<br>24 ore poi</div>
+        <div class="t-copy">"Il mercato è sceso del 4%. Chi è rimasto investito nel 2008 ha guadagnato il 130% nei 5 anni successivi."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEZIONE 7: LE REGOLE -->
+  <div class="section">
+    <div class="section-label">07 · Le regole del sistema</div>
+    <div class="section-title">Cosa si fa e cosa non si fa mai</div>
+    <div class="section-intro">Queste regole non sono opinioni — alcune sono vincoli normativi (MiFID II), altre sono scelte editoriali fondamentali per non danneggiare la fiducia dell'utente.</div>
+
+    <div class="rules-grid">
+      <div class="rule-card always">
+        <div class="rule-label">Sempre</div>
+        <ul>
+          <li><span>✓</span> Massimo 1 pillola per sessione</li>
+          <li><span>✓</span> Aspetta sempre prima di rispondere (delay)</li>
+          <li><span>✓</span> Usa dati reali dell'utente quando possibile</li>
+          <li><span>✓</span> Le pillole Finanz hanno sempre un disclaimer</li>
+          <li><span>✓</span> Il tono è caldo, non scolastico</li>
+          <li><span>✓</span> Stessa voce dell'onboarding, stessa terminologia</li>
+        </ul>
+      </div>
+      <div class="rule-card never">
+        <div class="rule-label">Mai</div>
+        <ul>
+          <li><span>✗</span> Due messaggi sullo stesso argomento nello stesso giorno</li>
+          <li><span>✗</span> Rispondere in tempo reale a un evento di mercato</li>
+          <li><span>✗</span> "Compra questo", "vendi quello" — vietato per legge</li>
+          <li><span>✗</span> Mostrare pillole grandi a utenti esperti (fastidio)</li>
+          <li><span>✗</span> Mandare push dopo le 21:00 o prima delle 19:00</li>
+          <li><span>✗</span> Più di 3 push al mese per lo stesso utente</li>
+        </ul>
+      </div>
+      <div class="rule-card timing">
+        <div class="rule-label">Timing</div>
+        <ul>
+          <li><span>⏱</span> Push: solo tra le 19:00 e le 21:00</li>
+          <li><span>⏱</span> Dopo calo mercato: 24h di silenzio prima di comunicare</li>
+          <li><span>⏱</span> Scoring aggiornato ogni 7 giorni + eventi critici</li>
+          <li><span>⏱</span> Il segmento dell'utente può cambiare solo in meglio (non retrocede se no)</li>
+        </ul>
+      </div>
+      <div class="rule-card timing" style="border-top-color:var(--blue)">
+        <div class="rule-label" style="color:var(--blue)">Compliance MiFID II</div>
+        <ul>
+          <li><span>§</span> Finanz = informazione, NON consulenza</li>
+          <li><span>§</span> Nessuna raccomandazione personalizzata di investimento</li>
+          <li><span>§</span> Disclaimer sempre presente sulle pillole Finanz</li>
+          <li><span>§</span> Dati utente solo per contesto, mai per targeting commerciale</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEZIONE 8: COME CAMBIA LA HP -->
+  <div class="section">
+    <div class="section-label">08 · La homepage che evolve</div>
+    <div class="section-title">Come cambia ciò che vedi ogni volta che torni</div>
+    <div class="section-intro">La homepage non è statica. Cambia in base a chi sei oggi — non a chi eri quando hai scaricato l'app. È un sistema che impara da te in modo silenzioso.</div>
+
+    <div class="card">
+      <div class="card-title">La logica dello scoring (semplificata)</div>
+      <div class="card-body">
+        Il sistema valuta 3 cose su di te, su una scala da 0 a 100:
+        <br><br>
+        <strong style="color:var(--orange)">Engagement (0–100)</strong> — Quanto usi l'app? Apri spesso, controlli il saldo, leggi le pillole?<br>
+        <strong style="color:var(--green)">Conoscenza (0–100)</strong> — Hai letto le pillole? Hai completato le schede dei fondi? Sei andato in Explora?<br>
+        <strong style="color:var(--blue)">Stabilità Emotiva (0–100)</strong> — Reagisci ai cali di mercato? Hai cercato "come disdire"? Hai saltato versamenti consecutivi?
+        <br><br>
+        Questi tre numeri cambiano ogni settimana. In base a dove sei, l'app decide il tuo segmento e quindi cosa ti mostra.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Un esempio reale di percorso</div>
+      <div class="card-body">
+        <strong>Giorno 1 — Percorso B (onboarding con bonifico manuale):</strong> Sei in "Bonifico Pendente" — vedi saldo €0, un tracker dei passi, e una pillola indigo che ti guida al primo versamento o riempie l'attesa con contenuto utile. Nessuna pressione.<br><br>
+        <strong>Giorno 1 — Percorso A (onboarding con RID):</strong> Sei "Nuovo RID" — vedi una pillola LG che ti spiega come funziona la regola automatica. Il sistema sta già lavorando.<br><br>
+        <strong>Settimana 2 (hai aperto l'app 4 volte):</strong> Engagement sale. Stai diventando "Attivo" — la pillola si rimpicciolisce, diventa MD, con dati reali sui tuoi versamenti.<br><br>
+        <strong>Mese 3 (versamento saltato):</strong> Trigger T3 si attiva. Il giorno dopo vedi una pillola MD che ti spiega l'impatto in modo costruttivo — non una sgridata.<br><br>
+        <strong>Mese 6 (hai 2 fondi, engagement alto):</strong> Sei "Attivo" avanzato, quasi "Esperto". Vedi pillole SM di Finanz su concetti avanzati — mercati, diversificazione.
+      </div>
+    </div>
+  </div>
+
+  <!-- SEZIONE 9: CONTINUITA' ONBOARDING-APP -->
+  <div class="section">
+    <div class="section-label">09 · La continuità di voce</div>
+    <div class="section-title">Stessa voce dall'onboarding all'app</div>
+    <div class="section-intro">Una delle cose più importanti: l'utente non deve sentire che è arrivato in un posto diverso. La stessa terminologia usata nell'onboarding deve tornare nelle pillole.</div>
+
+    <div class="card">
+      <div class="card-title">Le parole che non cambiano mai</div>
+      <div class="card-body">
+        ✓ Si dice <strong>"versamento automatico"</strong>, non "RID" o "SDD" o "domiciliazione bancaria"<br>
+        ✓ Si dice <strong>"la tua regola"</strong>, non "il tuo piano di accumulo" o "PAC"<br>
+        ✓ Si dice <strong>"il tuo obiettivo"</strong>, non "il tuo portafoglio" o "i tuoi investimenti"<br>
+        ✓ Il tono è sempre in prima persona, diretto, come un amico che capisce di soldi<br>
+        ✓ Numeri reali sempre: "€420 versati" invece di "stai andando bene"
+      </div>
+    </div>
+  </div>
+
+  <!-- RIEPILOGO FINALE -->
+  <div class="section">
+    <div class="section-label">10 · In sintesi</div>
+    <div class="section-title">Le 5 cose da tenere in testa</div>
+    <div class="section-intro">Questo sprint si può riassumere in 5 concetti fondamentali.</div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-num"><span>3</span></div>
+        <div class="stat-label">formati di pillola<br>(LG / MD / SM)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num"><span>2</span></div>
+        <div class="stat-label">fonti di contenuto<br>(Gimme5 + Finanz)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num"><span>7</span></div>
+        <div class="stat-label">stati homepage<br>che cambiano nel tempo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num"><span>7</span></div>
+        <div class="stat-label">trigger comportamentali<br>che le attivano</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">La pillola giusta = persona giusta × momento giusto × formato giusto</div>
+      <div class="card-body">
+        Non è una sezione blog. Non è un feed di notizie. È un sistema di educazione adattiva che si accorge di te — e parla la tua lingua, con i tuoi numeri, nel momento in cui ha più senso ascoltare.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       WIREFRAME CLIENTI — Sistema Pillole
+  ══════════════════════════════════════════════════════ -->
+  <div class="wf-block-header">
+    <div class="wf-block-eyebrow">Gimme5 · Sprint 2 · Aprile 2026</div>
+    <h2>WIREFRAME CLIENTI — Sistema Pillole</h2>
+    <p>Versione visiva del sistema: come appare ogni stato in homepage, come funziona il motore, come evolve l'utente nel tempo.</p>
+  </div>
+
+  <!-- WF01: FORMATI PILLOLA -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF01 · I formati pillola</div>
+    <div class="wf-section-title">3 dimensioni × 2 fonti — tutte le combinazioni</div>
+    <div class="wf-section-sub">Ogni utente vede il formato corretto in base al suo stato. La fonte (Gimme5 o Finanz) dipende dall'argomento. Bonifico Pendente usa il formato speciale indigo — operativo, non educativo.</div>
+
+    <!-- Table header -->
+    <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:0;background:var(--navy);border-radius:12px 12px 0 0;padding:12px 16px;margin-bottom:0;">
+      <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.5);">Formato</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#FF6B35;padding-left:12px;">Gimme5</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#93C5FD;padding-left:12px;">Finanz</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#A5B4FC;padding-left:12px;">Indigo — Bonifico</div>
+    </div>
+
+    <!-- LG row -->
+    <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:0;border:1px solid var(--border);border-top:none;background:var(--white);">
+      <div style="padding:20px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(255,107,53,0.04);">
+        <div style="font-size:22px;font-weight:900;color:var(--navy);line-height:1;">LG</div>
+        <div style="font-size:9px;font-weight:700;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:3px;">Large</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px;text-align:center;line-height:1.4;">Nuovi utenti</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);">
+        <div class="hp-card-pill orange" style="margin:0;">
+          <div class="hcp-tag">Gimme5 · Il tuo prossimo passo</div>
+          <div class="hcp-title">Attiva il versamento automatico.</div>
+          <div class="hcp-body">Chi risparmia in automatico arriva all'obiettivo il 40% più veloce.</div>
+          <div class="hcp-cta">Attiva ora →</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;">Nuovo A · Nuovo RID</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);">
+        <div style="background:var(--bg);border:1px dashed var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);font-style:italic;">Non disponibile</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Finanz LG non prevista</div>
+        </div>
+      </div>
+      <div style="padding:16px;">
+        <div class="hp-card-pill indigo" style="margin:0;">
+          <div class="hcp-tracker">
+            <div class="hcp-trk-lbl">I tuoi prossimi passi</div>
+            <div class="hcp-trk-steps">
+              <div class="hcp-tdot done"></div><div class="hcp-tline done"></div>
+              <div class="hcp-tdot done"></div><div class="hcp-tline"></div>
+              <div class="hcp-tdot act"></div><div class="hcp-tline"></div>
+              <div class="hcp-tdot"></div>
+            </div>
+            <div class="hcp-trk-labels">
+              <span class="hcp-trk-lbl-item done">Registrato</span>
+              <span class="hcp-trk-lbl-item done">Piano</span>
+              <span class="hcp-trk-lbl-item act">Bonifico</span>
+              <span class="hcp-trk-lbl-item">Attivo</span>
+            </div>
+          </div>
+          <div class="hcp-tag">Gimme5 · Inizia quando vuoi</div>
+          <div class="hcp-title">Il tuo piano è pronto. Aspettiamo insieme.</div>
+          <div class="hcp-cta">Come fare il bonifico →</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;">Bonifico Pendente · solo T0</div>
+      </div>
+    </div>
+
+    <!-- MD row -->
+    <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:0;border:1px solid var(--border);border-top:none;background:var(--white);">
+      <div style="padding:20px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(255,107,53,0.04);">
+        <div style="font-size:22px;font-weight:900;color:var(--navy);line-height:1;">MD</div>
+        <div style="font-size:9px;font-weight:700;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:3px;">Medium</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px;text-align:center;line-height:1.4;">Utenti attivi</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);">
+        <div style="background:linear-gradient(135deg,var(--orange) 0%,#E8520A 100%);border-radius:12px;padding:14px 16px;">
+          <div class="hcp-tag">Gimme5 · Il tuo piano</div>
+          <div class="hcp-title">Non ci pensavi — ma il tuo piano sì. €420.</div>
+          <div class="hcp-body">Sei al 42% del tuo obiettivo.</div>
+          <div class="hcp-cta">Vedi i progressi →</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;">Dormiente · Attivo (G5)</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);">
+        <div style="background:linear-gradient(135deg,#1B4FFF 0%,#0A2FB3 100%);border-radius:12px;padding:14px 16px;">
+          <div class="hcp-tag">Finanz · Mercati</div>
+          <div class="hcp-title">Cos'è la diversificazione.</div>
+          <div class="hcp-body">Non mettere tutto in un paniere — in pratica.</div>
+          <div class="hcp-cta">Leggi in 3 min →</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;">Attivo · contenuto cultura</div>
+      </div>
+      <div style="padding:16px;">
+        <div style="background:var(--bg);border:1px dashed var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);font-style:italic;">Non disponibile</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Bonifico Pendente usa solo LG</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SM row -->
+    <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:0;border:1px solid var(--border);border-top:none;background:var(--white);border-radius:0 0 12px 12px;">
+      <div style="padding:20px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(255,107,53,0.04);border-radius:0 0 0 12px;">
+        <div style="font-size:22px;font-weight:900;color:var(--navy);line-height:1;">SM</div>
+        <div style="font-size:9px;font-weight:700;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:3px;">Small</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px;text-align:center;line-height:1.4;">Esperti</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);">
+        <div style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;">
+          <div class="pill-sm-icon" style="width:32px;height:32px;font-size:15px;">📊</div>
+          <div class="pill-sm-text">
+            <div class="t1">Un versamento mancato non cambia tutto.</div>
+            <div class="t2">Gimme5 · Nota tranquilla</div>
+          </div>
+          <div class="pill-sm-arrow">›</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;">A Rischio · tono leggero</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border);">
+        <div style="background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.25);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:#1B4FFF;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">📈</div>
+          <div class="pill-sm-text">
+            <div class="t1" style="color:var(--navy);">Asset allocation dopo i 40</div>
+            <div class="t2">Finanz · 5 min</div>
+          </div>
+          <div class="pill-sm-arrow" style="color:var(--blue);">›</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;">Esperto · contenuto avanzato</div>
+      </div>
+      <div style="padding:16px;">
+        <div style="background:var(--bg);border:1px dashed var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);font-style:italic;">Non disponibile</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Bonifico Pendente usa solo LG</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- WF02: TRIGGER ROWS -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF02 · I 7 trigger</div>
+    <div class="wf-section-title">Quando scatta una pillola — tutti i casi</div>
+    <div class="wf-section-sub">Ogni evento comportamentale dell'utente può attivare una pillola dopo un intervallo preciso. T0 è l'unico immediato — tutti gli altri hanno un ritardo intenzionale per non risultare intrusivi.</div>
+
+    <div class="trigger-list">
+
+      <div class="trigger-row" style="border-left:4px solid #6366F1;">
+        <div class="t-num" style="background:#6366F1;">T0</div>
+        <div>
+          <div class="t-name">Onboarding completato via bonifico</div>
+          <div class="t-desc">Percorso B — l'utente ha scelto bonifico manuale. Entra subito in stato Bonifico Pendente.</div>
+        </div>
+        <div class="t-delay" style="color:#6366F1;background:rgba(99,102,241,0.08);">Immediato<br>nessun ritardo</div>
+        <div class="t-copy">"Il tuo piano è pronto. Aspettiamo insieme." — Pillola LG indigo con tracker dei passi.</div>
+      </div>
+
+      <div class="trigger-row">
+        <div class="t-num">T1</div>
+        <div>
+          <div class="t-name">Primo accesso post-onboarding</div>
+          <div class="t-desc">Primo versamento ricevuto. L'utente diventa Nuovo A — nessuna regola automatica attiva.</div>
+        </div>
+        <div class="t-delay">+6h<br>dal versamento</div>
+        <div class="t-copy">"Attiva il versamento automatico — chi risparmia così arriva all'obiettivo il 40% più veloce." — Pillola LG.</div>
+      </div>
+
+      <div class="trigger-row">
+        <div class="t-num">T2</div>
+        <div>
+          <div class="t-name">Primo versamento ricevuto</div>
+          <div class="t-desc">Conferma dal sistema bancario. Celebra il primo passo concreto dell'utente.</div>
+        </div>
+        <div class="t-delay">+48h<br>dalla conferma</div>
+        <div class="t-copy">"Il tuo primo €30 è già al lavoro. Ecco come cresce nel tempo." — LG Gimme5, dati reali.</div>
+      </div>
+
+      <div class="trigger-row">
+        <div class="t-num">T3</div>
+        <div>
+          <div class="t-name">Versamento saltato / regola disattivata</div>
+          <div class="t-desc">L'utente ha mancato un versamento programmato. Tono neutro, nessuna pressione.</div>
+        </div>
+        <div class="t-delay">+24h<br>dall'evento</div>
+        <div class="t-copy">"Un versamento mancato non cambia tutto. Ecco quanto impatta davvero." — SM o nessuna pill se A Rischio.</div>
+      </div>
+
+      <div class="trigger-row">
+        <div class="t-num">T4</div>
+        <div>
+          <div class="t-name">Milestone raggiunta (€100, €500, €1000…)</div>
+          <div class="t-desc">L'utente supera una soglia psicologicamente significativa. Momento di celebrazione.</div>
+        </div>
+        <div class="t-delay">+2h<br>dalla milestone</div>
+        <div class="t-copy">"Hai appena raggiunto €500. Sai cosa puoi fare ora?" — Prima pillola MD Finanz per utenti Attivi.</div>
+      </div>
+
+      <div class="trigger-row">
+        <div class="t-num">T5</div>
+        <div>
+          <div class="t-name">Inattività prolungata (30+ giorni)</div>
+          <div class="t-desc">L'utente non apre l'app da più di 30 giorni. Stato → Dormiente.</div>
+        </div>
+        <div class="t-delay">+72h<br>da 30gg inattivo</div>
+        <div class="t-copy">"Non ci pensavi — ma il tuo piano sì. €420 già versati." — MD Gimme5, mostra progressi reali.</div>
+      </div>
+
+      <div class="trigger-row" style="border-left:4px solid var(--red);">
+        <div class="t-num" style="background:var(--red);">T6</div>
+        <div>
+          <div class="t-name">Calo mercato &gt;3% in 24h</div>
+          <div class="t-desc">Evento di mercato significativo. Il sistema si ferma — non reagisce mai in tempo reale.</div>
+        </div>
+        <div class="t-delay" style="color:var(--red);background:rgba(220,38,38,0.08);">Silenzio 24h<br>poi pillola SM</div>
+        <div class="t-copy">"I mercati fluttuano. Il tuo piano è costruito per questo." — Solo dopo 24h di silenzio. MiFID II compliant.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- WF03: PERCORSO EVOLUTIVO -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF03 · L'utente nel tempo</div>
+    <div class="wf-section-title">Come evolve la homepage in 6 mesi</div>
+    <div class="wf-section-sub">Due percorsi paralleli: Percorso B (bonifico → attesa → attivazione) e Percorso A (regola subito attiva).</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#6366F1;margin-bottom:12px;">Percorso B — Bonifico manuale</div>
+        <div class="timeline-wf">
+          <div class="tl-item-wf i">
+            <div class="tl-step-wf i">Giorno 0 · Onboarding completato</div>
+            <div class="tl-title-wf">HP: Bonifico Pendente · €0</div>
+            <div class="tl-desc-wf">Entra subito in stato "Bonifico Pendente". Vede il tracker dei passi e una pill LG indigo che lo guida senza pressione.</div>
+            <div class="tl-pill-wf i">Pillola LG indigo — "Il tuo piano è pronto. Aspettiamo insieme."</div>
+          </div>
+          <div class="tl-item-wf i">
+            <div class="tl-step-wf i">Giorno 2–3 · Ancora €0</div>
+            <div class="tl-title-wf">Reminder gentile</div>
+            <div class="tl-desc-wf">Se non ha ancora inviato il bonifico, la pill si rimpicciolisce a MD con tono ancora più basso.</div>
+            <div class="tl-pill-wf i">Pillola MD indigo — "Anche solo €10 per iniziare."</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Giorno 3–5 · Bonifico ricevuto</div>
+            <div class="tl-title-wf">Trigger T2 — 48h dopo</div>
+            <div class="tl-desc-wf">Transizione a "Nuovo A". Il sistema celebra il primo versamento e lo invita ad attivare la regola automatica.</div>
+            <div class="tl-pill-wf">Pillola LG — "Il tuo primo €30 è al lavoro."</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;">Percorso A — Regola automatica subito</div>
+        <div class="timeline-wf">
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Giorno 1 · Onboarding completato</div>
+            <div class="tl-title-wf">HP: Nuovo RID · regola attiva</div>
+            <div class="tl-desc-wf">Sceglie €1/giorno durante l'onboarding. HP mostra la regola attiva e rinforza l'abitudine.</div>
+            <div class="tl-pill-wf">Pillola LG — "Risparmia €1 al giorno. Senza pensarci."</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Mese 2 · Alta frequenza di accesso</div>
+            <div class="tl-title-wf">Scoring: Engagement sale → Attivo</div>
+            <div class="tl-desc-wf">Apre l'app spesso, legge le pillole. Il sistema lo sposta verso "Attivo" — pillola si rimpicciolisce con dati reali.</div>
+            <div class="tl-pill-wf">Pillola MD — dati reali sul suo obiettivo</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Mese 4 · Milestone €500</div>
+            <div class="tl-title-wf">Trigger T4 — 2h dopo</div>
+            <div class="tl-desc-wf">Prima esposizione a contenuto Finanz. Ha le basi per capirlo.</div>
+            <div class="tl-pill-wf">Pillola MD Finanz — primo contenuto cultura finanziaria</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Mese 6 · Secondo fondo attivato</div>
+            <div class="tl-title-wf">Scoring: diventa "Esperto"</div>
+            <div class="tl-desc-wf">Pillole grandi spariscono. Solo SM discrete — contenuto avanzato, non invasivo.</div>
+            <div class="tl-pill-wf">Pillola SM Finanz — discreto, avanzato</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- WF04: GARANZIE DEL SISTEMA -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF04 · Le garanzie del sistema</div>
+    <div class="wf-section-title">Cosa garantisce il sistema — sempre e mai</div>
+    <div class="wf-section-sub">Regole non negoziabili. Definiscono il perimetro del sistema indipendentemente dal segmento utente o dal trigger attivo.</div>
+
+    <div class="guarantee-grid">
+      <div class="guarantee-card always">
+        <div class="guarantee-label">✓ Sempre</div>
+        <ul>
+          <li><span>✓</span> Max 1 pillola per sessione — mai due contemporaneamente</li>
+          <li><span>✓</span> Ritardo intenzionale tra evento e pillola (tranne T0)</li>
+          <li><span>✓</span> Dati reali dell'utente nel copy ("€420 versati", non placeholder)</li>
+          <li><span>✓</span> Disclaimer legale su tutti i contenuti Finanz</li>
+          <li><span>✓</span> Stesso vocabolario dell'onboarding ("versamento automatico", non "RID")</li>
+          <li><span>✓</span> Tono caldo e umano — mai scolastico o impersonale</li>
+          <li><span>✓</span> Stato Bonifico Pendente: zero pressione, supporto gentile</li>
+          <li><span>✓</span> Pill SM o assenza per utenti A Rischio — nessuna pressione</li>
+        </ul>
+      </div>
+      <div class="guarantee-card never">
+        <div class="guarantee-label">✗ Mai</div>
+        <ul>
+          <li><span>✗</span> Due pillole sullo stesso argomento nella stessa giornata</li>
+          <li><span>✗</span> Risposta immediata a calo di mercato — silenzio 24h obbligatorio (T6)</li>
+          <li><span>✗</span> "Compra questo / vendi quello" — vietato MiFID II</li>
+          <li><span>✗</span> Pillola LG o MD a un utente Esperto — usa solo SM</li>
+          <li><span>✗</span> Push notification dopo le 21:00 o prima delle 08:00</li>
+          <li><span>✗</span> Più di 3 push al mese per singolo utente</li>
+          <li><span>✗</span> Contenuto Finanz avanzato a utente Nuovo — aspetta scoring sufficiente</li>
+          <li><span>✗</span> Tono urgente o di allerta verso utenti in difficoltà</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="doc-footer">
+  Gimme5 · Strategia Pillole Educative · Sprint 2 · Aprile 2026 · Documento interno
+</div>
+
+</body>
+</html>

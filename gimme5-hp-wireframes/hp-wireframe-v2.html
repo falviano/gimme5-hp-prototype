@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 — WIREFRAME HP · v2</title>
+<style>
+:root {
+  --orange:#FF6B35; --orange-d:#E8520A;
+  --blue:#1B4FFF;   --blue-d:#0A2FB3;
+  --indigo:#6366F1; --indigo-d:#4F46E5;
+  --navy:#1a1a2e;
+  --green:#16A34A;  --red:#DC2626; --amber:#D97706;
+  --bg:#F5F5F7; --white:#fff; --text:#111;
+  --muted:#666; --border:#E5E7EB;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+
+/* COVER */
+.cover{background:var(--navy);color:#fff;padding:60px 48px 48px;border-bottom:4px solid var(--orange)}
+.cover-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:16px}
+.cover h1{font-size:36px;font-weight:900;letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
+.cover p{font-size:16px;color:rgba(255,255,255,.65);max-width:600px;line-height:1.6;margin-bottom:32px}
+.cover-meta{display:flex;gap:12px;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:.4px}
+
+/* LAYOUT */
+.page{max-width:1200px;margin:0 auto;padding:56px 48px}
+.section{margin-bottom:64px}
+.section-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:10px}
+.section-title{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--navy);margin-bottom:8px;line-height:1.2}
+.section-sub{font-size:14px;color:var(--muted);max-width:680px;margin-bottom:28px;line-height:1.7}
+
+hr{border:none;border-top:1px solid var(--border);margin:56px 0}
+
+/* WF BLOCK HEADER */
+.wf-block-header{background:var(--orange);padding:32px 36px 28px;border-radius:16px;margin-bottom:40px}
+.wf-block-eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px}
+.wf-block-header h2{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.1;margin-bottom:6px}
+.wf-block-header p{font-size:13px;color:rgba(255,255,255,.8);max-width:560px;line-height:1.6}
+.wf-section{margin-bottom:56px}
+.wf-section-tag{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+.wf-section-title{font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-.3px;margin-bottom:6px}
+.wf-section-sub{font-size:13px;color:var(--muted);max-width:680px;line-height:1.6;margin-bottom:24px}
+
+/* FORK GRID (onboarding paths) */
+.fork-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+@media(max-width:900px){.fork-grid{grid-template-columns:1fr 1fr}}
+.fork-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative}
+.fork-num{width:28px;height:28px;background:var(--navy);color:#fff;border-radius:8px;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.fork-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.fork-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.fork-hp{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:rgba(255,107,53,.1);color:var(--orange);display:inline-block}
+
+/* INSIGHT */
+.insight{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.2);border-radius:14px;padding:18px 22px;margin-top:16px;margin-bottom:0}
+.insight p{font-size:13px;color:var(--navy);line-height:1.65}
+.insight strong{color:var(--orange)}
+
+/* ═══════════════════════════════════════
+   HP CARD — formato core del wireframe
+═══════════════════════════════════════ */
+.hp-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.hp-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.hp-card-top{padding:16px 16px 12px;flex:1}
+.hp-card-state{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.hp-card-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.hp-card-name{font-size:13px;font-weight:700;color:var(--navy)}
+.hp-card-phase{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.hp-card-sub{font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+
+/* Pill inside card */
+.hp-card-pill{border-radius:12px;padding:12px 14px;margin-bottom:0}
+.hp-card-pill.orange{background:linear-gradient(140deg,var(--orange) 0%,var(--orange-d) 100%)}
+.hp-card-pill.blue{background:linear-gradient(140deg,var(--blue) 0%,var(--blue-d) 100%)}
+.hp-card-pill.indigo{background:linear-gradient(140deg,var(--indigo) 0%,var(--indigo-d) 100%)}
+.hp-card-pill.dark{background:linear-gradient(140deg,var(--navy) 0%,#0d0d1c 100%)}
+.hp-card-pill.gray{background:var(--bg);border:1px solid var(--border)}
+.hcp-tag{font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:4px}
+.hcp-tag.dark{color:var(--muted)}
+.hcp-title{font-size:13px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:5px}
+.hcp-title.dark{color:var(--navy)}
+.hcp-body{font-size:11px;color:rgba(255,255,255,.8);line-height:1.45;margin-bottom:8px}
+.hcp-body.dark{color:var(--muted)}
+.hcp-cta{display:inline-block;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.32);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
+.hcp-cta.dark{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* Tracker inside pill */
+.hcp-tracker{margin-bottom:8px}
+.hcp-trk-lbl{font-size:8px;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;margin-bottom:6px}
+.hcp-trk-steps{display:flex;align-items:center}
+.hcp-tdot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,.4);background:transparent;flex-shrink:0}
+.hcp-tdot.done{background:rgba(255,255,255,.9);border-color:rgba(255,255,255,.9)}
+.hcp-tdot.act{background:transparent;border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+.hcp-tline{flex:1;height:1.5px;background:rgba(255,255,255,.25)}
+.hcp-tline.done{background:rgba(255,255,255,.7)}
+.hcp-trk-labels{display:flex;justify-content:space-between;margin-top:3px}
+.hcp-trk-lbl-item{font-size:7px;color:rgba(255,255,255,.65)}
+.hcp-trk-lbl-item.done{color:rgba(255,255,255,.9);font-weight:700}
+.hcp-trk-lbl-item.act{color:#fff;font-weight:700}
+
+/* Zero-pill state */
+.hp-card-no-pill{background:var(--bg);border:1px dashed var(--border);border-radius:12px;padding:14px;text-align:center;margin-bottom:0}
+.hp-card-no-pill .np-icon{font-size:18px;margin-bottom:4px}
+.hp-card-no-pill .np-text{font-size:11px;font-weight:700;color:var(--muted)}
+.hp-card-no-pill .np-sub{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.4}
+
+/* Shortcut chips inside card */
+.hp-card-shortcuts{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.sc-chip{font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.2);color:var(--orange)}
+.sc-chip.none{background:var(--bg);border-color:var(--border);color:var(--muted);font-style:italic}
+
+/* HP content preview inside card */
+.hp-card-content{margin-bottom:10px}
+.hcc-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;color:var(--text)}
+.hcc-row:last-child{border-bottom:none}
+.hcc-row span{font-size:14px;flex-shrink:0}
+.hcc-label{flex:1;color:var(--muted)}
+.hcc-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;background:rgba(22,163,74,.1);color:var(--green)}
+.hcc-badge.warn{background:rgba(220,38,38,.1);color:var(--red)}
+.hcc-badge.neu{background:var(--bg);color:var(--muted)}
+
+/* Card footer */
+.hp-card-size{padding:8px 16px 12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.hp-card-size-tag{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
+.hp-card-size-tag.lg{background:rgba(255,107,53,.12);color:var(--orange)}
+.hp-card-size-tag.lg-i{background:rgba(99,102,241,.12);color:var(--indigo)}
+.hp-card-size-tag.lg-d{background:rgba(26,26,46,.12);color:var(--navy)}
+.hp-card-size-tag.md{background:rgba(27,79,255,.1);color:var(--blue)}
+.hp-card-size-tag.sm{background:var(--bg);color:var(--navy);border:1px solid var(--border)}
+.hp-card-size-tag.zero{background:rgba(220,38,38,.08);color:var(--red)}
+.hp-card-size-src{font-size:10px;color:var(--muted)}
+
+/* PILL FORMAT TABLE (WF01) */
+.pill-table{border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.pill-table-header{display:grid;grid-template-columns:80px 1fr 1fr 1fr;background:var(--navy);padding:12px 16px;gap:0}
+.pth-cell{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);padding-left:12px}
+.pth-cell:first-child{padding-left:0;color:rgba(255,255,255,.45)}
+.pth-cell.o{color:#FF6B35} .pth-cell.b{color:#93C5FD} .pth-cell.i{color:#A5B4FC}
+.pill-table-row{display:grid;grid-template-columns:80px 1fr 1fr 1fr;border-top:1px solid var(--border);background:var(--white)}
+.pill-table-row:last-child{border-radius:0 0 12px 12px}
+.ptr-size{padding:20px 12px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(255,107,53,.03)}
+.ptr-size-n{font-size:22px;font-weight:900;color:var(--navy);line-height:1}
+.ptr-size-l{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-top:3px}
+.ptr-size-s{font-size:9px;color:var(--muted);margin-top:4px;text-align:center;line-height:1.4}
+.ptr-cell{padding:14px;border-right:1px solid var(--border)}
+.ptr-cell:last-child{border-right:none}
+.ptr-note{font-size:10px;color:var(--muted);margin-top:6px}
+.ptr-na{background:var(--bg);border:1px dashed var(--border);border-radius:10px;padding:14px;text-align:center;font-size:11px;color:var(--muted);font-style:italic}
+
+/* SM pill (inline style) */
+.pill-sm-inline{background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.25);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:9px}
+.pill-sm-inline.blue{background:rgba(27,79,255,.08);border-color:rgba(27,79,255,.25)}
+.psi-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.psi-icon.orange{background:var(--orange)}
+.psi-icon.blue{background:var(--blue)}
+.psi-t1{font-size:11px;font-weight:700;color:var(--navy);line-height:1.3;flex:1}
+.psi-t2{font-size:10px;color:var(--muted);margin-top:1px}
+.psi-arr{font-size:16px;color:var(--border)}
+
+/* TRIGGER TABLE */
+.trigger-list{display:flex;flex-direction:column;gap:10px}
+.trigger-row{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:grid;grid-template-columns:36px 1fr 90px 1fr;gap:16px;align-items:start}
+.t-num{width:32px;height:32px;background:var(--navy);color:#fff;border-radius:8px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.t-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.t-desc{font-size:12px;color:var(--muted);line-height:1.4}
+.t-delay{font-size:11px;font-weight:700;color:var(--amber);text-align:center;background:rgba(217,119,6,.08);border-radius:8px;padding:5px 8px;line-height:1.4}
+.t-copy{font-size:12px;color:var(--muted);font-style:italic;line-height:1.5}
+
+/* TIMELINE WF03 */
+.timeline-wf{position:relative;padding-left:28px}
+.timeline-wf::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--border)}
+.tl-item-wf{position:relative;margin-bottom:14px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
+.tl-item-wf::before{content:'';position:absolute;left:-23px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--orange);border:2px solid var(--bg)}
+.tl-item-wf.i::before{background:var(--indigo)}
+.tl-step-wf{font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--orange);margin-bottom:3px}
+.tl-step-wf.i{color:var(--indigo)}
+.tl-title-wf{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.tl-desc-wf{font-size:11px;color:var(--muted);line-height:1.5}
+.tl-pill-wf{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(255,107,53,.1);color:var(--orange);margin-top:6px}
+.tl-pill-wf.i{background:rgba(99,102,241,.1);color:var(--indigo)}
+
+/* GUARANTEE */
+.guarantee-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.guarantee-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px}
+.guarantee-card.always{border-top:3px solid var(--green)}
+.guarantee-card.never{border-top:3px solid var(--red)}
+.guarantee-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
+.guarantee-card.always .guarantee-label{color:var(--green)}
+.guarantee-card.never .guarantee-label{color:var(--red)}
+.guarantee-card ul{list-style:none;padding:0}
+.guarantee-card ul li{font-size:13px;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;line-height:1.45}
+.guarantee-card ul li:last-child{border-bottom:none}
+.guarantee-card.always ul li span{color:var(--green)}
+.guarantee-card.never  ul li span{color:var(--red)}
+
+/* FOOTER */
+.doc-footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Gimme5 · Sprint 2 · Pillole Educative</div>
+  <h1>Wireframe HP<br>Sistema Pillole — v2</h1>
+  <p>10 stati utente · 4 percorsi di onboarding · Shortcut contestuali · Pill LG→MD→SM→∅ in base all'esperienza. Aggiornato con logica corretta post-call.</p>
+  <div class="cover-meta">
+    <div class="badge">Aprile 2026</div>
+    <div class="badge">10 stati HP</div>
+    <div class="badge">Onboarding €5 min confermato</div>
+    <div class="badge">Facsimile progettazione</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- SEZIONE 1: I PERCORSI DI ONBOARDING -->
+  <div class="section">
+    <div class="section-label">01 · Il bivio dall'onboarding</div>
+    <div class="section-title">4 percorsi — 4 prime homepage diverse</div>
+    <div class="section-sub">Completare l'onboarding richiede sempre un versamento minimo di €5. La differenza sta nel metodo di pagamento (RID automatico vs bonifico manuale) e nella scelta di attivare o meno la regola ricorrente.</div>
+
+    <div class="fork-grid">
+
+      <div class="fork-card" style="border-top:3px solid var(--green)">
+        <div class="fork-num" style="background:var(--green)">A</div>
+        <div class="fork-title">RID attivo · €10+ versati</div>
+        <div class="fork-desc">Ha attivato il PAC con addebito automatico durante l'onboarding. Il sistema è già operativo. Il primo versamento è avvenuto (o è schedulato a breve).</div>
+        <div class="fork-hp">→ HP: Nuovo RID · Pill LG orange</div>
+      </div>
+
+      <div class="fork-card" style="border-top:3px solid var(--orange)">
+        <div class="fork-num" style="background:var(--orange)">B</div>
+        <div class="fork-title">Skip regola · €5 versati</div>
+        <div class="fork-desc">Ha versato la quota minima €5 ma ha saltato l'impostazione della regola automatica. Ha saldo positivo ma nessun piano ricorrente.</div>
+        <div class="fork-hp">→ HP: Nuovo A · Pill LG dark</div>
+      </div>
+
+      <div class="fork-card" style="border-top:3px solid var(--indigo)">
+        <div class="fork-num" style="background:var(--indigo)">C</div>
+        <div class="fork-title">Bonifico + RID · €0 in app</div>
+        <div class="fork-desc">Ha tentato di impostare il RID ma ha scelto bonifico manuale — regola annullata in attesa del versamento. Saldo ancora €0 in app.</div>
+        <div class="fork-hp">→ HP: Bonifico Pendente + alert RID annullato · No pill</div>
+      </div>
+
+      <div class="fork-card" style="border-top:3px solid var(--g2,#9CA3AF)">
+        <div class="fork-num">D</div>
+        <div class="fork-title">Bonifico + skip tutto · €0</div>
+        <div class="fork-desc">Ha scelto bonifico manuale senza impostare alcuna regola. Massimo drop risk. La HP è solo operativa: IBAN + tracker, niente altro.</div>
+        <div class="fork-hp">→ HP: Bonifico Pendente minimal · No pill</div>
+      </div>
+
+    </div>
+
+    <div class="insight">
+      <p><strong>Nota chiave sui percorsi C e D:</strong> tra la fine dell'onboarding e la ricezione del bonifico passano 2–5 giorni. In questo periodo saldo €0 non significa "nulla è successo" — l'utente ha completato il processo. La HP deve rassicurare, non far sembrare che qualcosa sia andato storto.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- WF BLOCK -->
+  <div class="wf-block-header">
+    <div class="wf-block-eyebrow">Gimme5 · Sprint 2 · Aprile 2026</div>
+    <h2>WIREFRAME HP — 10 Stati</h2>
+    <p>Tutti gli stati che un utente può vivere: dalla prima apertura post-onboarding fino all'uso avanzato. Ogni stato ha contenuto, shortcut e formato pill definiti.</p>
+  </div>
+
+
+  <!-- WF01: I 10 STATI HP -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF01 · Gli stati</div>
+    <div class="wf-section-title">10 stati — composizione HP per ciascuno</div>
+    <div class="wf-section-sub">Ogni card mostra: cosa vede l'utente nella HP (contenuto), le shortcut disponibili, e il formato pillola. Gli stati del gruppo A sono immediati (post-onboarding), il gruppo B è post-bonifico, il gruppo C è ciclo di vita.</div>
+
+    <!-- GRUPPO A: POST-ONBOARDING -->
+    <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:12px;">A — Subito dopo l'onboarding</div>
+    <div class="hp-card-grid" style="margin-bottom:24px;">
+
+      <!-- A1: RID attivo -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--green)"></div>
+            <div class="hp-card-name">Nuovo RID</div>
+          </div>
+          <div class="hp-card-phase">Percorso A · RID attivo · €10+ versati</div>
+          <div class="hp-card-sub">Piano in corso. Primo versamento ricevuto. Nessuna azione richiesta — il meccanismo gira da solo.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · €10,00</div><div class="hcc-badge">RID attivo</div></div>
+            <div class="hcc-row"><span>🏖️</span><div class="hcc-label">Goal · Vacanza Grecia 2%</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut</div><div class="hcc-badge neu">nessuna</div></div>
+          </div>
+          <div class="hp-card-pill orange">
+            <div class="hcp-tag">Gimme5 · Come funziona</div>
+            <div class="hcp-title">Cos'è il PAC — e perché funziona.</div>
+            <div class="hcp-body">Ogni mese, in automatico, il tuo piano cresce senza che tu debba ricordarti nulla.</div>
+            <div class="hcp-cta">Leggi in 2 min →</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag lg">LG · Gimme5</div>
+          <div class="hp-card-size-src">T1 · +6h onboarding</div>
+        </div>
+      </div>
+
+      <!-- A2: Skip regola -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--orange)"></div>
+            <div class="hp-card-name">Nuovo A</div>
+          </div>
+          <div class="hp-card-phase">Percorso B · Skip regola · €5 versati</div>
+          <div class="hp-card-sub">Ha versato €5 ma non ha impostato il PAC. Il saldo esiste, ma il piano automatico no. Focus unico: attivare la regola.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · €5,00</div></div>
+            <div class="hcc-row"><span>🎯</span><div class="hcc-label">Hero card: "Cosa stai risparmiando per?"</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut · "Attiva regola"</div><div class="hcc-badge">1 CTA</div></div>
+          </div>
+          <div class="hp-card-pill dark">
+            <div class="hcp-tag">Gimme5 · Inizia adesso</div>
+            <div class="hcp-title">Inizia con €1 al giorno.</div>
+            <div class="hcp-body">Non serve una cifra grande. €1/giorno fa €365 all'anno.</div>
+            <div class="hcp-cta">Attiva la regola →</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag lg-d">LG · Dark</div>
+          <div class="hp-card-size-src">T1 · +6h</div>
+        </div>
+      </div>
+
+      <!-- A3: Bonifico + RID annullato -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--indigo)"></div>
+            <div class="hp-card-name">Boni. Pendente · RID</div>
+          </div>
+          <div class="hp-card-phase">Percorso C · Regola annullata · €0 in app</div>
+          <div class="hp-card-sub">Ha tentato il RID ma ha scelto bonifico — regola annullata. Solo operativo: IBAN + alert + tracker. Nessuna pill educativa.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · €0 (bonifico in transito)</div></div>
+            <div class="hcc-row"><span>⏸️</span><div class="hcc-label">Alert: "Regola in pausa — aspetta il bonifico"</div></div>
+            <div class="hcc-row"><span>🏦</span><div class="hcc-label">IBAN card + tracker passi</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut</div><div class="hcc-badge neu">nessuna</div></div>
+          </div>
+          <div class="hp-card-no-pill">
+            <div class="np-icon">🚫</div>
+            <div class="np-text">Nessuna pillola</div>
+            <div class="np-sub">Solo schermata operativa — la pill appare dopo il bonifico</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag zero">No pill · T0</div>
+          <div class="hp-card-size-src">Solo operativo</div>
+        </div>
+      </div>
+
+      <!-- A4: Bonifico + skip tutto -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:#9CA3AF"></div>
+            <div class="hp-card-name">Boni. Pendente · Skip</div>
+          </div>
+          <div class="hp-card-phase">Percorso D · Doppio skip · €0 in app</div>
+          <div class="hp-card-sub">HP più minimale. Solo IBAN + tracker. Nessun elemento educativo, nessuna shortcut. L'unica azione possibile è fare il bonifico.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · €0</div></div>
+            <div class="hcc-row"><span>🏦</span><div class="hcc-label">IBAN card + tracker passi</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut</div><div class="hcc-badge neu">nessuna</div></div>
+          </div>
+          <div class="hp-card-no-pill">
+            <div class="np-icon">🚫</div>
+            <div class="np-text">Nessuna pillola</div>
+            <div class="np-sub">Solo IBAN. Zero educational — drop risk massimo</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag zero">No pill · T0</div>
+          <div class="hp-card-size-src">Solo operativo</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GRUPPO B: POST-BONIFICO -->
+    <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--indigo);margin-bottom:12px;">B — Dopo il primo bonifico (da C e D)</div>
+    <div class="hp-card-grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin-bottom:24px;">
+
+      <!-- B1: Bonifico arrivato, aveva RID -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--green)"></div>
+            <div class="hp-card-name">Post-bonifico · Conferma RID</div>
+          </div>
+          <div class="hp-card-phase">Da percorso C · Trigger T2 · +48h dal bonifico</div>
+          <div class="hp-card-sub">Il bonifico è arrivato. La regola RID era stata tentata — ora può essere confermata. Momento di massima motivazione: celebra e converti.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · €20,00+</div><div class="hcc-badge">Primo versamento!</div></div>
+            <div class="hcc-row"><span>🎉</span><div class="hcc-label">Alert verde: "Bonifico arrivato!"</div></div>
+            <div class="hcc-row"><span>🏠</span><div class="hcc-label">Goal card · obiettivo scelto</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut · "Conferma regola RID"</div><div class="hcc-badge">1 CTA</div></div>
+          </div>
+          <div class="hp-card-pill orange">
+            <div class="hcp-tag">Gimme5 · Piano pronto</div>
+            <div class="hcp-title">Un clic per mettere tutto in automatico.</div>
+            <div class="hcp-body">Hai fatto la parte difficile. Ora basta confermare.</div>
+            <div class="hcp-cta">Attiva ora →</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag lg">LG · Gimme5</div>
+          <div class="hp-card-size-src">T2 · +48h bonifico</div>
+        </div>
+      </div>
+
+      <!-- B2: Bonifico arrivato, ancora senza regola -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--orange)"></div>
+            <div class="hp-card-name">Post-bonifico · No regola</div>
+          </div>
+          <div class="hp-card-phase">Da percorso D · Trigger T2 · +48h dal bonifico</div>
+          <div class="hp-card-sub">Bonifico arrivato, saldo positivo, ancora nessun PAC. Come Nuovo A ma con il saldo reale che crea urgenza positiva.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · €50,00+</div><div class="hcc-badge">Primo versamento!</div></div>
+            <div class="hcc-row"><span>✈️</span><div class="hcc-label">Goal card · obiettivo</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut · "Attiva regola automatica"</div><div class="hcc-badge">1 CTA</div></div>
+          </div>
+          <div class="hp-card-pill orange">
+            <div class="hcp-tag">Gimme5 · Il tuo prossimo passo</div>
+            <div class="hcp-title">Hai i soldi. Metti il pilota automatico.</div>
+            <div class="hcp-body">Chi attiva il PAC raggiunge l'obiettivo il 40% prima.</div>
+            <div class="hcp-cta">Attiva ora →</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag lg">LG · Gimme5</div>
+          <div class="hp-card-size-src">T2 · +48h bonifico</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GRUPPO C: CICLO DI VITA -->
+    <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:12px;">C — Ciclo di vita nell'app</div>
+    <div class="hp-card-grid">
+
+      <!-- C1: Dormiente -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:#9CA3AF"></div>
+            <div class="hp-card-name">Dormiente</div>
+          </div>
+          <div class="hp-card-phase">14+ giorni inattivo</div>
+          <div class="hp-card-sub">Zero pill in-app — solo saldo fermo. Il re-engagement avviene via push con €reali. Al rientro: bottom sheet contestuale, non pill.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · fermo da +14gg</div></div>
+            <div class="hcc-row"><span>🎯</span><div class="hcc-label">2 goal card · tx datate</div></div>
+            <div class="hcc-row"><span>📋</span><div class="hcc-label">Bottom sheet al rientro (non pill)</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut</div><div class="hcc-badge neu">nessuna</div></div>
+          </div>
+          <div class="hp-card-no-pill">
+            <div class="np-icon">🔕</div>
+            <div class="np-text">Zero pill in-app</div>
+            <div class="np-sub">Solo push esterno con €reali. Bottom sheet al rientro.</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag zero">No pill · solo push</div>
+          <div class="hp-card-size-src">T3 · +24h evento</div>
+        </div>
+      </div>
+
+      <!-- C2: A Rischio -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--red)"></div>
+            <div class="hp-card-name">A Rischio</div>
+          </div>
+          <div class="hp-card-phase">Calo >3% · Stabilità &lt;30 · Silenzio 24h</div>
+          <div class="hp-card-sub">Silenzio totale nelle 24h post-calo. Zero pill, zero push. Dopo 48h: bottom sheet contestuale (Finanz, sul portafoglio specifico, non sul mercato).</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo · in calo</div><div class="hcc-badge warn">–€11 settimana</div></div>
+            <div class="hcc-row"><span>🎯</span><div class="hcc-label">Goal card · una con warning</div></div>
+            <div class="hcc-row"><span>⏱️</span><div class="hcc-label">Bottom sheet Finanz dopo 48h</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Shortcut</div><div class="hcc-badge neu">nessuna</div></div>
+          </div>
+          <div class="hp-card-no-pill">
+            <div class="np-icon">🤫</div>
+            <div class="np-text">Silenzio 24h · poi bottom sheet</div>
+            <div class="np-sub">Fonte Finanz obbligatoria. Parla del suo portafoglio, non del mercato.</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag zero">No pill · T6 silenzio</div>
+          <div class="hp-card-size-src">Finanz · 48h+ calo</div>
+        </div>
+      </div>
+
+      <!-- C3: Attivo -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--blue)"></div>
+            <div class="hp-card-name">Attivo</div>
+          </div>
+          <div class="hp-card-phase">3–18 mesi · regola costante</div>
+          <div class="hp-card-sub">Uso regolare, versamenti in regola. Riceve contenuti più profondi. 3 shortcut contestuali. 1 pill MD per sessione.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">Saldo crescente · +7,2% ytd</div></div>
+            <div class="hcc-row"><span>🎯</span><div class="hcc-label">2 goal card + aggiungi obiettivo</div></div>
+            <div class="hcc-row"><span>📋</span><div class="hcc-label">3 tx recenti · o fondi aperti</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Versa ora · JOINK · + Obiettivo</div><div class="hcc-badge">3 CTA</div></div>
+          </div>
+          <div class="hp-card-pill blue">
+            <div class="hcp-tag">Finanz · Cultura finanziaria</div>
+            <div class="hcp-title">Perché non mettere tutto nello stesso posto.</div>
+            <div class="hcp-body">Diversificare riduce la volatilità senza abbassare il rendimento atteso.</div>
+            <div class="hcp-cta">Leggi in 3 min →</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag md">MD · Finanz</div>
+          <div class="hp-card-size-src">1/sessione · skippabile</div>
+        </div>
+      </div>
+
+      <!-- C4: Esperto -->
+      <div class="hp-card">
+        <div class="hp-card-top">
+          <div class="hp-card-state">
+            <div class="hp-card-dot" style="background:var(--amber)"></div>
+            <div class="hp-card-name">Esperto</div>
+          </div>
+          <div class="hp-card-phase">6+ mesi · Score >70 · Zero pill MAI</div>
+          <div class="hp-card-sub">Layout denso. Dati, non educazione. Zero pill in-app — mai, nessuna eccezione. Solo SM massimo, mai LG/MD. 3 shortcut avanzate.</div>
+          <div class="hp-card-content">
+            <div class="hcc-row"><span>💰</span><div class="hcc-label">€8.420 · +8,1% ytd</div></div>
+            <div class="hcc-row"><span>🎯</span><div class="hcc-label">3 goal card + 3 fondi aperti</div></div>
+            <div class="hcc-row"><span>⚡</span><div class="hcc-label">Versa · Personalizza · Report</div><div class="hcc-badge">3 CTA avanz.</div></div>
+          </div>
+          <div class="hp-card-no-pill">
+            <div class="np-icon">🚫</div>
+            <div class="np-text">Zero pill — mai</div>
+            <div class="np-sub">Nessuna eccezione. Solo alert push trimestrale fuori app.</div>
+          </div>
+        </div>
+        <div class="hp-card-size">
+          <div class="hp-card-size-tag zero">No pill · mai</div>
+          <div class="hp-card-size-src">Solo push trimestrali</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- WF02: PILL FORMAT TABLE -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF02 · I formati pillola</div>
+    <div class="wf-section-title">3 dimensioni × 3 fonti — tutte le combinazioni</div>
+    <div class="wf-section-sub">Ogni stato riceve il formato corretto. LG per i nuovi, MD per gli attivi, SM per gli esperti. Bonifico Pendente usa il formato speciale indigo (operativo, non educativo). Finanz LG non è prevista.</div>
+
+    <div class="pill-table">
+      <div class="pill-table-header">
+        <div class="pth-cell">Formato</div>
+        <div class="pth-cell o">Gimme5</div>
+        <div class="pth-cell b">Finanz</div>
+        <div class="pth-cell i">Indigo — Bonifico</div>
+      </div>
+
+      <!-- LG -->
+      <div class="pill-table-row">
+        <div class="ptr-size">
+          <div class="ptr-size-n">LG</div>
+          <div class="ptr-size-l">Large</div>
+          <div class="ptr-size-s">Nuovi utenti A, B, post-bonifico</div>
+        </div>
+        <div class="ptr-cell">
+          <div class="hp-card-pill orange" style="margin:0">
+            <div class="hcp-tag">Gimme5 · Il tuo prossimo passo</div>
+            <div class="hcp-title">Attiva il versamento automatico.</div>
+            <div class="hcp-body">Chi risparmia in automatico arriva all'obiettivo il 40% più veloce.</div>
+            <div class="hcp-cta">Attiva ora →</div>
+          </div>
+          <div class="ptr-note">Nuovo RID · Nuovo A · Post-bonifico</div>
+        </div>
+        <div class="ptr-cell">
+          <div class="ptr-na">Non disponibile<br><span style="font-size:10px">Finanz LG non prevista</span></div>
+        </div>
+        <div class="ptr-cell">
+          <div class="hp-card-pill indigo" style="margin:0">
+            <div class="hcp-tracker">
+              <div class="hcp-trk-lbl">I tuoi prossimi passi</div>
+              <div class="hcp-trk-steps">
+                <div class="hcp-tdot done"></div><div class="hcp-tline done"></div>
+                <div class="hcp-tdot done"></div><div class="hcp-tline"></div>
+                <div class="hcp-tdot act"></div><div class="hcp-tline"></div>
+                <div class="hcp-tdot"></div>
+              </div>
+              <div class="hcp-trk-labels">
+                <span class="hcp-trk-lbl-item done">Account</span>
+                <span class="hcp-trk-lbl-item done">Fondo</span>
+                <span class="hcp-trk-lbl-item act">Bonifico</span>
+                <span class="hcp-trk-lbl-item">Attivo</span>
+              </div>
+            </div>
+            <div class="hcp-tag">Gimme5 · In attesa</div>
+            <div class="hcp-title">Il tuo piano è pronto. Aspettiamo insieme.</div>
+            <div class="hcp-cta">Come fare il bonifico →</div>
+          </div>
+          <div class="ptr-note">Solo Bonifico Pendente · T0</div>
+        </div>
+      </div>
+
+      <!-- MD -->
+      <div class="pill-table-row">
+        <div class="ptr-size">
+          <div class="ptr-size-n">MD</div>
+          <div class="ptr-size-l">Medium</div>
+          <div class="ptr-size-s">Dormiente · Attivo</div>
+        </div>
+        <div class="ptr-cell">
+          <div style="background:linear-gradient(135deg,var(--orange) 0%,#E8520A 100%);border-radius:12px;padding:14px 16px">
+            <div class="hcp-tag">Gimme5 · Il tuo piano</div>
+            <div class="hcp-title">Sei al 42% — il tuo piano non si è fermato.</div>
+            <div class="hcp-body">Anche quando non guardavi, il sistema lavorava.</div>
+            <div class="hcp-cta">Vedi i progressi →</div>
+          </div>
+          <div class="ptr-note">Dormiente · rientro</div>
+        </div>
+        <div class="ptr-cell">
+          <div style="background:linear-gradient(135deg,#1B4FFF 0%,#0A2FB3 100%);border-radius:12px;padding:14px 16px">
+            <div class="hcp-tag">Finanz · Cultura finanziaria</div>
+            <div class="hcp-title">Perché diversificare riduce il rischio.</div>
+            <div class="hcp-body">Due fondi correlati negativamente si proteggono a vicenda.</div>
+            <div class="hcp-cta">Leggi in 3 min →</div>
+          </div>
+          <div class="ptr-note">Attivo · contenuto avanzato</div>
+        </div>
+        <div class="ptr-cell">
+          <div class="ptr-na">Non disponibile<br><span style="font-size:10px">Bonifico usa solo LG indigo</span></div>
+        </div>
+      </div>
+
+      <!-- SM -->
+      <div class="pill-table-row">
+        <div class="ptr-size" style="border-radius:0 0 0 12px">
+          <div class="ptr-size-n">SM</div>
+          <div class="ptr-size-l">Small</div>
+          <div class="ptr-size-s">A Rischio · Esperto</div>
+        </div>
+        <div class="ptr-cell">
+          <div class="pill-sm-inline">
+            <div class="psi-icon orange">📊</div>
+            <div><div class="psi-t1">Un versamento mancato non cambia tutto.</div><div class="psi-t2">Gimme5 · Nota tranquilla</div></div>
+            <div class="psi-arr">›</div>
+          </div>
+          <div class="ptr-note">A Rischio · tono leggero</div>
+        </div>
+        <div class="ptr-cell">
+          <div class="pill-sm-inline blue">
+            <div class="psi-icon blue">📈</div>
+            <div><div class="psi-t1">Asset allocation: ribilanciamento annuale.</div><div class="psi-t2">Finanz · 4 min</div></div>
+            <div class="psi-arr" style="color:var(--blue)">›</div>
+          </div>
+          <div class="ptr-note">Esperto · contenuto avanzato</div>
+        </div>
+        <div class="ptr-cell" style="border-radius:0 0 12px 0">
+          <div class="ptr-na">Non disponibile</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- WF03: TRIGGER -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF03 · I trigger</div>
+    <div class="wf-section-title">Quando scatta una pillola — tutti i casi</div>
+    <div class="wf-section-sub">Le pillole non appaiono mai in tempo reale. C'è sempre un ritardo intenzionale. T0 è l'unica eccezione: scatta immediatamente all'onboarding con bonifico.</div>
+
+    <div class="trigger-list">
+      <div class="trigger-row" style="border-left:4px solid var(--indigo)">
+        <div class="t-num" style="background:var(--indigo)">T0</div>
+        <div><div class="t-name">Onboarding completato via bonifico (Percorsi C e D)</div><div class="t-desc">Entra in stato Bonifico Pendente. Solo schermata operativa con IBAN e tracker.</div></div>
+        <div class="t-delay" style="color:var(--indigo);background:rgba(99,102,241,.08)">Immediato<br>nessun ritardo</div>
+        <div class="t-copy">"Il tuo piano è pronto. Aspettiamo insieme." — schermata operativa, no pill educativa.</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T1</div>
+        <div><div class="t-name">Primo accesso post-onboarding (Percorsi A e B)</div><div class="t-desc">RID attivo o skip regola. Il primo versamento €5+ è già stato ricevuto.</div></div>
+        <div class="t-delay">+6h<br>dall'onboarding</div>
+        <div class="t-copy">A: "Cos'è il PAC — e perché funziona." — Pill LG orange.<br>B: "Inizia con €1 al giorno." — Pill LG dark.</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T2</div>
+        <div><div class="t-name">Bonifico ricevuto (Percorsi C e D → transizione)</div><div class="t-desc">Transizione da Bonifico Pendente a Nuovo A o conferma RID. Momento di massima motivazione.</div></div>
+        <div class="t-delay">+48h<br>dal bonifico</div>
+        <div class="t-copy">C: "Un clic per mettere tutto in automatico." — Pill LG + shortcut "Conferma RID".<br>D: "Hai i soldi. Metti il pilota automatico." — Pill LG + shortcut "Attiva regola".</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T3</div>
+        <div><div class="t-name">Versamento saltato / regola disattivata</div><div class="t-desc">Tono neutro, nessuna pressione. SM per A Rischio, nessuna pill se stabilità <30.</div></div>
+        <div class="t-delay">+24h<br>dall'evento</div>
+        <div class="t-copy">"Un versamento mancato non cambia tutto. Ecco quanto impatta davvero." — SM o nessuna.</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T4</div>
+        <div><div class="t-name">Milestone raggiunta (€100, €500, €1000, 1/3/6/12 mesi)</div><div class="t-desc">Celebrazione. Prima esposizione Finanz possibile a €500+.</div></div>
+        <div class="t-delay">+2h<br>dalla milestone</div>
+        <div class="t-copy">"Hai appena raggiunto €500. Sei nel 20% più costante." — MD Gimme5 o prima MD Finanz.</div>
+      </div>
+      <div class="trigger-row">
+        <div class="t-num">T5</div>
+        <div><div class="t-name">Inattività 14+ giorni (Dormiente)</div><div class="t-desc">Zero pill in-app. Push con €reali dell'utente. Bottom sheet solo al rientro.</div></div>
+        <div class="t-delay">Push esterno<br>nessuna pill</div>
+        <div class="t-copy">"In questi 14 giorni avresti potuto avere €X in più. La regola è ancora lì." — dati reali.</div>
+      </div>
+      <div class="trigger-row" style="border-left:4px solid var(--red)">
+        <div class="t-num" style="background:var(--red)">T6</div>
+        <div><div class="t-name">Calo mercato >3% · Stabilità utente &lt;30</div><div class="t-desc">Silenzio obbligatorio 24h. Bottom sheet Finanz dopo 48h — sul portafoglio specifico, non sul mercato.</div></div>
+        <div class="t-delay" style="color:var(--red);background:rgba(220,38,38,.08)">SILENZIO 24h<br>→ bottom sheet 48h</div>
+        <div class="t-copy">"I mercati hanno corretto. Sul tuo portafoglio: –€11. È normale." — Fonte Finanz obbligatoria.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- WF04: EVOLUZIONE NEL TEMPO -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF04 · L'utente nel tempo</div>
+    <div class="wf-section-title">Come evolve la homepage in 6 mesi</div>
+    <div class="wf-section-sub">Quattro percorsi paralleli dalla prima apertura dell'app. La pill si restringe man mano che l'utente diventa più esperto.</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:12px;">Percorso A — RID subito attivo</div>
+        <div class="timeline-wf">
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Giorno 1 · €10 versati</div>
+            <div class="tl-title-wf">HP: Nuovo RID</div>
+            <div class="tl-desc-wf">Piano attivo, primo debit eseguito. Rinforza l'abitudine. Nessuna shortcut.</div>
+            <div class="tl-pill-wf">Pill LG orange — "Cos'è il PAC"</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Mese 2 · Accessi frequenti</div>
+            <div class="tl-title-wf">Scoring → Attivo</div>
+            <div class="tl-desc-wf">Pill si rimpicciolisce. Dati reali sul suo obiettivo. 3 shortcut disponibili.</div>
+            <div class="tl-pill-wf">Pill MD orange — dati reali</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Mese 4 · Milestone €500</div>
+            <div class="tl-title-wf">Trigger T4 — prima Finanz</div>
+            <div class="tl-desc-wf">Ha le basi per contenuto finanziario. Prima pill Finanz.</div>
+            <div class="tl-pill-wf">Pill MD Finanz — cultura finanziaria</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Mese 6 · Secondo fondo</div>
+            <div class="tl-title-wf">Scoring → Esperto</div>
+            <div class="tl-desc-wf">Layout denso. Zero pill LG/MD. Solo SM discreta o nulla.</div>
+            <div class="tl-pill-wf">Pill SM Finanz — avanzato e discreto</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--indigo);margin-bottom:12px;">Percorso C/D — Bonifico manuale</div>
+        <div class="timeline-wf">
+          <div class="tl-item-wf i">
+            <div class="tl-step-wf i">Giorno 0 · Onboarding completo</div>
+            <div class="tl-title-wf">HP: Bonifico Pendente · €0</div>
+            <div class="tl-desc-wf">Tracker passi + IBAN card. Zero pill educativa. Attesa rassicurante.</div>
+            <div class="tl-pill-wf i">Pill LG indigo — "Il tuo piano è pronto. Aspettiamo."</div>
+          </div>
+          <div class="tl-item-wf i">
+            <div class="tl-step-wf i">Giorno 2–3 · Ancora €0</div>
+            <div class="tl-title-wf">Reminder indigo</div>
+            <div class="tl-desc-wf">Se non ha ancora inviato il bonifico, gentle reminder. La pill si riduce leggermente.</div>
+            <div class="tl-pill-wf i">Pill MD indigo — "Anche solo €10 per iniziare."</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Giorno 3–5 · Bonifico ricevuto</div>
+            <div class="tl-title-wf">Trigger T2 · +48h</div>
+            <div class="tl-desc-wf">Transizione a Nuovo A o conferma RID. Momento di massima opportunità.</div>
+            <div class="tl-pill-wf">Pill LG orange — celebra + converti al PAC</div>
+          </div>
+          <div class="tl-item-wf">
+            <div class="tl-step-wf">Mese 1+ · Come percorso A</div>
+            <div class="tl-title-wf">Stessa evoluzione del percorso A</div>
+            <div class="tl-desc-wf">Da qui il percorso converge: Attivo → Esperto con la stessa logica.</div>
+            <div class="tl-pill-wf">MD → SM → ∅</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- WF05: GARANZIE -->
+  <div class="wf-section">
+    <div class="wf-section-tag">WF05 · Le garanzie</div>
+    <div class="wf-section-title">Cosa garantisce il sistema — sempre e mai</div>
+    <div class="wf-section-sub">Regole non negoziabili indipendentemente dallo stato utente o dal trigger attivo.</div>
+
+    <div class="guarantee-grid">
+      <div class="guarantee-card always">
+        <div class="guarantee-label">✓ Sempre</div>
+        <ul>
+          <li><span>✓</span> Max 1 pillola per sessione — mai due contemporaneamente</li>
+          <li><span>✓</span> Onboarding completato = almeno €5 versati — saldo mai €0 per RID/skip</li>
+          <li><span>✓</span> Dati reali dell'utente nel copy ("€420 versati", non placeholder)</li>
+          <li><span>✓</span> Shortcut in posizione fissa: sempre tra contenuto e pillola</li>
+          <li><span>✓</span> Ritardo intenzionale tra evento e pill (tranne T0 bonifico)</li>
+          <li><span>✓</span> Label autore visibile — Gimme5 🟠 o Finanz 🔵</li>
+          <li><span>✓</span> Disclaimer MiFID II su tutti i contenuti Finanz</li>
+          <li><span>✓</span> Bonus €5 solo con RID attivo — non con bonifico</li>
+        </ul>
+      </div>
+      <div class="guarantee-card never">
+        <div class="guarantee-label">✗ Mai</div>
+        <ul>
+          <li><span>✗</span> Pill LG o MD per un utente Esperto — zero pill per gli esperti</li>
+          <li><span>✗</span> Risposta immediata a calo di mercato — silenzio 24h obbligatorio</li>
+          <li><span>✗</span> "Compra / vendi / aumenta" — vietato MiFID II execution only</li>
+          <li><span>✗</span> Contenuto educativo nello stato Bonifico Pendente — solo operativo</li>
+          <li><span>✗</span> Push dopo le 21:00 o prima delle 08:00</li>
+          <li><span>✗</span> Più di 3 push al mese per singolo utente</li>
+          <li><span>✗</span> Tono urgente o di allerta verso utenti in difficoltà</li>
+          <li><span>✗</span> Finanz LG — non è mai prevista</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="doc-footer">Gimme5 · Wireframe HP Sistema Pillole · v2 · Sprint 2 · Aprile 2026</div>
+
+</body>
+</html>

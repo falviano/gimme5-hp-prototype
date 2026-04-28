@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 — Strategia HP</title>
+<style>
+  :root {
+    --orange: #FF5C00;
+    --navy: #0F1729;
+    --green: #00B37A;
+    --blue: #1B4FFF;
+    --red: #EF4444;
+    --amber: #F59E0B;
+    --grey-100: #F5F5F7;
+    --grey-200: #E5E7EB;
+    --grey-400: #9CA3AF;
+    --grey-700: #374151;
+    --grey-900: #111827;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #fff;
+    color: var(--grey-900);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 64px;
+  }
+  .cover-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--orange);
+  }
+  .cover-h1 {
+    font-size: 64px; font-weight: 900; color: white;
+    letter-spacing: -2px; line-height: 1.05;
+    margin-top: 32px; max-width: 700px;
+  }
+  .cover-h1 span { color: var(--orange); }
+  .cover-sub {
+    font-size: 20px; color: rgba(255,255,255,0.5);
+    margin-top: 20px; max-width: 560px; line-height: 1.5;
+  }
+  .cover-meta {
+    display: flex; gap: 32px; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 32px; margin-top: 64px;
+  }
+  .cover-meta-item { font-size: 13px; color: rgba(255,255,255,0.4); }
+  .cover-meta-item strong { color: rgba(255,255,255,0.8); display: block; font-size: 15px; }
+
+  /* SECTIONS */
+  .section {
+    padding: 96px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .section-h {
+    font-size: 44px; font-weight: 900; letter-spacing: -1.2px;
+    line-height: 1.08; margin-bottom: 20px; color: var(--grey-900);
+  }
+  .section-sub {
+    font-size: 18px; color: var(--grey-400); line-height: 1.6;
+    max-width: 640px; margin-bottom: 48px;
+  }
+
+  /* DIVIDER SECTION */
+  .divider-section {
+    background: var(--grey-100);
+    padding: 0;
+    border-top: 1px solid var(--grey-200);
+    border-bottom: 1px solid var(--grey-200);
+  }
+
+  /* STAT GRID */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1.5px solid var(--grey-200);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .stat-item {
+    padding: 32px 28px;
+    border-right: 1px solid var(--grey-200);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-size: 48px; font-weight: 900; line-height: 1;
+    letter-spacing: -1.5px; margin-bottom: 8px;
+  }
+  .stat-label { font-size: 14px; color: var(--grey-700); line-height: 1.4; }
+  .stat-note { font-size: 12px; color: var(--grey-400); margin-top: 4px; }
+
+  /* PROBLEM */
+  .problem-box {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 48px;
+    color: white;
+    margin-bottom: 24px;
+  }
+  .problem-h { font-size: 28px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
+  .problem-body { font-size: 16px; color: rgba(255,255,255,0.65); line-height: 1.7; max-width: 640px; }
+
+  /* FLOW */
+  .flow {
+    display: flex;
+    gap: 0;
+    margin-top: 48px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1.5px solid var(--grey-200);
+  }
+  .flow-step {
+    flex: 1;
+    padding: 28px 24px;
+    border-right: 1px solid var(--grey-200);
+    background: white;
+  }
+  .flow-step:last-child { border-right: none; }
+  .flow-step-num {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--grey-400); margin-bottom: 12px;
+  }
+  .flow-step-h { font-size: 16px; font-weight: 800; color: var(--grey-900); margin-bottom: 8px; }
+  .flow-step-body { font-size: 13px; color: var(--grey-700); line-height: 1.6; }
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; flex-shrink: 0;
+    background: var(--grey-100);
+    font-size: 16px; color: var(--grey-400);
+  }
+
+  /* ONBOARDING FORK */
+  .fork-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 48px;
+  }
+  .fork-card {
+    border-radius: 16px;
+    padding: 28px 24px;
+    border: 2px solid var(--grey-200);
+  }
+  .fork-card.active { border-color: var(--orange); background: #FFF7ED; }
+  .fork-card.mid { border-color: var(--blue); background: #EFF6FF; }
+  .fork-card.passive { border-color: var(--green); background: #F0FDF4; }
+  .fork-num {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .fork-num.active { color: var(--orange); }
+  .fork-num.mid { color: var(--blue); }
+  .fork-num.passive { color: var(--green); }
+  .fork-h { font-size: 17px; font-weight: 800; color: var(--grey-900); margin-bottom: 8px; }
+  .fork-body { font-size: 13px; color: var(--grey-700); line-height: 1.6; margin-bottom: 16px; }
+  .fork-hp {
+    font-size: 12px; font-weight: 700; padding: 8px 12px;
+    border-radius: 8px; border: 1px solid var(--grey-200);
+    background: white; color: var(--grey-900);
+  }
+
+  /* SEGMENTS */
+  .segments {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1.5px solid var(--grey-200);
+    margin-top: 48px;
+  }
+  .seg {
+    padding: 24px 20px;
+    border-right: 1px solid var(--grey-200);
+  }
+  .seg:last-child { border-right: none; }
+  .seg-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .seg-h { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+  .seg-who { font-size: 12px; color: var(--grey-400); line-height: 1.5; margin-bottom: 12px; }
+  .seg-pill {
+    font-size: 11px; font-weight: 700; padding: 6px 10px;
+    border-radius: 6px; display: inline-block; margin-bottom: 8px;
+  }
+  .seg-goal { font-size: 12px; color: var(--grey-700); font-weight: 600; }
+
+  /* PILL SYSTEM */
+  .pill-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .pill-demo {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1.5px solid var(--grey-200);
+  }
+  .pill-demo-label {
+    padding: 10px 16px;
+    background: var(--grey-100);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--grey-400);
+    border-bottom: 1px solid var(--grey-200);
+  }
+  .pill-demo-body { padding: 16px; }
+
+  /* PILL VISUAL */
+  .pill-v {
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pill-v::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+  .pill-v-lg {
+    padding: 24px 20px;
+    min-height: 200px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    background: #1C1C1E;
+  }
+  .pill-v-md {
+    padding: 18px;
+    min-height: 128px;
+    display: flex; flex-direction: column;
+    background: var(--orange);
+  }
+  .pill-v-sm {
+    padding: 13px 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--orange);
+  }
+  .pv-brand { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .pv-title-lg { font-size: 24px; font-weight: 900; color: white; line-height: 1.15; letter-spacing: -0.5px; }
+  .pv-title-md { font-size: 17px; font-weight: 800; color: white; line-height: 1.2; }
+  .pv-title-sm { font-size: 13px; font-weight: 700; color: white; }
+  .pv-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 6px; line-height: 1.4; }
+  .pv-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: white; color: #111;
+    font-size: 11px; font-weight: 700;
+    padding: 8px 16px; border-radius: 99px;
+    margin-top: 16px; align-self: flex-start;
+  }
+  .pv-btn-sm {
+    display: inline-flex;
+    background: white; color: #111;
+    font-size: 11px; font-weight: 700;
+    padding: 7px 13px; border-radius: 99px;
+    flex-shrink: 0;
+  }
+  .pv-size { font-size: 12px; color: var(--grey-400); margin-top: 12px; text-align: center; }
+
+  /* TIMING */
+  .timing-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 1fr;
+    border-bottom: 1px solid var(--grey-200);
+    font-size: 13px;
+  }
+  .timing-row:last-child { border-bottom: none; }
+  .timing-cell {
+    padding: 16px 20px;
+    border-right: 1px solid var(--grey-200);
+    line-height: 1.5;
+    color: var(--grey-700);
+  }
+  .timing-cell:last-child { border-right: none; }
+  .timing-cell.when { font-weight: 700; color: var(--grey-400); font-size: 12px; }
+  .timing-header {
+    display: grid;
+    grid-template-columns: 120px 1fr 1fr;
+    background: var(--grey-100);
+    border-radius: 12px 12px 0 0;
+    border: 1.5px solid var(--grey-200);
+    border-bottom: none;
+  }
+  .timing-header-cell {
+    padding: 10px 20px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--grey-400);
+    border-right: 1px solid var(--grey-200);
+  }
+  .timing-header-cell:last-child { border-right: none; }
+  .timing-body {
+    border: 1.5px solid var(--grey-200);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+  }
+
+  /* RULES */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 48px;
+  }
+  .rule-card {
+    border-radius: 12px;
+    padding: 24px;
+    border: 1.5px solid var(--grey-200);
+  }
+  .rule-num {
+    font-size: 40px; font-weight: 900; color: var(--grey-200);
+    line-height: 1; margin-bottom: 12px;
+  }
+  .rule-h { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+  .rule-body { font-size: 13px; color: var(--grey-700); line-height: 1.7; }
+
+  /* CTA FINALE */
+  .finale {
+    background: var(--navy);
+    padding: 96px 64px;
+    text-align: center;
+  }
+  .finale-h {
+    font-size: 48px; font-weight: 900; color: white;
+    letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px;
+  }
+  .finale-h span { color: var(--orange); }
+  .finale-sub { font-size: 18px; color: rgba(255,255,255,0.5); max-width: 560px; margin: 0 auto; }
+  .finale-steps {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-top: 56px;
+  }
+  .finale-step {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 24px 28px;
+    text-align: left;
+    width: 240px;
+  }
+  .finale-step-num {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--orange); margin-bottom: 8px;
+  }
+  .finale-step-h { font-size: 15px; font-weight: 700; color: white; margin-bottom: 6px; }
+  .finale-step-body { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+  @media (max-width: 900px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .segments { grid-template-columns: 1fr 1fr; }
+    .fork-grid, .pill-showcase, .rules-grid { grid-template-columns: 1fr; }
+    .section { padding: 64px 24px; }
+    .cover { padding: 40px 24px; }
+    .cover-h1 { font-size: 40px; }
+    .section-h { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <div>
+    <div class="cover-tag">Gimme5 · Strategia Homepage</div>
+    <h1 class="cover-h1">La homepage<br>che parla a <span>ogni</span><br>utente.</h1>
+    <p class="cover-sub">Un sistema che adatta messaggi, contenuti e pillole in base a chi sei — dal primo accesso all'utente esperto.</p>
+  </div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><strong>Aprile 2026</strong>Documento di strategia</div>
+    <div class="cover-meta-item"><strong>Interno</strong>Team Gimme5</div>
+    <div class="cover-meta-item"><strong>v1.0</strong>Prima versione</div>
+  </div>
+</div>
+
+
+<!-- ═══ IL PUNTO DI PARTENZA ═══ -->
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">01 · Il punto di partenza</div>
+  <h2 class="section-h">Chi usa Gimme5<br>— i dati reali</h2>
+  <p class="section-sub">Prima di decidere cosa mostrare in homepage, serviva sapere chi ci arriva. Questi sono i dati.</p>
+
+  <div class="stat-grid">
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--orange);">70%</div>
+      <div class="stat-label">degli utenti<br>ha meno di 45 anni</div>
+      <div class="stat-note">Vs 20% della media settore</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--blue);">65%</div>
+      <div class="stat-label">non aveva mai<br>usato una piattaforma finanziaria</div>
+      <div class="stat-note">Target vergine — massima educabilità</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--navy);">89k</div>
+      <div class="stat-label">utenti dormienti<br>— si sono fermati</div>
+      <div class="stat-note">Priorità assoluta: riattivarli</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--green);">+€102</div>
+      <div class="stat-label">mese in più<br>con una regola attiva</div>
+      <div class="stat-note">Da paper accademico Gimme5</div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px; background:var(--grey-100); border-radius:16px; padding:32px 40px; display:flex; gap:48px;">
+    <div>
+      <div style="font-size:32px; font-weight:900; color:var(--grey-900);">50%+</div>
+      <div style="font-size:14px; color:var(--grey-700); margin-top:4px;">usa l'app tra le 18 e le 9</div>
+      <div style="font-size:12px; color:var(--grey-400); margin-top:2px;">Momento personale → tono caldo, non formale</div>
+    </div>
+    <div>
+      <div style="font-size:32px; font-weight:900; color:var(--grey-900);">19%</div>
+      <div style="font-size:14px; color:var(--grey-700); margin-top:4px;">sceglie "Viaggi" come obiettivo</div>
+      <div style="font-size:12px; color:var(--grey-400); margin-top:2px;">Il goal più comune — default visivo suggerito</div>
+    </div>
+    <div>
+      <div style="font-size:32px; font-weight:900; color:var(--grey-900);">30%</div>
+      <div style="font-size:14px; color:var(--grey-700); margin-top:4px;">ha completato almeno un obiettivo</div>
+      <div style="font-size:12px; color:var(--grey-400); margin-top:2px;">Chi completa un goal ha alta probabilità di restare</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ IL PROBLEMA ═══ -->
+<div style="background:var(--grey-100); border-top:1px solid var(--grey-200); border-bottom:1px solid var(--grey-200);">
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">02 · Il problema</div>
+  <h2 class="section-h">La homepage uguale<br>per tutti non funziona.</h2>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:48px;">
+    <div class="problem-box">
+      <div class="problem-h">Chi ha appena finito l'onboarding</div>
+      <div class="problem-body">Ha bisogno di essere rassicurato — il piano funziona, il primo versamento arriverà, è tutto normale. Se vede la stessa home di un utente con 6 mesi di versamenti, si sente perso.</div>
+    </div>
+    <div class="problem-box" style="background:#1a1a2e;">
+      <div class="problem-h">Chi ha saltato la regola</div>
+      <div class="problem-body">Ha bisogno di un invito chiaro e senza pressione. Se la home è la stessa di chi ha già la regola attiva, non sa cosa fare. Non si sente in colpa — si sente disorientato.</div>
+    </div>
+    <div class="problem-box" style="background:#1a2a1a;">
+      <div class="problem-h">Chi non apre l'app da 30 giorni</div>
+      <div class="problem-body">Ha bisogno di vedere che il piano è andato avanti anche senza di lui. Non ha bisogno di essere rimproverato — ha bisogno di un motivo per tornare.</div>
+    </div>
+    <div class="problem-box" style="background:#2a1a1a;">
+      <div class="problem-h">Chi ha visto scendere il portafoglio</div>
+      <div class="problem-body">Ha bisogno di contesto, non di silenzio e non di allarmi. Un dato reale ("−€11 questa settimana") + una spiegazione calma vale più di qualsiasi notifica automatica.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══ LA SOLUZIONE ═══ -->
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">03 · La soluzione</div>
+  <h2 class="section-h">Un sistema che riconosce<br>chi sei — e si adatta.</h2>
+  <p class="section-sub">Ogni volta che un utente apre l'app, il sistema sa tre cose: da quanto tempo non accede, se ha una regola attiva, e come sta il mercato. Con queste info decide cosa mostrare.</p>
+
+  <div class="flow" style="margin-top:48px;">
+    <div class="flow-step">
+      <div class="flow-step-num">Input</div>
+      <div class="flow-step-h">Cosa sa l'app</div>
+      <div class="flow-step-body" style="color:var(--grey-400);">Ultimo accesso · Regola attiva o no · Portafoglio · Andamento mercato · Ora del giorno</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-step-num">Segmento</div>
+      <div class="flow-step-h">Chi è l'utente</div>
+      <div class="flow-step-body" style="color:var(--grey-400);">Nuovo / Dormiente / A Rischio / Attivo / Esperto — calcolato ogni 7 giorni</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-step-num">Contenuto</div>
+      <div class="flow-step-h">Cosa vede</div>
+      <div class="flow-step-body" style="color:var(--grey-400);">Homepage personalizzata · Pillola educativa giusta · Messaggio nel tono giusto</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-step-num">Risultato</div>
+      <div class="flow-step-h">Cosa succede</div>
+      <div class="flow-step-body" style="color:var(--grey-400);">Più versamenti attivati · Meno abbandoni · Utenti più informati e stabili</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ L'ONBOARDING ═══ -->
+<div style="background:var(--grey-100); border-top:1px solid var(--grey-200); border-bottom:1px solid var(--grey-200);">
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">04 · Il punto di partenza di ogni utente</div>
+  <h2 class="section-h">Dall'onboarding escono<br>3 tipi di utente.</h2>
+  <p class="section-sub">La scelta che fa durante la registrazione determina quale homepage vede al primo accesso. Tre percorsi, tre homepage diverse — ma sempre la stessa voce.</p>
+
+  <div class="fork-grid">
+
+    <div class="fork-card active">
+      <div class="fork-num active">Percorso 1</div>
+      <div class="fork-h">Ha attivato il versamento automatico</div>
+      <div class="fork-body">Ha scelto l'importo (anche solo €5), collegato il suo IBAN, e firmato l'autorizzazione. Sa che il 1° del mese il primo versamento partirà da solo.</div>
+      <div class="fork-hp">
+        <div style="font-size:10px; color:var(--grey-400); margin-bottom:2px;">HOME CHE VEDE</div>
+        Conferma del piano attivo · Pillola grande "Cos'è il PAC"
+      </div>
+    </div>
+
+    <div class="fork-card mid">
+      <div class="fork-num mid">Percorso 2</div>
+      <div class="fork-h">Ha scelto il bonifico manuale</div>
+      <div class="fork-body">Ha preferito non collegare il conto automaticamente. Ha le coordinate per fare il primo versamento a mano. Il piano è impostato ma non ancora partito.</div>
+      <div class="fork-hp">
+        <div style="font-size:10px; color:var(--grey-400); margin-bottom:2px;">HOME CHE VEDE</div>
+        Card con coordinate bancarie · Reminder e nudge verso l'automatico
+      </div>
+    </div>
+
+    <div class="fork-card passive">
+      <div class="fork-num passive">Percorso 3</div>
+      <div class="fork-h">Ha saltato per ora</div>
+      <div class="fork-body">Ha premuto "Salta per ora". Ha un fondo, capisce il prodotto, ma non ha ancora deciso. Forse non aveva l'IBAN, forse voleva pensarci.</div>
+      <div class="fork-hp">
+        <div style="font-size:10px; color:var(--grey-400); margin-bottom:2px;">HOME CHE VEDE</div>
+        Invito semplice · "Anche solo €5 al mese. Quando vuoi."
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:24px; background:#FFFBEB; border-radius:12px; padding:20px 24px; border:1.5px solid #FDE68A; font-size:14px; color:var(--grey-700); line-height:1.7;">
+    <strong style="color:var(--grey-900);">La regola del tono:</strong> nessuno dei tre si sente in colpa per la scelta che ha fatto. L'app non giudica — si adatta.
+  </div>
+</div>
+</div>
+
+
+<!-- ═══ I 5 SEGMENTI ═══ -->
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">05 · I segmenti utente</div>
+  <h2 class="section-h">5 tipi di utente.<br>5 homepage diverse.</h2>
+  <p class="section-sub">Dopo l'onboarding, il sistema monitora il comportamento e aggiorna il segmento ogni 7 giorni. Ogni segmento ha un obiettivo specifico — e riceve messaggi pensati per quello.</p>
+
+  <div class="segments">
+
+    <div class="seg" style="border-top:4px solid #DC2626;">
+      <div class="seg-label" style="color:#DC2626;">Nuovo</div>
+      <div class="seg-h">Nuovo</div>
+      <div class="seg-who">Ha finito l'onboarding da meno di 7 giorni. Può avere la regola attiva o no.</div>
+      <div class="seg-pill" style="background:#FEF2F2; color:#DC2626;">Pillola grande</div>
+      <div class="seg-goal">Obiettivo: primo versamento</div>
+    </div>
+
+    <div class="seg" style="border-top:4px solid var(--blue);">
+      <div class="seg-label" style="color:var(--blue);">Dormiente</div>
+      <div class="seg-h">Dormiente</div>
+      <div class="seg-who">Non apre l'app da 14+ giorni. Il piano può continuare da solo — lui si è fermato.</div>
+      <div class="seg-pill" style="background:#EFF6FF; color:var(--blue);">Solo push</div>
+      <div class="seg-goal">Obiettivo: rientro in app</div>
+    </div>
+
+    <div class="seg" style="border-top:4px solid var(--amber);">
+      <div class="seg-label" style="color:var(--amber);">A Rischio</div>
+      <div class="seg-h">A Rischio</div>
+      <div class="seg-who">Inattivo + mercato sceso. Potrebbe prendere decisioni impulsive — uscire, ritirare.</div>
+      <div class="seg-pill" style="background:#FFFBEB; color:var(--amber);">Silenzio 24h poi Finanz</div>
+      <div class="seg-goal">Obiettivo: non far scappare</div>
+    </div>
+
+    <div class="seg" style="border-top:4px solid var(--green);">
+      <div class="seg-label" style="color:var(--green);">Attivo</div>
+      <div class="seg-h">Attivo</div>
+      <div class="seg-who">Usa l'app regolarmente, ha la regola attiva da 2+ mesi. Tutto funziona.</div>
+      <div class="seg-pill" style="background:#F0FDF4; color:var(--green);">Pillola media</div>
+      <div class="seg-goal">Obiettivo: mantenere e educare</div>
+    </div>
+
+    <div class="seg" style="border-top:4px solid var(--navy);">
+      <div class="seg-label" style="color:var(--navy);">Esperto</div>
+      <div class="seg-h">Esperto</div>
+      <div class="seg-who">6+ mesi di versamenti, conosce il prodotto. Vuole dati, non spiegazioni.</div>
+      <div class="seg-pill" style="background:var(--grey-100); color:var(--grey-700);">No pillole</div>
+      <div class="seg-goal">Obiettivo: retention + dati chiari</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══ IL SISTEMA PILLOLE ═══ -->
+<div style="background:var(--grey-100); border-top:1px solid var(--grey-200); border-bottom:1px solid var(--grey-200);">
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">06 · Il sistema pillole</div>
+  <h2 class="section-h">Più sei nuovo,<br>più la pillola è grande.</h2>
+  <p class="section-sub">Le pillole sono contenuto educativo in formato card. Appaiono in homepage quando sono rilevanti. Più l'utente è nuovo e meno sa, più la pillola è grande e prominente.</p>
+
+  <div class="pill-showcase">
+
+    <div class="pill-demo">
+      <div class="pill-demo-label">Grande · Nuovo utente</div>
+      <div class="pill-demo-body">
+        <div class="pill-v pill-v-lg">
+          <div>
+            <div class="pv-brand">Gimme5 · Per iniziare</div>
+            <div class="pv-title-lg">Risparmia €1 al giorno. Senza pensarci.</div>
+            <div class="pv-sub">Il versamento automatico funziona perché rimuove l'emotività dalla finanza.</div>
+          </div>
+          <div class="pv-btn">SCOPRI DI PIÙ ›</div>
+        </div>
+        <div class="pv-size">Quando: primo accesso · Senza regola</div>
+        <div style="margin-top:8px; font-size:11px; color:var(--grey-400); text-align:center;">Fonte: Gimme5</div>
+      </div>
+    </div>
+
+    <div class="pill-demo">
+      <div class="pill-demo-label">Media · Utente attivo</div>
+      <div class="pill-demo-body">
+        <div class="pill-v pill-v-md">
+          <div class="pv-brand">Gimme5</div>
+          <div class="pv-title-md">Cos'è il PAC e perché funziona</div>
+          <div class="pv-sub">Investi automaticamente ogni mese, senza pensarci.</div>
+          <div class="pv-btn" style="margin-top:14px;">LEGGI ›</div>
+        </div>
+        <div class="pv-size">Quando: con regola attiva · Educazione base</div>
+        <div style="margin-top:8px; font-size:11px; color:var(--grey-400); text-align:center;">Fonte: Gimme5 o Finanz</div>
+      </div>
+    </div>
+
+    <div class="pill-demo">
+      <div class="pill-demo-label">Piccola · Solo per contesto</div>
+      <div class="pill-demo-body">
+        <div style="margin-bottom:12px;">
+          <div class="pill-v pill-v-sm">
+            <div style="flex:1;">
+              <div class="pv-brand">Finanz</div>
+              <div class="pv-title-sm">Perché i mercati scendono — e poi risalgono</div>
+            </div>
+            <div class="pv-btn-sm">LEGGI</div>
+          </div>
+        </div>
+        <div class="pv-size">Quando: mercato in calo · Utente stabile</div>
+        <div style="margin-top:8px; font-size:11px; color:var(--grey-400); text-align:center;">Fonte: Finanz (partner educativo)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div style="background:white; border-radius:12px; padding:20px 24px; border:1.5px solid var(--grey-200);">
+      <div style="font-size:13px; font-weight:700; color:var(--orange); margin-bottom:6px;">Pillole Gimme5</div>
+      <div style="font-size:13px; color:var(--grey-700); line-height:1.7;">Parlano del prodotto: come funziona il piano di accumulo, cosa succede il 1° del mese, come leggere il tuo obiettivo. Prodotte internamente.</div>
+    </div>
+    <div style="background:white; border-radius:12px; padding:20px 24px; border:1.5px solid var(--grey-200);">
+      <div style="font-size:13px; font-weight:700; color:var(--blue); margin-bottom:6px;">Pillole Finanz (partner)</div>
+      <div style="font-size:13px; color:var(--grey-700); line-height:1.7;">Parlano di finanza: cosa succede quando i mercati scendono, cos'è il DCA, perché diversificare. White label del partner Finanz, con disclaimer MiFID II.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══ LE REGOLE ═══ -->
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">07 · Le regole del sistema</div>
+  <h2 class="section-h">Cosa non cambia<br>mai — le 5 regole.</h2>
+  <p class="section-sub">Queste regole valgono sempre, indipendentemente dal segmento. Sono il guardrail del sistema.</p>
+
+  <div class="rules-grid">
+    <div class="rule-card">
+      <div class="rule-num">01</div>
+      <div class="rule-h">Silenzio nelle prime 24h dopo un calo di mercato</div>
+      <div class="rule-body">Se il mercato scende, non comunicare nulla per 24 ore. L'utente è in modalità ansia. Il silenzio è più rispettoso di qualsiasi messaggio — anche positivo.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">02</div>
+      <div class="rule-h">Le notifiche push solo tra le 19 e le 21</div>
+      <div class="rule-body">Il 50%+ degli utenti usa l'app la sera. È il momento in cui sono rilassati e ricettivi. Le notifiche mattutine o a pranzo vengono ignorate o infastidiscono.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">03</div>
+      <div class="rule-h">"Nel tempo" — mai "subito"</div>
+      <div class="rule-body">Il linguaggio usa sempre "nel tempo", "mese dopo mese", "passo dopo passo". Non si promettono rendimenti rapidi. È onesto e riduce le aspettative sbagliate.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">04</div>
+      <div class="rule-h">Una pillola per sessione, mai due messaggi sullo stesso tema</div>
+      <div class="rule-body">Se c'è già una pillola in homepage, la notifica push non arriva quel giorno. Un messaggio alla volta. La sovrapposizione crea rumore — non engagement.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">05</div>
+      <div class="rule-h">"Versamento automatico" — sempre, non "RID" o "SDD"</div>
+      <div class="rule-body">La stessa parola in onboarding, in app, nelle email. "Versamento automatico" è comprensibile da chiunque. RID e SDD sono gergo bancario che crea distanza.</div>
+    </div>
+    <div class="rule-card" style="background:var(--grey-100);">
+      <div class="rule-num" style="color:var(--grey-300);">+</div>
+      <div class="rule-h">Mai "Dovresti investire di più"</div>
+      <div class="rule-body">Gimme5 opera in regime execution only. Non può raccomandare prodotti o importi specifici. I dati mostrati sono informativi — mai persuasivi verso scelte d'investimento.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ IL TIMING ═══ -->
+<div style="background:var(--grey-100); border-top:1px solid var(--grey-200); border-bottom:1px solid var(--grey-200);">
+<div style="padding: 96px 64px; max-width: 1100px; margin: 0 auto;">
+  <div class="section-tag">08 · Il timing</div>
+  <h2 class="section-h">Il messaggio giusto<br>nel momento giusto.</h2>
+  <p class="section-sub">Il sistema non comunica in tempo reale. Ogni trigger ha un delay — progettato per rispettare l'utente e aumentare l'efficacia del messaggio.</p>
+
+  <div style="margin-top:48px;">
+    <div class="timing-header">
+      <div class="timing-header-cell">Momento</div>
+      <div class="timing-header-cell">Con regola attiva</div>
+      <div class="timing-header-cell">Senza regola</div>
+    </div>
+    <div class="timing-body">
+      <div class="timing-row">
+        <div class="timing-cell when">Giorno 0</div>
+        <div class="timing-cell"><strong>Pillola grande:</strong> "Hai fatto la mossa più difficile. Ecco cosa succede adesso."</div>
+        <div class="timing-cell"><strong>CTA chiara:</strong> "Inizia con €5 al mese. Puoi cambiarlo quando vuoi."</div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-cell when">Dopo 6h</div>
+        <div class="timing-cell">Push: "Cos'è il PAC — in 2 minuti"</div>
+        <div class="timing-cell">—</div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-cell when">Dopo 48h</div>
+        <div class="timing-cell">Pillola educativa: come funziona il 1° del mese</div>
+        <div class="timing-cell">Push: "Il tuo obiettivo ti aspetta. Con €X/mese ci arrivi entro [data]."</div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-cell when">1° del mese</div>
+        <div class="timing-cell">Push (ore 9): "Il tuo versamento di €25 è andato. Tutto come previsto."</div>
+        <div class="timing-cell">—</div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-cell when">Inattivo 14gg</div>
+        <div class="timing-cell">Push: "Il tuo piano continua anche senza di te. Dai un'occhiata."</div>
+        <div class="timing-cell">Push: "Ci vuole un minuto. Anche €5 bastano per iniziare."</div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-cell when">Calo mercato</div>
+        <div class="timing-cell" colspan="2" style="grid-column:span 2;"><strong>Silenzio 24h.</strong> Dopo 48h: pillola Finanz con dati reali dell'utente — "−€11 questa settimana. È normale. Ecco perché."</div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-cell when">80% obiettivo</div>
+        <div class="timing-cell">Push immediato: "Sei all'80%! Solo €X ancora." + banner in homepage</div>
+        <div class="timing-cell">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══ I PROSSIMI PASSI ═══ -->
+<div class="finale">
+  <h2 class="finale-h">Da qui, cosa<br><span>si costruisce.</span></h2>
+  <p class="finale-sub">La strategia è definita. I prossimi passi sono tre — ognuno porta il sistema un passo più vicino al prodotto finale.</p>
+
+  <div class="finale-steps">
+    <div class="finale-step">
+      <div class="finale-step-num">Passo 1</div>
+      <div class="finale-step-h">Wireframe completi</div>
+      <div class="finale-step-body">Tutti gli stati della homepage visualizzati — pronti per review con il team e per handoff agli sviluppatori.</div>
+    </div>
+    <div class="finale-step">
+      <div class="finale-step-num">Passo 2</div>
+      <div class="finale-step-h">Copy delle pillole</div>
+      <div class="finale-step-body">Il testo esatto di ogni pillola — Gimme5 e Finanz — per tutti i trigger definiti nel sistema.</div>
+    </div>
+    <div class="finale-step">
+      <div class="finale-step-num">Passo 3</div>
+      <div class="finale-step-h">Regole di scoring</div>
+      <div class="finale-step-body">La logica tecnica del sistema di segmentazione — cosa calcola, quando, e come decide il segmento di ogni utente.</div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gimme5 — HP Flow Diagram</title>
+<style>
+:root {
+  --orange: #FF5C00;
+  --blue: #1B4FFF;
+  --green: #00B37A;
+  --amber: #F59E0B;
+  --navy: #0F1729;
+  --grey-100: #F5F5F7;
+  --grey-200: #EBEBEB;
+  --grey-300: #D4D4D8;
+  --grey-500: #71717A;
+  --black: #111114;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  background: #F0F0F0;
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+  padding: 48px;
+  min-width: 1200px;
+}
+
+/* ─── HEADER ─── */
+.header { margin-bottom: 48px; }
+.badge {
+  display: inline-block; background: var(--black); color: white;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 12px;
+}
+.header h1 { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
+.header p { font-size: 15px; color: var(--grey-500); margin-top: 6px; }
+
+/* ─── FLOW ─── */
+.flow { display: flex; flex-direction: column; gap: 0; }
+
+/* Layer labels */
+.layer-row {
+  display: flex; align-items: stretch; gap: 12px;
+  position: relative;
+}
+.layer-label {
+  width: 110px; flex-shrink: 0;
+  display: flex; align-items: center;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--grey-500); padding-right: 12px; text-align: right;
+  justify-content: flex-end;
+}
+.layer-content { flex: 1; display: flex; gap: 12px; }
+
+/* Arrow between layers */
+.arrow-row {
+  display: flex; gap: 12px; padding: 0 0 0 122px;
+  height: 32px; align-items: center;
+}
+.arrow-down {
+  flex: 1; display: flex; justify-content: center; align-items: center;
+  color: var(--grey-300); font-size: 18px; font-weight: 300;
+}
+
+/* ─── CARDS ─── */
+.card {
+  background: white; border-radius: 16px; padding: 18px;
+  border: 1.5px solid var(--grey-200);
+  flex: 1;
+}
+.card-full {
+  background: white; border-radius: 16px; padding: 20px;
+  border: 1.5px solid var(--grey-200);
+  width: 100%;
+}
+
+/* ─── START NODE ─── */
+.start-node {
+  background: var(--black); color: white;
+  border-radius: 99px; padding: 14px 32px;
+  font-size: 15px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 10px;
+  margin: 0 auto 0 122px;
+}
+
+/* ─── DATA INPUTS ─── */
+.inputs-card {
+  background: white; border-radius: 16px; padding: 20px 24px;
+  border: 1.5px solid var(--grey-200);
+  margin-left: 122px;
+}
+.inputs-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 14px;
+}
+.input-item {
+  background: var(--grey-100); border-radius: 12px; padding: 12px 14px;
+}
+.input-item .icon {
+  width: 28px; height: 28px; background: var(--grey-200); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 8px;
+}
+.input-item .label { font-size: 11px; font-weight: 700; color: var(--black); }
+.input-item .desc { font-size: 10px; color: var(--grey-500); margin-top: 3px; line-height: 1.4; }
+
+/* ─── SEGMENT HEADER ─── */
+.seg-header {
+  border-radius: 12px 12px 0 0; padding: 12px 16px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: white; margin-bottom: 0;
+}
+.seg-card {
+  border-radius: 14px; overflow: hidden;
+  border: 1.5px solid var(--grey-200);
+  flex: 1; display: flex; flex-direction: column;
+}
+.seg-body { background: white; padding: 14px; flex: 1; }
+.seg-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.seg-desc { font-size: 11px; color: var(--grey-500); line-height: 1.4; }
+
+/* ─── STATE CARDS ─── */
+.state-card {
+  background: var(--grey-100); border-radius: 12px; padding: 14px;
+  flex: 1; border: 1.5px solid var(--grey-200);
+}
+.state-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--grey-500); margin-bottom: 8px;
+}
+.state-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.state-items { display: flex; flex-direction: column; gap: 4px; }
+.state-item {
+  font-size: 11px; color: var(--grey-700); line-height: 1.4;
+  display: flex; gap: 6px; align-items: flex-start;
+}
+.state-item::before { content: '—'; color: var(--grey-300); flex-shrink: 0; }
+
+/* ─── PILL CARDS ─── */
+.pill-card {
+  border-radius: 12px; padding: 14px;
+  flex: 1;
+}
+.pill-none {
+  background: var(--grey-100); border-radius: 12px; padding: 14px;
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  border: 1.5px dashed var(--grey-300);
+}
+.pill-none span { font-size: 11px; color: var(--grey-500); font-weight: 600; }
+.pill-brand { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+.pill-size { display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 6px; margin-bottom: 8px; }
+.pill-title { font-size: 13px; font-weight: 700; color: white; line-height: 1.3; }
+.pill-when { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 6px; }
+
+/* ─── TIMING CARDS ─── */
+.timing-card {
+  background: white; border-radius: 12px; padding: 14px;
+  flex: 1; border: 1.5px solid var(--grey-200);
+}
+.timing-badge {
+  display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 6px; margin-bottom: 8px;
+}
+.timing-text { font-size: 11px; color: var(--grey-700); line-height: 1.5; }
+.timing-rule { font-size: 11px; font-weight: 700; color: var(--black); margin-top: 6px; }
+
+/* ─── DECISION DIAMOND ─── */
+.decision-row {
+  margin-left: 122px;
+  display: flex; justify-content: center; margin-bottom: 0;
+}
+.decision-box {
+  background: white; border: 2px solid var(--black);
+  border-radius: 12px; padding: 14px 28px;
+  font-size: 13px; font-weight: 700; text-align: center;
+  position: relative;
+}
+
+/* ─── LEGEND ─── */
+.legend {
+  margin-top: 48px; margin-left: 122px;
+  display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--grey-500); }
+.legend-dot { width: 12px; height: 12px; border-radius: 4px; flex-shrink: 0; }
+
+/* ─── DIVIDER ─── */
+.section-label {
+  margin-left: 122px; margin-bottom: 12px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--grey-500); border-bottom: 1px solid var(--grey-200); padding-bottom: 8px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">Gimme5 · HP Logic · Flow Diagram</div>
+  <h1>Come la HP decide cosa mostrare</h1>
+  <p>Dal dato utente alla schermata corretta — in automatico</p>
+</div>
+
+<div class="flow">
+
+  <!-- START -->
+  <div style="margin-bottom:24px;">
+    <div class="start-node">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Utente apre l'app
+    </div>
+  </div>
+
+  <!-- ARROW -->
+  <div style="margin-left:122px; margin-bottom:8px; padding-left: calc(50% - 110px);">
+    <div style="font-size:20px; color:var(--grey-300);">↓</div>
+  </div>
+
+  <!-- LAYER: COSA SA L'APP -->
+  <div class="section-label">Cosa sa l'app</div>
+  <div style="margin-bottom:24px;">
+    <div class="inputs-card">
+      <div style="font-size:13px; font-weight:700; color:var(--black);">Dati disponibili in real time</div>
+      <div class="inputs-grid">
+        <div class="input-item">
+          <div class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="label">Ultima apertura</div>
+          <div class="desc">Quanti giorni fa ha aperto l'app</div>
+        </div>
+        <div class="input-item">
+          <div class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/></svg></div>
+          <div class="label">Regola attiva</div>
+          <div class="desc">Ha impostato un versamento automatico?</div>
+        </div>
+        <div class="input-item">
+          <div class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div class="label">Portafoglio</div>
+          <div class="desc">Saldo, % raggiunto, delta settimana</div>
+        </div>
+        <div class="input-item">
+          <div class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></div>
+          <div class="label">Mercato</div>
+          <div class="desc">Il fondo ha avuto un calo questa settimana?</div>
+        </div>
+        <div class="input-item">
+          <div class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+          <div class="label">Ora del giorno</div>
+          <div class="desc">Mattina / lavoro / sera → tono e timing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARROW -->
+  <div style="margin-left:122px; margin-bottom:8px; padding-left: calc(50% - 110px);">
+    <div style="font-size:20px; color:var(--grey-300);">↓</div>
+  </div>
+
+  <!-- LAYER: SEGMENTAZIONE -->
+  <div class="section-label">Segmentazione utente</div>
+  <div class="layer-row" style="margin-bottom:24px;">
+    <div class="layer-label"></div>
+    <div class="layer-content">
+
+      <div class="seg-card">
+        <div class="seg-header" style="background:var(--orange);">Nuovo</div>
+        <div class="seg-body">
+          <div class="seg-title">Non ha ancora versato</div>
+          <div class="seg-desc">Registrato, ma fondo non ancora attivo. Può essere in 3 sotto-stati.</div>
+        </div>
+      </div>
+
+      <div class="seg-card">
+        <div class="seg-header" style="background:#4B5563;">Dormiente</div>
+        <div class="seg-body">
+          <div class="seg-title">14+ giorni senza aprire</div>
+          <div class="seg-desc">Ha versato in passato ma ha smesso di usare l'app.</div>
+        </div>
+      </div>
+
+      <div class="seg-card">
+        <div class="seg-header" style="background:var(--amber);">A Rischio</div>
+        <div class="seg-body">
+          <div class="seg-title">Mercato sceso</div>
+          <div class="seg-desc">Il portafoglio ha perso valore. Rischio di vendere in preda al panico.</div>
+        </div>
+      </div>
+
+      <div class="seg-card">
+        <div class="seg-header" style="background:var(--green);">Attivo</div>
+        <div class="seg-body">
+          <div class="seg-title">Usa l'app regolarmente</div>
+          <div class="seg-desc">Apre spesso, ha una regola attiva, sta andando verso il suo obiettivo.</div>
+        </div>
+      </div>
+
+      <div class="seg-card">
+        <div class="seg-header" style="background:var(--navy);">Esperto</div>
+        <div class="seg-body">
+          <div class="seg-title">6+ mesi attivo</div>
+          <div class="seg-desc">Conosce l'app. Vuole dati densi, non spiegazioni. Zero pillole.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ARROW ROW -->
+  <div class="arrow-row" style="margin-bottom:8px;">
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+  </div>
+
+  <!-- LAYER: HP STATE -->
+  <div class="section-label">Cosa vede sulla HP</div>
+  <div class="layer-row" style="margin-bottom:24px;">
+    <div class="layer-label"></div>
+    <div class="layer-content">
+
+      <div class="state-card" style="background:white; border-color:#FFD4B8;">
+        <div class="state-label" style="color:var(--orange);">3 sotto-stati</div>
+        <div class="state-title">A — Senza regola</div>
+        <div class="state-items">
+          <div class="state-item">Hero scuro con selezione obiettivo</div>
+          <div class="state-item">Un solo task: scegliere il goal</div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--grey-200);">
+          <div class="state-title">B — Versamento auto</div>
+          <div class="state-items">
+            <div class="state-item">Goal card + data primo versamento</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--grey-200);">
+          <div class="state-title">C — Bonifico</div>
+          <div class="state-items">
+            <div class="state-item">Task unico: IBAN + copia</div>
+            <div class="state-item">Zero pill — solo operatività</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-card" style="background:white;">
+        <div class="state-label">Silenzio intenzionale</div>
+        <div class="state-title">HP normale + spazio vuoto</div>
+        <div class="state-items">
+          <div class="state-item">Saldo visibile</div>
+          <div class="state-item">Goal card in pausa</div>
+          <div class="state-item">Nessun nudge dentro l'app</div>
+          <div class="state-item">CTA "Riattiva il piano"</div>
+        </div>
+      </div>
+
+      <div class="state-card" style="background:white;">
+        <div class="state-label">2 fasi temporali</div>
+        <div class="state-title">0–24h: identica al normale</div>
+        <div class="state-items">
+          <div class="state-item">Zero alert, zero banner</div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--grey-200);">
+          <div class="state-title">48h: bottom sheet calmo</div>
+          <div class="state-items">
+            <div class="state-item">Dato suo (−€11, non %)</div>
+            <div class="state-item">Fonte Finanz obbligatoria</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-card" style="background:white;">
+        <div class="state-label">Layout bilanciato</div>
+        <div class="state-title">Goal card + pill + azioni</div>
+        <div class="state-items">
+          <div class="state-item">Progress con data reale</div>
+          <div class="state-item">1 pill contestuale per visita</div>
+          <div class="state-item">Quick actions in fondo</div>
+          <div class="state-item">Esplora in ultima posizione</div>
+        </div>
+      </div>
+
+      <div class="state-card" style="background:white;">
+        <div class="state-label">Layout denso</div>
+        <div class="state-title">Lista obiettivi + regole</div>
+        <div class="state-items">
+          <div class="state-item">Saldo grande in evidenza</div>
+          <div class="state-item">Lista compatta senza immagini</div>
+          <div class="state-item">Zero pillole — mai</div>
+          <div class="state-item">Alert solo trimestrale</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ARROW ROW -->
+  <div class="arrow-row" style="margin-bottom:8px;">
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+  </div>
+
+  <!-- LAYER: PILLOLA -->
+  <div class="section-label">Pillola mostrata</div>
+  <div class="layer-row" style="margin-bottom:24px;">
+    <div class="layer-label"></div>
+    <div class="layer-content">
+
+      <!-- Nuovo: pill LG -->
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div class="pill-card" style="background:#1C1C1E;">
+          <div class="pill-size">LG</div>
+          <div class="pill-brand">Gimme5</div>
+          <div class="pill-title">Inizia con €1 al giorno</div>
+          <div class="pill-when">Solo stato A · 6h dopo la regola per stato B</div>
+        </div>
+        <div class="pill-none" style="border-style:solid; background:white;">
+          <span style="font-size:10px; text-align:center; color:var(--grey-500);">Stato C: nessuna pill<br>solo operatività</span>
+        </div>
+      </div>
+
+      <!-- Dormiente: nessuna pill -->
+      <div class="pill-none">
+        <span style="text-align:center;">Nessuna pill<br>in-app</span>
+      </div>
+
+      <!-- A Rischio: Finanz -->
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+        <div class="pill-none" style="border-style:solid; background:white;">
+          <span style="font-size:10px; text-align:center; color:var(--grey-500);">0–24h<br>Nessuna pill</span>
+        </div>
+        <div class="pill-card" style="background:var(--blue);">
+          <div class="pill-size">Bottom sheet</div>
+          <div class="pill-brand">Finanz · MiFID II</div>
+          <div class="pill-title">Cosa succede dopo un calo</div>
+          <div class="pill-when">Solo dopo 48h dalla prima apertura</div>
+        </div>
+      </div>
+
+      <!-- Attivo: pill SM -->
+      <div class="pill-card" style="background:var(--orange);">
+        <div class="pill-size">SM</div>
+        <div class="pill-brand">Gimme5 · Solo per te</div>
+        <div class="pill-title">€270 versati — arrivi prima</div>
+        <div class="pill-when">1 per sessione · dati reali dell'utente</div>
+      </div>
+
+      <!-- Esperto: nessuna -->
+      <div class="pill-none">
+        <span style="text-align:center;">Nessuna pill<br>mai</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ARROW ROW -->
+  <div class="arrow-row" style="margin-bottom:8px;">
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+    <div class="arrow-down">↓</div>
+  </div>
+
+  <!-- LAYER: TIMING -->
+  <div class="section-label">Timing e canale</div>
+  <div class="layer-row" style="margin-bottom:48px;">
+    <div class="layer-label"></div>
+    <div class="layer-content">
+
+      <div class="timing-card">
+        <div class="timing-badge" style="background:var(--orange); color:white;">In-app · Immediato</div>
+        <div class="timing-text">Appare all'apertura dell'app. La pill B appare <strong>6h dopo</strong> la creazione della regola.</div>
+      </div>
+
+      <div class="timing-card">
+        <div class="timing-badge" style="background:#111; color:white;">Push · 19–21h</div>
+        <div class="timing-text">Il nudge arriva fuori app con i €reali persi. <strong>"In questi 30 giorni avresti avuto €56 in più."</strong></div>
+        <div class="timing-rule">Orario ottimale: 19–21h</div>
+      </div>
+
+      <div class="timing-card">
+        <div class="timing-badge" style="background:var(--amber); color:white;">In-app · 48h dopo</div>
+        <div class="timing-text">Il bottom sheet appare alla <strong>prima riapertura dopo 48h</strong> dal calo. Mai in push nelle prime 24h.</div>
+      </div>
+
+      <div class="timing-card">
+        <div class="timing-badge" style="background:var(--green); color:white;">In-app · Contestuale</div>
+        <div class="timing-text">Pill SM mostrata <strong>1 volta per sessione</strong>. Mai due pill nella stessa visita.</div>
+      </div>
+
+      <div class="timing-card">
+        <div class="timing-badge" style="background:var(--navy); color:white;">Push · Trimestrale</div>
+        <div class="timing-text">Solo un push ogni 3 mesi con il rendimento reale. Nient'altro.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REGOLE FISSE -->
+  <div class="section-label">Regole sempre valide (tutti i segmenti)</div>
+  <div style="margin-left:122px; margin-bottom:48px;">
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px;">
+      <div style="background:white; border-radius:14px; padding:16px; border-left:4px solid var(--black);">
+        <div style="font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey-500); margin-bottom:6px;">Vincolo MiFID II</div>
+        <div style="font-size:12px; font-weight:700; margin-bottom:4px;">Stesso contenuto per tutti</div>
+        <div style="font-size:11px; color:var(--grey-500); line-height:1.4;">Sullo stesso trigger, tutti gli utenti vedono lo stesso contenuto educativo. Solo il dato personale cambia.</div>
+      </div>
+      <div style="background:white; border-radius:14px; padding:16px; border-left:4px solid var(--black);">
+        <div style="font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey-500); margin-bottom:6px;">Linguaggio</div>
+        <div style="font-size:12px; font-weight:700; margin-bottom:4px;">"Nel tempo" — mai subito</div>
+        <div style="font-size:11px; color:var(--grey-500); line-height:1.4;">Nessuna promessa di crescita immediata. Sempre orizzonte temporale esplicito o data concreta.</div>
+      </div>
+      <div style="background:white; border-radius:14px; padding:16px; border-left:4px solid var(--black);">
+        <div style="font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey-500); margin-bottom:6px;">Canali esistenti</div>
+        <div style="font-size:12px; font-weight:700; margin-bottom:4px;">No sistemi paralleli</div>
+        <div style="font-size:11px; color:var(--grey-500); line-height:1.4;">Explora e blog già attivi via mail marketing. Le pill usano gli stessi contenuti — non ne creano di nuovi.</div>
+      </div>
+      <div style="background:white; border-radius:14px; padding:16px; border-left:4px solid var(--black);">
+        <div style="font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey-500); margin-bottom:6px;">Prerequisito tecnico</div>
+        <div style="font-size:12px; font-weight:700; margin-bottom:4px;">Regola = fondo attivo</div>
+        <div style="font-size:11px; color:var(--grey-500); line-height:1.4;">Il versamento automatico si può impostare solo se il fondo è già collegato e l'onboarding completato.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div style="font-size:11px; font-weight:700; color:var(--grey-500); margin-right:8px;">Legenda:</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange);"></div>Gimme5 / Nuovo / Attivo</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue);"></div>Finanz / A Rischio</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div>Attenzione / Timing critico</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>Stato positivo / Attivo</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--navy);"></div>Esperto / Finanz brand</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4B5563;"></div>Dormiente</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--black);"></div>Regola assoluta</div>
+  </div>
+
+</div>
+
+</body>
+</html>

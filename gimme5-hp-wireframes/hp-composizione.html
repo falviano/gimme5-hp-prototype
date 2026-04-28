@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 — HP Composizione per Stato</title>
+<style>
+  :root {
+    --orange: #FF6B35;
+    --navy: #1a1a2e;
+    --green: #16A34A;
+    --amber: #D97706;
+    --red: #DC2626;
+    --blue: #2563EB;
+    --indigo: #6366F1;
+    --bg: #F5F5F7;
+    --white: #ffffff;
+    --text: #111;
+    --muted: #666;
+    --border: #E5E7EB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--navy);
+    color: white;
+    padding: 48px;
+    border-bottom: 4px solid var(--orange);
+  }
+  .cover-label { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .cover h1 { font-size: 32px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px; }
+  .cover p { font-size: 15px; color: rgba(255,255,255,0.6); max-width: 560px; margin-bottom: 24px; }
+  .badges { display: flex; gap: 10px; flex-wrap: wrap; }
+  .badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+
+  /* PAGE */
+  .page { max-width: 1400px; margin: 0 auto; padding: 56px 48px; }
+
+  /* STATE GRID */
+  .state-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* PHONE */
+  .phone-wrap { display: flex; flex-direction: column; gap: 16px; }
+  .state-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 5px 0 8px;
+    border-bottom: 2px solid;
+  }
+  .phone {
+    background: var(--white);
+    border-radius: 24px;
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  /* notch */
+  .phone::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    margin: 8px auto 0;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 14px 6px;
+  }
+  .status-time { font-size: 9px; font-weight: 800; color: var(--text); }
+  .status-icons { font-size: 8px; color: var(--muted); }
+
+  /* HP HEADER */
+  .hp-header {
+    padding: 6px 14px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hp-greeting { font-size: 8px; color: var(--muted); }
+  .hp-name { font-size: 13px; font-weight: 800; color: var(--navy); }
+  .hp-saldo { font-size: 10px; font-weight: 700; color: var(--muted); margin-top: 2px; }
+  .hp-saldo span { color: var(--navy); font-weight: 800; }
+
+  /* BLOCKS */
+  .hp-block { margin: 0; border-bottom: 1px solid var(--border); }
+  .hp-block:last-child { border-bottom: none; }
+  .block-inner { padding: 10px 14px; }
+
+  /* TRACKER */
+  .tracker { padding: 10px 14px; background: rgba(99,102,241,0.06); border-bottom: 1px solid rgba(99,102,241,0.15); }
+  .tracker-label { font-size: 7px; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .tracker-steps { display: flex; align-items: center; gap: 0; margin-bottom: 4px; }
+  .t-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .t-dot.done { background: var(--indigo); }
+  .t-dot.active { background: white; border: 1.5px solid var(--indigo); box-shadow: 0 0 0 2px rgba(99,102,241,0.3); }
+  .t-dot.pending { background: white; border: 1.5px solid var(--border); }
+  .t-line { flex: 1; height: 1.5px; }
+  .t-line.done { background: var(--indigo); }
+  .t-line.pending { background: var(--border); }
+  .tracker-labels { display: flex; justify-content: space-between; }
+  .tracker-labels span { font-size: 6px; color: var(--muted); }
+  .tracker-labels span.done { color: var(--indigo); font-weight: 700; }
+  .tracker-labels span.active { color: var(--indigo); font-weight: 800; }
+
+  /* IBAN CARD */
+  .iban-card { background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.2); border-radius: 10px; padding: 10px 12px; margin: 0 14px 10px; }
+  .iban-label { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--indigo); margin-bottom: 4px; }
+  .iban-num { font-size: 8px; font-weight: 700; color: var(--navy); letter-spacing: 0.3px; margin-bottom: 6px; font-family: monospace; }
+  .iban-btns { display: flex; gap: 6px; }
+  .iban-btn { flex: 1; font-size: 7px; font-weight: 700; padding: 4px 0; border-radius: 6px; text-align: center; }
+  .iban-btn.primary { background: var(--indigo); color: white; }
+  .iban-btn.secondary { background: white; border: 1px solid var(--border); color: var(--navy); }
+  .iban-note { font-size: 6.5px; color: var(--muted); margin: 6px 14px 0; padding-bottom: 10px; }
+
+  /* HERO CARD */
+  .hero-card { background: var(--navy); border-radius: 10px; padding: 10px 12px; margin: 0 14px 10px; }
+  .hero-q { font-size: 8px; font-weight: 700; color: white; margin-bottom: 6px; line-height: 1.3; }
+  .hero-opts { display: flex; flex-wrap: wrap; gap: 4px; }
+  .hero-opt { font-size: 7px; padding: 3px 7px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+  .hero-opt.sel { background: var(--orange); border-color: var(--orange); color: white; font-weight: 700; }
+
+  /* PILL */
+  .pill { border-radius: 10px; padding: 10px 12px; margin: 0 14px 10px; }
+  .pill.lg-dark { background: var(--navy); }
+  .pill.lg-orange { background: var(--orange); }
+  .pill.lg-indigo { background: var(--indigo); }
+  .pill.md-orange { background: linear-gradient(135deg, var(--orange), #E8520A); }
+  .pill.md-blue { background: linear-gradient(135deg, #1B4FFF, #0A2FB3); }
+  .pill.sm { background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2); display: flex; align-items: center; gap: 8px; padding: 8px 12px; }
+  .pill.sm-blue { background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2); display: flex; align-items: center; gap: 8px; padding: 8px 12px; }
+  .pill-tag { font-size: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(255,255,255,0.6); margin-bottom: 3px; }
+  .pill-title { font-size: 9px; font-weight: 800; color: white; line-height: 1.2; margin-bottom: 4px; }
+  .pill-body { font-size: 7.5px; color: rgba(255,255,255,0.8); line-height: 1.4; margin-bottom: 6px; }
+  .pill-cta { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 7px; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+  .pill-sm-icon { width: 26px; height: 26px; background: var(--orange); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+  .pill-sm-text { flex: 1; }
+  .pill-sm-t1 { font-size: 8px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+  .pill-sm-t2 { font-size: 6.5px; color: var(--muted); }
+  .pill-sm-arr { font-size: 12px; color: var(--orange); }
+
+  /* SIZE TAG */
+  .pill-size-row { padding: 4px 14px 8px; display: flex; align-items: center; gap: 6px; }
+  .size-tag { font-size: 7px; font-weight: 800; padding: 2px 7px; border-radius: 10px; }
+  .size-tag.lg { background: rgba(255,107,53,0.12); color: var(--orange); }
+  .size-tag.lg-i { background: rgba(99,102,241,0.12); color: var(--indigo); }
+  .size-tag.md { background: rgba(37,99,235,0.1); color: var(--blue); }
+  .size-tag.sm { background: var(--bg); color: var(--navy); }
+  .size-src { font-size: 7px; color: var(--muted); }
+
+  /* GOAL */
+  .goal-card { background: var(--bg); border-radius: 10px; padding: 10px 12px; margin: 0 14px 10px; }
+  .goal-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .goal-name { font-size: 9px; font-weight: 800; color: var(--navy); }
+  .goal-status { font-size: 7px; font-weight: 700; color: var(--green); }
+  .goal-bar-bg { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+  .goal-bar-fill { height: 100%; border-radius: 3px; background: var(--orange); }
+  .goal-meta { display: flex; justify-content: space-between; }
+  .goal-meta span { font-size: 7px; color: var(--muted); }
+  .goal-meta strong { color: var(--navy); font-weight: 700; }
+
+  /* SALDO DORMIENTE */
+  .saldo-fermo { padding: 10px 14px; background: rgba(156,163,175,0.08); border-bottom: 1px solid var(--border); }
+  .saldo-fermo-label { font-size: 7px; color: var(--muted); margin-bottom: 2px; }
+  .saldo-fermo-num { font-size: 20px; font-weight: 900; color: var(--navy); letter-spacing: -1px; }
+  .saldo-fermo-note { font-size: 7px; color: var(--muted); margin-top: 2px; }
+
+  /* BOTTOM SHEET */
+  .bottom-sheet { background: rgba(217,119,6,0.06); border-top: 2px solid var(--amber); padding: 10px 14px; margin-top: 4px; }
+  .bs-label { font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--amber); margin-bottom: 5px; }
+  .bs-text { font-size: 8px; color: var(--navy); line-height: 1.4; margin-bottom: 6px; }
+  .bs-cta { font-size: 7px; font-weight: 700; color: var(--amber); }
+
+  /* SILENCE */
+  .silence { padding: 12px 14px; text-align: center; }
+  .silence-icon { font-size: 20px; margin-bottom: 4px; }
+  .silence-text { font-size: 7.5px; color: var(--muted); line-height: 1.5; }
+
+  /* JOINK */
+  .joink-row { padding: 8px 14px; display: flex; gap: 6px; }
+  .joink-btn { flex: 1; font-size: 8px; font-weight: 800; padding: 7px 0; border-radius: 8px; text-align: center; }
+  .joink-btn.primary { background: var(--orange); color: white; }
+  .joink-btn.secondary { background: var(--bg); border: 1px solid var(--border); color: var(--navy); }
+
+  /* QUICK ACTIONS */
+  .quick-actions { padding: 8px 14px 4px; }
+  .qa-label { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 6px; }
+  .qa-row { display: flex; gap: 6px; overflow: hidden; }
+  .qa-btn { flex-shrink: 0; font-size: 7px; font-weight: 700; padding: 4px 9px; border-radius: 8px; white-space: nowrap; }
+  .qa-btn.orange { background: rgba(255,107,53,0.1); color: var(--orange); border: 1px solid rgba(255,107,53,0.2); }
+  .qa-btn.navy { background: rgba(26,26,46,0.07); color: var(--navy); border: 1px solid var(--border); }
+  .qa-btn.green { background: rgba(22,163,74,0.08); color: var(--green); border: 1px solid rgba(22,163,74,0.2); }
+  .qa-btn.blue { background: rgba(37,99,235,0.08); color: var(--blue); border: 1px solid rgba(37,99,235,0.2); }
+
+  /* FONDI LIST */
+  .fondi-list { padding: 6px 14px 10px; }
+  .fondo-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .fondo-row:last-child { border-bottom: none; }
+  .fondo-name { font-size: 8px; font-weight: 700; color: var(--navy); }
+  .fondo-meta { font-size: 7px; color: var(--muted); margin-top: 1px; }
+  .fondo-val { text-align: right; }
+  .fondo-val .v { font-size: 9px; font-weight: 800; color: var(--navy); }
+  .fondo-val .perc { font-size: 7px; color: var(--green); font-weight: 700; }
+
+  /* ESPERTO */
+  .esp-header { padding: 8px 14px; background: var(--navy); }
+  .esp-total { font-size: 18px; font-weight: 900; color: white; letter-spacing: -0.5px; }
+  .esp-perc { font-size: 8px; color: rgba(255,255,255,0.6); margin-top: 1px; }
+  .esp-section-label { font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); padding: 6px 14px 4px; }
+
+  /* ESPLORA */
+  .esplora { padding: 8px 14px; background: var(--bg); }
+  .esplora-label { font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 6px; }
+  .esplora-cards { display: flex; gap: 6px; }
+  .esplora-card { flex: 1; background: white; border-radius: 8px; padding: 6px 8px; border: 1px solid var(--border); }
+  .esplora-card-tag { font-size: 6px; font-weight: 700; text-transform: uppercase; color: var(--orange); margin-bottom: 2px; }
+  .esplora-card-title { font-size: 7.5px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+
+  /* NO PILL BADGE */
+  .no-pill { margin: 6px 14px 10px; background: rgba(220,38,38,0.05); border: 1px dashed rgba(220,38,38,0.2); border-radius: 8px; padding: 6px 10px; font-size: 7px; color: var(--muted); font-style: italic; text-align: center; }
+
+  /* REGOLA ROW */
+  .regola-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 14px; border-bottom: 1px solid var(--border); }
+  .regola-name { font-size: 8px; font-weight: 700; color: var(--navy); }
+  .regola-val { font-size: 7px; color: var(--muted); }
+  .regola-status { font-size: 7px; font-weight: 700; }
+  .regola-status.active { color: var(--green); }
+  .regola-status.paused { color: var(--amber); }
+
+  /* ADD BTN */
+  .add-btn { margin: 8px 14px; display: flex; align-items: center; gap: 6px; font-size: 8px; font-weight: 700; color: var(--orange); border: 1.5px dashed rgba(255,107,53,0.3); border-radius: 8px; padding: 6px 10px; }
+  .add-btn span { font-size: 14px; line-height: 1; }
+
+  /* SECTION LABEL IN PHONE */
+  .phone-section-label { font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); padding: 6px 14px 0; }
+
+  /* RIATTIVA */
+  .riattiva-card { background: rgba(37,99,235,0.06); border: 1px solid rgba(37,99,235,0.15); border-radius: 10px; padding: 10px 12px; margin: 0 14px 10px; }
+  .riattiva-label { font-size: 7px; font-weight: 700; text-transform: uppercase; color: var(--blue); margin-bottom: 4px; }
+  .riattiva-text { font-size: 8px; color: var(--navy); line-height: 1.3; margin-bottom: 6px; }
+  .riattiva-cta { font-size: 7.5px; font-weight: 800; color: white; background: var(--blue); padding: 4px 10px; border-radius: 6px; display: inline-block; }
+
+  /* LEGEND */
+  .legend { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; margin-bottom: 40px; }
+  .legend-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 14px; }
+  .legend-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .legend-item { display: flex; align-items: flex-start; gap: 8px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .legend-text { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .legend-text strong { color: var(--navy); display: block; font-size: 12px; }
+
+  /* OPINION SECTION */
+  .opinion-section { margin-top: 56px; }
+  .opinion-header { background: var(--navy); color: white; border-radius: 16px; padding: 28px 32px; margin-bottom: 32px; }
+  .opinion-header h2 { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .opinion-header p { font-size: 14px; color: rgba(255,255,255,0.6); }
+  .opinion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .op-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+  .op-card.yes { border-top: 3px solid var(--green); }
+  .op-card.no { border-top: 3px solid var(--red); }
+  .op-card.maybe { border-top: 3px solid var(--amber); }
+  .op-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .op-card.yes .op-label { color: var(--green); }
+  .op-card.no .op-label { color: var(--red); }
+  .op-card.maybe .op-label { color: var(--amber); }
+  .op-title { font-size: 16px; font-weight: 800; color: var(--navy); margin-bottom: 12px; line-height: 1.2; }
+  .op-list { list-style: none; padding: 0; }
+  .op-list li { font-size: 13px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; line-height: 1.5; }
+  .op-list li:last-child { border-bottom: none; }
+  .op-list li span { font-weight: 700; flex-shrink: 0; }
+  .op-matrix { background: white; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .op-matrix-header { background: var(--navy); color: white; display: grid; grid-template-columns: 140px repeat(5, 1fr); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .op-matrix-header div, .op-matrix-row div { padding: 10px 12px; border-right: 1px solid rgba(255,255,255,0.1); }
+  .op-matrix-header div:last-child, .op-matrix-row div:last-child { border-right: none; }
+  .op-matrix-row { display: grid; grid-template-columns: 140px repeat(5, 1fr); border-bottom: 1px solid var(--border); font-size: 11px; }
+  .op-matrix-row:last-child { border-bottom: none; }
+  .op-matrix-row div { padding: 9px 12px; border-right: 1px solid var(--border); color: var(--muted); display: flex; align-items: center; }
+  .op-matrix-row div:first-child { font-weight: 700; color: var(--navy); font-size: 12px; }
+  .op-matrix-row div:last-child { border-right: none; }
+  .dot-yes { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .dot-no { width: 8px; height: 8px; border-radius: 50%; background: rgba(220,38,38,0.3); border: 1.5px solid var(--red); }
+  .dot-maybe { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); opacity: 0.5; }
+
+  .footer { background: var(--navy); color: rgba(255,255,255,0.4); text-align: center; padding: 20px; font-size: 11px; margin-top: 60px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-label">Gimme5 · Sprint 2 · HP Composizione</div>
+  <h1>Come si compone l'HP<br>per ogni stato utente</h1>
+  <p>Wireframe dei 7 stati homepage + analisi CTA, shortcuts e aggiungi obiettivo.</p>
+  <div class="badges">
+    <div class="badge">7 stati</div>
+    <div class="badge">Aprile 2026</div>
+    <div class="badge">Documento interno</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-title">Legenda stati</div>
+    <div class="legend-grid">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--indigo)"></div><div class="legend-text"><strong>Bonifico Pendente</strong>Nessun versamento ricevuto. Percorso B.</div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6B7280"></div><div class="legend-text"><strong>Nuovo A</strong>1° versamento ricevuto, nessuna regola.</div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><div class="legend-text"><strong>Nuovo RID</strong>1° versamento + regola automatica attiva.</div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#9CA3AF"></div><div class="legend-text"><strong>Dormiente</strong>Inattivo 30+ giorni.</div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div><div class="legend-text"><strong>A Rischio</strong>Segnali abbandono / post-calo mercato.</div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div><div class="legend-text"><strong>Attivo</strong>Utente regolare, engagement alto.</div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div><div class="legend-text"><strong>Esperto</strong>6+ mesi, 2+ regole, score alto.</div></div>
+    </div>
+  </div>
+
+  <!-- WIREFRAMES -->
+  <div class="state-grid">
+
+    <!-- ── BONIFICO PENDENTE ── -->
+    <div class="phone-wrap">
+      <div class="state-label" style="color:var(--indigo);border-color:var(--indigo);">Bonifico Pendente</div>
+      <div class="phone">
+        <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●●</span></div>
+        <div class="hp-header">
+          <div class="hp-greeting">Ciao</div>
+          <div class="hp-name">Mario 👋</div>
+          <div class="hp-saldo">Saldo <span>€0,00</span></div>
+        </div>
+        <!-- Tracker -->
+        <div class="tracker">
+          <div class="tracker-label">I tuoi prossimi passi</div>
+          <div class="tracker-steps">
+            <div class="t-dot done"></div>
+            <div class="t-line done"></div>
+            <div class="t-dot done"></div>
+            <div class="t-line pending"></div>
+            <div class="t-dot active"></div>
+            <div class="t-line pending"></div>
+            <div class="t-dot pending"></div>
+          </div>
+          <div class="tracker-labels">
+            <span class="done">Iscritto</span>
+            <span class="done">Piano</span>
+            <span class="active">Bonifico</span>
+            <span>Attivo</span>
+          </div>
+        </div>
+        <!-- IBAN -->
+        <div style="height:8px"></div>
+        <div class="iban-card">
+          <div class="iban-label">🏦 Il tuo IBAN Gimme5</div>
+          <div class="iban-num">IT60 X054 2811 1010 0000 0123 456</div>
+          <div class="iban-btns">
+            <div class="iban-btn primary">📋 Copia IBAN</div>
+            <div class="iban-btn secondary">🏦 Apri banca</div>
+          </div>
+        </div>
+        <div class="iban-note">Min. €5 per il primo versamento</div>
+        <!-- No pill -->
+        <div class="no-pill">❌ Nessuna pillola educativa<br>Solo contenuto operativo</div>
+        <!-- Esplora -->
+        <div class="esplora">
+          <div class="esplora-label">Esplora</div>
+          <div class="esplora-cards">
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">Come fare il bonifico</div></div>
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">Cosa succede dopo</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NUOVO A ── -->
+    <div class="phone-wrap">
+      <div class="state-label" style="color:#6B7280;border-color:#9CA3AF;">Nuovo A</div>
+      <div class="phone">
+        <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●●</span></div>
+        <div class="hp-header">
+          <div class="hp-greeting">Ciao</div>
+          <div class="hp-name">Mario 👋</div>
+          <div class="hp-saldo">Saldo <span>€30,00</span></div>
+        </div>
+        <!-- Hero card -->
+        <div class="hp-block">
+          <div class="block-inner">
+            <div class="hero-card">
+              <div class="hero-q">Cosa stai risparmiando per?</div>
+              <div class="hero-opts">
+                <div class="hero-opt sel">🏖️ Viaggio</div>
+                <div class="hero-opt">🏠 Casa</div>
+                <div class="hero-opt">🚗 Veicolo</div>
+                <div class="hero-opt">⭐ Libero</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Quick actions -->
+        <div class="quick-actions">
+          <div class="qa-label">Azioni rapide</div>
+          <div class="qa-row">
+            <div class="qa-btn orange">+ Regola auto</div>
+            <div class="qa-btn navy">+ Obiettivo</div>
+          </div>
+        </div>
+        <!-- Pill LG dark -->
+        <div class="hp-block">
+          <div class="block-inner" style="padding-bottom:0">
+            <div class="pill lg-dark">
+              <div class="pill-tag">Gimme5 · Il tuo prossimo passo</div>
+              <div class="pill-title">Attiva il versamento automatico.</div>
+              <div class="pill-body">Chi risparmia così arriva al 40% più veloce.</div>
+              <div class="pill-cta">Attiva ora →</div>
+            </div>
+          </div>
+          <div class="pill-size-row"><span class="size-tag lg">LG</span><span class="size-src">Gimme5</span></div>
+        </div>
+        <!-- Esplora -->
+        <div class="esplora">
+          <div class="esplora-label">Esplora</div>
+          <div class="esplora-cards">
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">Come funziona il PAC</div></div>
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">€1 al giorno</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NUOVO RID ── -->
+    <div class="phone-wrap">
+      <div class="state-label" style="color:var(--green);border-color:var(--green);">Nuovo RID</div>
+      <div class="phone">
+        <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●●</span></div>
+        <div class="hp-header">
+          <div class="hp-greeting">Ciao</div>
+          <div class="hp-name">Mario 👋</div>
+          <div class="hp-saldo">Saldo <span>€30,00</span></div>
+        </div>
+        <!-- Goal -->
+        <div class="hp-block">
+          <div class="block-inner">
+            <div class="goal-card">
+              <div class="goal-top"><div class="goal-name">🏖️ Viaggio in Giappone</div><div class="goal-status">✓ Attivo</div></div>
+              <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:3%"></div></div>
+              <div class="goal-meta"><span>€30 / <strong>€2.000</strong></span><span>€25/mese</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Quick actions -->
+        <div class="quick-actions">
+          <div class="qa-label">Azioni rapide</div>
+          <div class="qa-row">
+            <div class="qa-btn orange">💸 Versa ora</div>
+            <div class="qa-btn navy">+ Obiettivo</div>
+          </div>
+        </div>
+        <!-- Pill LG orange -->
+        <div class="hp-block">
+          <div class="block-inner" style="padding-bottom:0">
+            <div class="pill lg-orange">
+              <div class="pill-tag">Gimme5 · Come funziona</div>
+              <div class="pill-title">Risparmia €1 al giorno. Senza pensarci.</div>
+              <div class="pill-body">Il tuo versamento automatico è attivo. Ogni giorno lavora.</div>
+              <div class="pill-cta">Come funziona →</div>
+            </div>
+          </div>
+          <div class="pill-size-row"><span class="size-tag lg">LG</span><span class="size-src">Gimme5</span></div>
+        </div>
+        <!-- Esplora -->
+        <div class="esplora">
+          <div class="esplora-label">Esplora</div>
+          <div class="esplora-cards">
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">Cos'è il PAC</div></div>
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">Come cresce</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DORMIENTE ── -->
+    <div class="phone-wrap">
+      <div class="state-label" style="color:#9CA3AF;border-color:#D1D5DB;">Dormiente</div>
+      <div class="phone">
+        <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●●</span></div>
+        <div class="hp-header">
+          <div class="hp-greeting">Bentornato</div>
+          <div class="hp-name">Mario 👋</div>
+        </div>
+        <!-- Saldo fermo -->
+        <div class="saldo-fermo">
+          <div class="saldo-fermo-label">Il tuo piano aspettava</div>
+          <div class="saldo-fermo-num">€420</div>
+          <div class="saldo-fermo-note">Non ci hai pensato tu — ma il piano sì</div>
+        </div>
+        <!-- Goal fermo -->
+        <div class="hp-block">
+          <div class="block-inner">
+            <div class="goal-card">
+              <div class="goal-top"><div class="goal-name">🏖️ Viaggio in Giappone</div><div class="goal-status" style="color:var(--muted)">⏸ In pausa</div></div>
+              <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:21%"></div></div>
+              <div class="goal-meta"><span>€420 / <strong>€2.000</strong></span><span>21%</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Riattiva -->
+        <div class="riattiva-card">
+          <div class="riattiva-label">Regola in pausa</div>
+          <div class="riattiva-text">La tua regola automatica è ferma. Riattivala quando vuoi.</div>
+          <div class="riattiva-cta">Riattiva la regola →</div>
+        </div>
+        <!-- No pill -->
+        <div class="no-pill">❌ Nessuna pillola in-app</div>
+        <!-- Esplora -->
+        <div class="esplora">
+          <div class="esplora-label">Esplora</div>
+          <div class="esplora-cards">
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">Perché continuare</div></div>
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">Il tuo €420</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── A RISCHIO ── -->
+    <div class="phone-wrap">
+      <div class="state-label" style="color:var(--red);border-color:var(--red);">A Rischio</div>
+      <div class="phone">
+        <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●●</span></div>
+        <div class="hp-header">
+          <div class="hp-greeting">Ciao</div>
+          <div class="hp-name">Mario 👋</div>
+          <div class="hp-saldo">Saldo <span>€380,00</span></div>
+        </div>
+        <!-- Goal normale -->
+        <div class="hp-block">
+          <div class="block-inner">
+            <div class="goal-card">
+              <div class="goal-top"><div class="goal-name">🏖️ Viaggio in Giappone</div></div>
+              <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:19%;background:#9CA3AF"></div></div>
+              <div class="goal-meta"><span>€380 / <strong>€2.000</strong></span><span>19%</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Silence -->
+        <div class="silence">
+          <div class="silence-icon">🤫</div>
+          <div class="silence-text">Silenzio nelle prime 24h<br>dopo l'evento di mercato</div>
+        </div>
+        <!-- Bottom sheet dopo 48h -->
+        <div class="bottom-sheet">
+          <div class="bs-label">Dopo 48h — bottom sheet</div>
+          <div class="bs-text">"Sul tuo portafoglio:<br>-€11 questa settimana.<br>È normale per te."</div>
+          <div class="bs-cta">Ho capito →</div>
+        </div>
+        <!-- No pill -->
+        <div class="no-pill">❌ Zero pillole educative</div>
+        <!-- Esplora -->
+        <div class="esplora">
+          <div class="esplora-label">Esplora</div>
+          <div class="esplora-cards">
+            <div class="esplora-card"><div class="esplora-card-tag">Finanz</div><div class="esplora-card-title">I mercati scendono</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ATTIVO ── -->
+    <div class="phone-wrap">
+      <div class="state-label" style="color:var(--blue);border-color:var(--blue);">Attivo</div>
+      <div class="phone">
+        <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●●</span></div>
+        <div class="hp-header">
+          <div class="hp-greeting">Il tuo piano</div>
+          <div class="hp-name">✓ Tutto ok</div>
+          <div class="hp-saldo">Saldo <span>€420,00</span></div>
+        </div>
+        <!-- Goal -->
+        <div class="hp-block">
+          <div class="block-inner">
+            <div class="goal-card">
+              <div class="goal-top"><div class="goal-name">🏖️ Viaggio in Giappone</div><div class="goal-status">✓ In corso</div></div>
+              <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:21%"></div></div>
+              <div class="goal-meta"><span>€420 / <strong>€2.000</strong></span><span>Luglio 2026</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Quick actions -->
+        <div class="quick-actions">
+          <div class="qa-label">Azioni rapide</div>
+          <div class="qa-row">
+            <div class="qa-btn orange">💸 Versa ora</div>
+            <div class="qa-btn green">⚡ JOINK</div>
+            <div class="qa-btn navy">+ Obiettivo</div>
+          </div>
+        </div>
+        <!-- Pill MD -->
+        <div class="hp-block">
+          <div class="block-inner" style="padding-bottom:0">
+            <div class="pill md-orange">
+              <div class="pill-tag">Gimme5 · Il tuo piano</div>
+              <div class="pill-title">Non ci pensavi — il tuo piano sì. €420.</div>
+              <div class="pill-body">Sei al 21%. Stai andando bene.</div>
+              <div class="pill-cta">Vedi i progressi →</div>
+            </div>
+          </div>
+          <div class="pill-size-row"><span class="size-tag md">MD</span><span class="size-src">Gimme5</span></div>
+        </div>
+        <!-- Esplora -->
+        <div class="esplora">
+          <div class="esplora-label">Esplora</div>
+          <div class="esplora-cards">
+            <div class="esplora-card"><div class="esplora-card-tag">Finanz</div><div class="esplora-card-title">Diversificazione</div></div>
+            <div class="esplora-card"><div class="esplora-card-tag">G5</div><div class="esplora-card-title">DCA spiegato</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ESPERTO ── -->
+    <div class="phone-wrap">
+      <div class="state-label" style="color:var(--amber);border-color:var(--amber);">Esperto</div>
+      <div class="phone">
+        <div class="status-bar"><span class="status-time">9:41</span><span class="status-icons">●●●</span></div>
+        <!-- Dense header -->
+        <div class="esp-header">
+          <div class="esp-total">€1.240</div>
+          <div class="esp-perc">↑ +2.3% questo mese</div>
+        </div>
+        <!-- Fondi -->
+        <div class="esp-section-label">PORTAFOGLIO</div>
+        <div class="fondi-list">
+          <div class="fondo-row">
+            <div><div class="fondo-name">Amundi Azionario ESG</div><div class="fondo-meta">Viaggio · €25/mese</div></div>
+            <div class="fondo-val"><div class="v">€820</div><div class="perc">+1.8%</div></div>
+          </div>
+          <div class="fondo-row">
+            <div><div class="fondo-name">Gimme5 Obbligazionario</div><div class="fondo-meta">Casa · €15/mese</div></div>
+            <div class="fondo-val"><div class="v">€420</div><div class="perc">+0.9%</div></div>
+          </div>
+        </div>
+        <!-- Obiettivi -->
+        <div class="esp-section-label">OBIETTIVI</div>
+        <div class="hp-block">
+          <div class="block-inner" style="padding:6px 14px">
+            <div class="goal-card" style="margin-bottom:6px">
+              <div class="goal-top"><div class="goal-name">🏖️ Viaggio</div></div>
+              <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:41%"></div></div>
+            </div>
+            <div class="goal-card">
+              <div class="goal-top"><div class="goal-name">🏠 Casa</div></div>
+              <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:8%;background:var(--blue)"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Add obiettivo -->
+        <div class="add-btn"><span>+</span> Aggiungi obiettivo</div>
+        <!-- Quick actions -->
+        <div class="quick-actions">
+          <div class="qa-row">
+            <div class="qa-btn navy">⚙️ Personalizza</div>
+            <div class="qa-btn blue">📊 Report</div>
+          </div>
+        </div>
+        <!-- No pill -->
+        <div class="no-pill">❌ Nessuna pillola — mai</div>
+      </div>
+    </div>
+
+  </div><!-- /state-grid -->
+
+
+  <!-- OPINIONE CTA -->
+  <div class="opinion-section">
+
+    <div class="opinion-header">
+      <h2>Shortcuts, CTA e "Aggiungi obiettivo"</h2>
+      <p>Analisi per stato: cosa ha senso mostrare e cosa no.</p>
+    </div>
+
+    <div class="opinion-grid">
+      <div class="op-card yes">
+        <div class="op-label">✓ Sì — shortcuts hanno senso</div>
+        <div class="op-title">Ma solo contestuali allo stato</div>
+        <ul class="op-list">
+          <li><span style="color:var(--green)">✓</span> Nuovo A: "Attiva regola auto" è l'unica CTA che conta — mettila in evidenza</li>
+          <li><span style="color:var(--green)">✓</span> Nuovo RID: "Versa ora" e "Aggiungi obiettivo" quando ha già la regola attiva</li>
+          <li><span style="color:var(--green)">✓</span> Attivo: "Versa ora" + "JOINK" + "Aggiungi obiettivo" — tutte e tre hanno senso</li>
+          <li><span style="color:var(--green)">✓</span> Esperto: shortcuts dense (Personalizza, Report) — non CTAs di base</li>
+        </ul>
+      </div>
+      <div class="op-card no">
+        <div class="op-label">✗ No — rimuovi le shortcuts</div>
+        <div class="op-title">Negli stati fragili creano rumore</div>
+        <ul class="op-list">
+          <li><span style="color:var(--red)">✗</span> Bonifico Pendente: zero shortcuts oltre al bonifico — un solo obiettivo visivo</li>
+          <li><span style="color:var(--red)">✗</span> A Rischio: nessuna CTA di acquisto o prodotto nelle 24h post-calo</li>
+          <li><span style="color:var(--red)">✗</span> Dormiente: nessuna CTA aggressiva — solo "Riattiva regola" in tono morbido</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- MATRICE -->
+    <div class="op-matrix">
+      <div class="op-matrix-header">
+        <div>Stato</div>
+        <div>Versa ora</div>
+        <div>+ Regola auto</div>
+        <div>+ Obiettivo</div>
+        <div>JOINK</div>
+        <div>Personalizza HP</div>
+      </div>
+      <div class="op-matrix-row">
+        <div>Bonifico Pendente</div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+      </div>
+      <div class="op-matrix-row">
+        <div>Nuovo A</div>
+        <div><div class="dot-maybe"></div></div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-maybe"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+      </div>
+      <div class="op-matrix-row">
+        <div>Nuovo RID</div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+      </div>
+      <div class="op-matrix-row">
+        <div>Dormiente</div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+      </div>
+      <div class="op-matrix-row">
+        <div>A Rischio</div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-no"></div></div>
+      </div>
+      <div class="op-matrix-row">
+        <div>Attivo</div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-no"></div></div>
+      </div>
+      <div class="op-matrix-row">
+        <div>Esperto</div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-yes"></div></div>
+        <div><div class="dot-no"></div></div>
+        <div><div class="dot-yes"></div></div>
+      </div>
+    </div>
+
+    <!-- AGGIUNGI OBIETTIVO -->
+    <div style="margin-top:24px">
+      <div class="op-card maybe" style="border-radius:16px">
+        <div class="op-label">▲ Aggiungi obiettivo — sì, ma con una condizione</div>
+        <div class="op-title">Solo da Nuovo RID in poi, mai prima</div>
+        <ul class="op-list">
+          <li><span style="color:var(--amber)">→</span> Bonifico Pendente e Nuovo A: il secondo obiettivo è una distrazione — l'utente non ha ancora dimostrato di saper mantenere il primo</li>
+          <li><span style="color:var(--amber)">→</span> Da Nuovo RID: ha la regola attiva + versamento ricevuto — è pronto a pensare al secondo obiettivo</li>
+          <li><span style="color:var(--amber)">→</span> Il bottone deve essere secondario visivamente (testo o outline), mai primario — non competere con la pill o l'obiettivo attivo</li>
+          <li><span style="color:var(--amber)">→</span> Per l'Esperto: mostrarlo sempre, è parte del layout denso</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  Gimme5 · HP Composizione per Stato · Sprint 2 · Aprile 2026 · Documento interno
+</div>
+
+</body>
+</html>

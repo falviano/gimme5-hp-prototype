@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 — Homepage Adattiva</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: #f2f2f2;
+  color: #111;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.header {
+  background: #111;
+  padding: 56px 64px 52px;
+  border-bottom: 4px solid #f55a27;
+}
+.header-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #f55a27;
+  margin-bottom: 16px;
+}
+.header h1 {
+  font-size: 40px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -.8px;
+  line-height: 1.1;
+  max-width: 700px;
+}
+.header h1 em { color: #f55a27; font-style: normal; }
+.header-meta {
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(255,255,255,.3);
+}
+
+/* PAGE */
+.page { max-width: 860px; margin: 0 auto; padding: 0 64px 100px; }
+
+/* SECTION */
+.section {
+  padding: 64px 0 56px;
+  border-bottom: 1px solid #ddd;
+}
+.section:last-child { border-bottom: none; }
+
+.section-num {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #f55a27;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -.6px;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  color: #111;
+}
+.section-sub {
+  font-size: 17px;
+  color: #666;
+  line-height: 1.6;
+  max-width: 620px;
+  margin-bottom: 36px;
+}
+
+/* BIG POINT */
+.points { display: flex; flex-direction: column; gap: 16px; }
+.point {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px 28px;
+  border: 1px solid #e8e8e8;
+}
+.point-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f55a27;
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+.point-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.5;
+}
+.point-text strong { color: #f55a27; }
+.point-text span { color: #888; font-weight: 400; font-size: 15px; display: block; margin-top: 4px; }
+
+/* VERSUS */
+.versus {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+.versus-card {
+  border-radius: 14px;
+  padding: 28px 32px;
+}
+.versus-card.bad {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+}
+.versus-card.good {
+  background: #fff5f0;
+  border: 2px solid #f55a27;
+}
+.versus-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  color: #bbb;
+}
+.versus-label.orange { color: #f55a27; }
+.versus-item {
+  font-size: 17px;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.4;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.versus-item:last-child { border-bottom: none; padding-bottom: 0; }
+.versus-item.muted { color: #666; font-weight: 400; }
+
+/* BIG QUOTE */
+.big-quote {
+  background: #111;
+  border-radius: 16px;
+  padding: 40px 44px;
+  margin-top: 8px;
+}
+.big-quote p {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.5;
+}
+.big-quote p em { color: #f55a27; font-style: normal; }
+
+/* USERS GRID */
+.users { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.user-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px 28px;
+  border: 1px solid #e8e8e8;
+}
+.user-num {
+  font-size: 28px;
+  font-weight: 900;
+  color: #eee;
+  flex-shrink: 0;
+  width: 40px;
+  font-variant-numeric: tabular-nums;
+}
+.user-content { flex: 1; }
+.user-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 4px;
+}
+.user-desc {
+  font-size: 15px;
+  color: #888;
+  line-height: 1.4;
+}
+.user-pill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+.pill-lg { background: #f55a27; color: #fff; }
+.pill-md { background: #fff0e8; color: #f55a27; border: 1.5px solid #f55a27; }
+.pill-sm { background: #f2f2f2; color: #888; }
+.pill-no { background: #f2f2f2; color: #bbb; }
+
+/* RULE BOX */
+.rule-box {
+  background: #f55a27;
+  border-radius: 14px;
+  padding: 32px 36px;
+  margin-top: 8px;
+}
+.rule-box p {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.5;
+}
+
+/* FOOTER */
+.footer {
+  background: #111;
+  padding: 20px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer span { font-size: 11px; color: rgba(255,255,255,.25); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-label">Gimme5 · Homepage Adattiva · Aprile 2026</div>
+  <h1>La Homepage <em>parla a te.</em><br>Non a tutti.</h1>
+  <div class="header-meta">Team Cosmico × Gimme5 · Da validare</div>
+</div>
+
+<div class="page">
+
+  <!-- 01 IL PROBLEMA -->
+  <div class="section">
+    <div class="section-num">01 · Il problema</div>
+    <div class="section-title">Oggi la HP è uguale per tutti.</div>
+    <div class="section-sub">Un utente nuovo e uno che usa l'app da un anno vedono la stessa cosa. Non funziona.</div>
+    <div class="versus">
+      <div class="versus-card bad">
+        <div class="versus-label">Adesso</div>
+        <div class="versus-item muted">Stessa HP per tutti</div>
+        <div class="versus-item muted">L'utente non sa cosa fare</div>
+        <div class="versus-item muted">I messaggi vengono ignorati</div>
+      </div>
+      <div class="versus-card good">
+        <div class="versus-label orange">Come sarà</div>
+        <div class="versus-item">La HP cambia in base a chi sei</div>
+        <div class="versus-item">Ti dice esattamente cosa fare</div>
+        <div class="versus-item">Il messaggio è sempre rilevante</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 02 COME FUNZIONA IL MESSAGGIO -->
+  <div class="section">
+    <div class="section-num">02 · Come funziona il messaggio</div>
+    <div class="section-title">Ogni messaggio fa 3 cose.</div>
+    <div class="section-sub">Non informa genericamente. Spinge all'azione.</div>
+    <div class="points">
+      <div class="point">
+        <div class="point-dot"></div>
+        <div class="point-text">
+          <strong>Ti dice cosa fare</strong> — non ti saluta, ti dà un'istruzione.
+          <span>Es: "Filippo la tua regola è attiva, manca un passo"</span>
+        </div>
+      </div>
+      <div class="point">
+        <div class="point-dot"></div>
+        <div class="point-text">
+          <strong>Ti mostra cosa perdi</strong> — con numeri reali, non frasi generiche.
+          <span>Es: "+91% di risparmio. Basta avere un obiettivo."</span>
+        </div>
+      </div>
+      <div class="point">
+        <div class="point-dot"></div>
+        <div class="point-text">
+          <strong>Ha una card dedicata</strong> — la pill. Tappabile, con approfondimento.
+          <span>La card cambia dimensione in base a quanto l'utente ha bisogno di guida.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 03 LA PILL CARD -->
+  <div class="section">
+    <div class="section-num">03 · La pill card</div>
+    <div class="section-title">Più sei nuovo, più è grande.</div>
+    <div class="section-sub">Man mano che l'utente cresce, la card si rimpicciolisce e scende in pagina. Quando sei esperto, quasi non la vedi.</div>
+    <div class="users">
+      <div class="user-row">
+        <div class="user-num">LG</div>
+        <div class="user-content">
+          <div class="user-name">Utente Nuovo</div>
+          <div class="user-desc">Prima cosa che vede in pagina. Grande, protagonista. Guida ogni passo.</div>
+        </div>
+        <div class="user-pill pill-lg">In cima</div>
+      </div>
+      <div class="user-row">
+        <div class="user-num">MD</div>
+        <div class="user-content">
+          <div class="user-name">Utente Attivo</div>
+          <div class="user-desc">Appare a metà pagina, dopo obiettivi e grafico. Supporta, non comanda.</div>
+        </div>
+        <div class="user-pill pill-md">A metà</div>
+      </div>
+      <div class="user-row">
+        <div class="user-num">SM</div>
+        <div class="user-content">
+          <div class="user-name">Utente Esperto</div>
+          <div class="user-desc">In fondo, quasi nascosta. L'utente sa già cosa fare.</div>
+        </div>
+        <div class="user-pill pill-sm">In fondo</div>
+      </div>
+      <div class="user-row">
+        <div class="user-num" style="color:#ddd;">—</div>
+        <div class="user-content">
+          <div class="user-name">Dormiente · A Rischio</div>
+          <div class="user-desc">Nessuna pill. Parla solo il grafico e il bottom sheet contestuale.</div>
+        </div>
+        <div class="user-pill pill-no">Nessuna</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 04 I TIPI DI UTENTE -->
+  <div class="section">
+    <div class="section-num">04 · I tipi di utente</div>
+    <div class="section-title">9 situazioni diverse.<br>9 homepage diverse.</div>
+    <div class="section-sub">Ogni stato ha un greeting, un messaggio principale e una call to action diversa.</div>
+    <div class="users">
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">Nuovo — tutto fatto, manca obiettivo</div>
+          <div class="user-desc">"Filippo la tua regola è attiva, manca un passo" → Imposta il tuo primo obiettivo</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">Nuovo — bonifico fatto, no regola</div>
+          <div class="user-desc">"Filippo hai €10, manca solo la regola" → Attiva il risparmio automatico</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">Nuovo — tutto skippato · vuole risparmiare</div>
+          <div class="user-desc">"Benvenuto Filippo, per iniziare a risparmiare versa e imposta la regola" → Versa e imposta la tua prima regola</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">Nuovo — tutto skippato · vuole guadagnare</div>
+          <div class="user-desc">"Benvenuto Filippo, per iniziare a guadagnare versa e imposta la regola" → Versa e inizia subito a guadagnare</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">Fantasma — rientra dopo settimane</div>
+          <div class="user-desc">"Bentornato Filippo, sono 4 giorni. Zero versamenti." → Versa e imposta la tua prima regola</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">In Pausa — regola ferma</div>
+          <div class="user-desc">"Bentornato Filippo, la tua regola è ferma da 60 giorni." → Riprendi a risparmiare</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">Dormiente — non apre l'app da settimane</div>
+          <div class="user-desc">"Bentornato Filippo, da quanto tempo!" + grafico piatto + bottom sheet rassicurante</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">A Rischio — mercati in calo</div>
+          <div class="user-desc">"Ciao Filippo, mercati giù. Niente panico." + grafico rosso + bottom sheet dopo 48h</div>
+        </div>
+      </div>
+      <div class="user-row">
+        <div class="user-content">
+          <div class="user-name">Attivo · Esperto — tutto ok</div>
+          <div class="user-desc">"Bentornato Filippo" + grafico verde + quick actions + pill progressiva</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- REGOLA FINALE -->
+  <div class="section">
+    <div class="section-num">La regola</div>
+    <div class="rule-box">
+      <p>Il messaggio non saluta.<br><strong>Il messaggio istruisce.</strong><br>L'utente deve capire in 2 secondi cosa deve fare e perché farlo adesso.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>Gimme5 · Homepage Adattiva · Aprile 2026</span>
+  <span>Cosmico × Gimme5</span>
+</div>
+
+</body>
+</html>

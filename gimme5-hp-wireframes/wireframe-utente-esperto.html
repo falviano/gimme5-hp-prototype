@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIMME5 — Wireframe Utente Esperto · 27 aprile 2026</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #ffffff;
+  --surface:  #f3f3f3;
+  --card:     #e8e8e8;
+  --border:   #d0d0d0;
+  --border-active: #555555;
+  --text-1:   #111111;
+  --text-2:   #555555;
+  --text-3:   #aaaaaa;
+  --chip-on:  #111111;
+  --phone-w:  210px;
+  --radius:   10px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  padding: 32px 40px 80px;
+  min-width: 1600px;
+}
+
+/* ─── HEADER ─── */
+.header { margin-bottom: 36px; }
+.header-row { display: flex; align-items: flex-start; gap: 40px; }
+.header h1 { font-size: 18px; font-weight: 700; letter-spacing: -.3px; margin-bottom: 4px; }
+.version { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; }
+.changelog {
+  background: #1e1e1e; border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px 18px; flex: 1; max-width: 760px;
+}
+.changelog h3 { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-3); margin-bottom: 8px; }
+.changelog ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 20px; }
+.changelog li { font-size: 10px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+.changelog li::before { content: '→'; color: var(--text-1); font-weight: 700; }
+.tag-new { background: var(--border-active); color: #111; font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.tag-chg { background: var(--border); color: #fff; font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+
+/* ─── SECTION LABEL ─── */
+.section-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-3); margin: 40px 0 14px;
+  border-bottom: 1px solid var(--border); padding-bottom: 8px;
+}
+
+/* ─── PHONES ROW ─── */
+.phones-row { display: flex; gap: 16px; flex-wrap: nowrap; align-items: flex-start; }
+
+/* ─── PHONE WRAP ─── */
+.phone-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.case-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); white-space: nowrap; max-width: var(--phone-w); }
+.case-label strong { color: var(--text-2); font-weight: 700; }
+
+/* ─── CHIPS ─── */
+.chips-row { display: flex; gap: 4px; flex-wrap: wrap; width: var(--phone-w); }
+.chip {
+  font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: .4px;
+  border: 1px solid var(--border); color: var(--text-3);
+  display: flex; align-items: center; gap: 3px;
+}
+.chip::before { content: '✗'; font-size: 9px; font-weight: 900; color: var(--text-3); }
+.chip.on { background: var(--chip-on); color: #111; border-color: var(--chip-on); }
+.chip.on::before { content: '✓'; color: #111; }
+.chip.paused { border-style: dashed; border-color: var(--border-active); color: var(--text-3); }
+.chip.paused::before { content: '↻'; color: var(--text-3); }
+
+/* ─── PHONE ─── */
+.phone {
+  width: var(--phone-w);
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+  position: relative; flex-shrink: 0;
+  height: auto !important;
+}
+.phone::after {
+  content: '?';
+  position: absolute; top: 6px; right: 8px;
+  width: 13px; height: 13px; border: 1px solid var(--border); border-radius: 50%;
+  font-size: 9px; font-weight: 700; color: var(--text-3);
+  line-height: 13px; text-align: center; z-index: 10; pointer-events: none;
+}
+
+/* ─── STATUS BAR ─── */
+.status-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 12px 4px 12px; padding-right: 26px !important;
+  font-size: 10px; color: var(--text-3); flex-shrink: 0;
+}
+
+/* ─── SCREEN ─── */
+.screen { flex: 1; padding: 8px 12px 6px; display: flex; flex-direction: column; gap: 7px; overflow: hidden; }
+
+/* ─── GREETING ─── */
+.greeting { display: flex; justify-content: space-between; align-items: flex-start; }
+.greeting-text .name { font-size: 11px; font-weight: 700; line-height: 1.2; }
+.greeting-text .sub { font-size: 9px; color: var(--text-2); margin-top: 1px; }
+
+/* ─── VALUE ─── */
+.value-block { margin-top: 0; }
+.value-label { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .5px; }
+.value-amount { font-size: 20px; font-weight: 700; letter-spacing: -1px; line-height: 1.1; }
+.value-amount.muted { color: var(--text-2); }
+.value-sub { font-size: 10px; color: var(--text-3); margin-top: 1px; }
+
+/* ─── CTA ─── */
+.cta {
+  border: 1.5px solid var(--text-1); border-radius: 6px;
+  padding: 7px 10px; font-size: 9px; font-weight: 700;
+  text-align: center; color: var(--text-1); background: transparent; line-height: 1.2;
+}
+.cta.filled { background: var(--text-1); color: var(--bg); }
+.cta.ghost { border-color: var(--border); color: var(--text-3); }
+.cta-pair { display: flex; gap: 4px; }
+.cta-pair .cta { flex: 1; font-size: 10px; padding: 6px 4px; }
+
+/* ─── OBJECTIVE CARD ─── */
+.obj-card { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; background: var(--card); }
+.obj-card.placeholder { border-style: dashed; border-color: var(--border-active); }
+.obj-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.obj-name { font-size: 9px; font-weight: 700; }
+.obj-pct { font-size: 10px; color: var(--text-2); }
+.progress-track { width: 100%; height: 3px; background: var(--border); border-radius: 2px; position: relative; margin-bottom: 5px; }
+.progress-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--text-1); border-radius: 2px; }
+.progress-market {
+  position: absolute; top: 0; height: 100%; border-radius: 0 2px 2px 0;
+  background: repeating-linear-gradient(90deg, var(--text-2) 0px, var(--text-2) 3px, transparent 3px, transparent 6px);
+}
+.progress-market.negative {
+  background: repeating-linear-gradient(90deg, var(--text-3) 0px, var(--text-3) 3px, transparent 3px, transparent 6px);
+}
+.progress-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-3); }
+.progress-labels .current { color: var(--text-2); font-weight: 600; }
+.obj-meta { margin-top: 4px; display: flex; justify-content: space-between; align-items: center; }
+.obj-routine { font-size: 10px; color: var(--text-3); }
+.obj-routine.active { color: var(--text-2); }
+.obj-tags { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 4px; }
+.obj-tag { font-size: 9px; padding: 1px 5px; border: 1px solid var(--border); border-radius: 3px; color: var(--text-3); }
+.market-label { font-size: 9px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 10px; color: var(--text-3); text-align: right; line-height: 1.4; }
+.market-label.pos { border-color: var(--border-active); color: var(--text-2); }
+.market-label.neg { color: var(--text-3); }
+
+/* ─── PLACEHOLDER ─── */
+.placeholder-inner { display: flex; align-items: center; gap: 6px; }
+.placeholder-icon { width: 20px; height: 20px; border: 1.5px dashed var(--border-active); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--text-3); }
+.placeholder-text .pt-name { font-size: 11px; font-weight: 700; color: var(--text-2); }
+.placeholder-text .pt-sub { font-size: 10px; color: var(--text-3); margin-top: 1px; }
+
+/* ─── ROUTINE ROW ─── */
+.routine-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--card);
+}
+.routine-row.patto { border-color: var(--border-active); }
+.routine-left { display: flex; align-items: center; gap: 6px; }
+.routine-icon { font-size: 10px; color: var(--text-2); }
+.routine-label { font-size: 10px; color: var(--text-2); font-weight: 600; }
+.routine-detail { font-size: 9px; color: var(--text-3); }
+.routine-badge { font-size: 9px; padding: 2px 5px; border-radius: 10px; border: 1px solid; }
+.routine-badge.active { border-color: var(--border-active); color: var(--text-2); }
+.routine-badge.count { border-color: var(--border-active); color: var(--text-2); }
+.routine-badge.paused { border-color: var(--border); color: var(--text-3); }
+
+/* ─── EDUCATIONAL PILL ─── */
+.edu-card { border-radius: 10px; display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden; }
+.edu-card.salmon { background: #222; color: #fff; }
+.edu-card.salmon::after { content: '×'; position: absolute; top: 6px; right: 7px; width: 14px; height: 14px; border-radius: 50%; background: rgba(0,0,0,.1); font-size: 10px; line-height: 14px; text-align: center; color: rgba(0,0,0,.45); }
+.edu-card.s { padding: 8px 12px; gap: 2px; min-height: 34px; }
+.edu-card.s .edu-title { font-size: 11px; font-weight: 700; line-height: 1.2; max-width: 100px; }
+.edu-card.s .edu-illus { width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,.07); position: absolute; bottom: -8px; right: -6px; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.edu-label { font-size: 9px; text-transform: uppercase; letter-spacing: .7px; color: #888; }
+.edu-title { font-size: 9px; font-weight: 700; line-height: 1.3; }
+.edu-footer { font-size: 9px; font-weight: 700; letter-spacing: .2px; color: #999; margin-top: auto; padding-top: 4px; }
+.edu-list { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); color: var(--text-1); }
+.edu-list-icon { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.edu-list-body { flex: 1; }
+.edu-list-title { font-size: 10px; font-weight: 700; line-height: 1.3; }
+.edu-list-source { font-size: 9px; color: var(--text-3); margin-top: 1px; }
+
+/* ─── POPUP CARD ─── */
+.popup-card { border: 1.5px solid var(--text-1); border-radius: 8px; padding: 8px 10px; background: var(--card); }
+.popup-title { font-size: 9px; font-weight: 700; line-height: 1.3; }
+.popup-sub { font-size: 10px; color: var(--text-2); margin-top: 3px; line-height: 1.4; }
+.popup-cta { margin-top: 6px; border: 1px solid var(--text-1); border-radius: 5px; padding: 4px 8px; font-size: 10px; font-weight: 700; text-align: center; }
+.popup-cta.ghost { border-color: var(--border); color: var(--text-3); margin-top: 3px; }
+
+/* ─── DETAIL VIEW ─── */
+.detail-section { margin-top: 5px; }
+.detail-label { font-size: 9px; text-transform: uppercase; letter-spacing: .8px; color: var(--text-3); margin-bottom: 4px; padding-bottom: 3px; }
+.detail-hero-val { font-size: 18px; font-weight: 700; letter-spacing: -.5px; line-height: 1.1; }
+.detail-hero-meta { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-3); margin-top: 2px; }
+.detail-cta-row { display: flex; gap: 4px; margin-top: 4px; }
+.detail-cta-row .cta { flex: 1; font-size: 10px; padding: 5px 4px; }
+.fund-card-detail { border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; background: var(--surface); margin-bottom: 4px; }
+.fund-card-detail:last-child { margin-bottom: 0; }
+.fund-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+.fund-card-name { font-size: 10px; font-weight: 700; }
+.fund-card-type { font-size: 9px; color: var(--text-3); margin-bottom: 3px; }
+.fund-card-stats { display: flex; gap: 6px; flex-wrap: wrap; }
+.fund-stat { font-size: 9px; color: var(--text-2); background: var(--card); border-radius: 3px; padding: 1px 5px; }
+.fund-stat.pos { color: var(--text-1); }
+.mov-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.mov-row:last-child { border-bottom: none; }
+.mov-tipo { font-size: 9px; color: var(--text-3); }
+.mov-tag { font-size: 9px; font-weight: 600; color: var(--text-2); margin-top: 1px; }
+.mov-date { font-size: 9px; color: var(--text-3); text-align: right; }
+.mov-val { font-size: 9px; color: var(--text-1); text-align: right; margin-top: 1px; }
+.mov-val.neg { color: var(--text-3); }
+
+/* ─── FLOW STEPS ─── */
+.fs { font-size: 10px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--text-2); white-space: nowrap; }
+.fs.p { border-color: var(--border-active); color: var(--text-1); font-weight: 700; }
+.fs.g { border-color: var(--border); color: var(--text-3); border-style: dashed; font-style: italic; }
+.fa { font-size: 9px; color: var(--text-3); }
+.flow-label { font-size: 10px; font-weight: 700; text-transform: uppercase; background: var(--text-1); color: #111; padding: 3px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+.flow-label.gray { background: var(--border); color: var(--text-2); }
+
+/* ─── SHEET MOCK ─── */
+.sheet-mock { border: 1.5px solid var(--border); border-radius: 10px 10px 0 0; padding: 10px 10px 12px; background: var(--surface); width: var(--phone-w); flex-shrink: 0; }
+.sheet-handle { width: 28px; height: 3px; background: var(--border); border-radius: 2px; margin: 0 auto 8px; }
+.sheet-title { font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+.sheet-sec-label { font-size: 9px; text-transform: uppercase; letter-spacing: .8px; color: var(--text-3); margin-bottom: 5px; }
+.sheet-item { border-radius: 7px; padding: 7px 9px; font-size: 11px; font-weight: 600; text-align: center; margin-bottom: 4px; }
+.sheet-item.primary { background: var(--text-1); color: #111; }
+.sheet-item.secondary { border: 1px solid var(--border); color: var(--text-2); }
+.sheet-item-row { display: flex; align-items: center; gap: 8px; padding: 6px 9px; border-radius: 7px; margin-bottom: 3px; border: 1px solid var(--border); }
+.sheet-item-row.patto-row { border-color: var(--border-active); }
+.sir-icon { font-size: 11px; color: var(--text-2); width: 14px; text-align: center; }
+.sir-name { font-size: 10px; font-weight: 700; color: var(--text-1); }
+.sir-desc { font-size: 9px; color: var(--text-3); }
+
+/* ─── BOTTOM NAV (4 tabs) ─── */
+.bottom-nav {
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 6px 0 8px; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9px; color: var(--text-3); flex: 1; }
+.nav-item.active { color: var(--text-1); }
+.nav-icon { width: 14px; height: 14px; border: 1.5px solid currentColor; border-radius: 3px; }
+.nav-item.plus .nav-icon { border-radius: 50%; width: 20px; height: 20px; background: var(--text-1); border-color: var(--text-1); position: relative; }
+.nav-item.plus .nav-icon::after { content: '+'; color: #111; font-size: 13px; font-weight: 700; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); line-height: 1; }
+
+/* ─── ANNOTATION ─── */
+.ann { font-size: 10px; color: var(--text-3); border-left: 2px solid var(--border); padding-left: 6px; margin-top: 3px; font-style: italic; max-width: var(--phone-w); line-height: 1.5; }
+.ann.hi { border-left-color: #888; color: var(--text-2); font-style: normal; font-weight: 600; }
+
+/* ─── ░░ NUOVI COMPONENTI 27/4 ░░ ─── */
+
+/* PATTO CARD (hero action, cima content area) */
+.patto-card {
+  border: 1.5px solid var(--border-active); border-radius: 8px;
+  padding: 8px 10px; background: var(--card);
+}
+.patto-header { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.patto-icon { font-size: 11px; }
+.patto-name-txt { font-size: 9px; font-weight: 700; }
+.patto-sub { font-size: 10px; color: var(--text-3); margin-bottom: 5px; }
+.cal-grid { display: grid; grid-template-columns: repeat(15, 1fr); gap: 2px; margin: 5px 0 3px; }
+.cal-d { aspect-ratio: 1; border-radius: 1px; background: var(--text-1); }
+.cal-d.off { background: var(--border); }
+.cal-d.fut { background: transparent; border: 1px solid var(--border); }
+.patto-days { font-size: 9px; color: var(--text-3); margin-bottom: 5px; }
+.patto-community { font-size: 9px; color: var(--text-3); border-top: 1px solid var(--border); padding-top: 4px; margin-bottom: 5px; }
+.patto-community strong { color: var(--text-2); }
+
+/* SEZIONE RAGGIUNTI */
+.section-mini-label {
+  font-size: 9px; text-transform: uppercase; letter-spacing: .8px;
+  color: var(--text-3); margin-top: 8px; margin-bottom: 4px;
+}
+.raggiunto-card {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 9px; background: var(--card);
+  display: flex; align-items: flex-start; gap: 7px;
+}
+.raggiunto-check { font-size: 9px; color: var(--text-2); flex-shrink: 0; margin-top: 1px; }
+.raggiunto-name { font-size: 11px; font-weight: 700; margin-bottom: 2px; }
+.raggiunto-date { font-size: 9px; color: var(--text-3); }
+.raggiunto-stats { display: flex; gap: 8px; margin-top: 3px; flex-wrap: wrap; }
+.rstat { font-size: 9px; color: var(--text-2); font-weight: 600; }
+
+/* EFFETTO COMPOSTO */
+.composto-card {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 6px 9px; background: var(--surface);
+  margin-bottom: 4px;
+}
+.composto-label { font-size: 9px; color: var(--text-3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+.composto-val { font-size: 14px; font-weight: 800; letter-spacing: -.5px; }
+.composto-note { font-size: 9px; color: var(--text-3); margin-top: 2px; }
+.composto-sub { font-size: 9px; color: var(--text-2); margin-top: 1px; }
+
+/* PRELIEVO — input importo */
+.input-mock {
+  border: 1.5px solid var(--border-active); border-radius: 6px;
+  padding: 8px 10px; text-align: center; margin: 3px 0;
+}
+.input-val { font-size: 18px; font-weight: 700; letter-spacing: -.5px; }
+.input-hint { font-size: 9px; color: var(--text-3); margin-top: 1px; }
+.info-box { border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; font-size: 10px; color: var(--text-3); line-height: 1.6; }
+.info-box strong { color: var(--text-2); }
+.info-box.impact { border-color: var(--border-active); }
+
+/* COMPOSIZIONE PORTAFOGLIO */
+.comp-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 10px; }
+.comp-row:last-child { border-bottom: none; }
+.comp-row.total { font-weight: 700; color: var(--text-1); margin-top: 2px; }
+.comp-label { color: var(--text-3); }
+.comp-val { color: var(--text-2); font-weight: 600; }
+.comp-val.neg { color: var(--text-3); }
+
+/* OBIETTIVO RAGGIUNTO — celebration */
+.raggiunto-full { display: flex; flex-direction: column; }
+.rf-top {
+  background: #222222; border-bottom: 1px solid var(--border);
+  padding: 16px 12px 20px; display: flex; flex-direction: column; align-items: center;
+}
+.rf-circles { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
+.rf-circle { border-radius: 50%; background: var(--border-active); opacity: .6; }
+.rf-name { font-size: 10px; font-weight: 700; text-align: center; margin-bottom: 3px; color: var(--text-2); }
+.rf-pct { font-size: 28px; font-weight: 900; letter-spacing: -1px; text-align: center; }
+
+/* STORIE VERE (community layer in creazione) */
+.storia-card { border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; background: var(--card); margin-bottom: 5px; }
+.storia-title { font-size: 10px; font-weight: 700; margin-bottom: 2px; }
+.storia-data { font-size: 9px; color: var(--text-3); margin-bottom: 5px; }
+.storia-tag { font-size: 9px; padding: 1px 5px; border: 1px solid var(--border); border-radius: 3px; color: var(--text-3); display: inline-block; margin-right: 3px; margin-bottom: 3px; }
+.storia-cta { font-size: 10px; font-weight: 700; border: 1px solid var(--border-active); border-radius: 5px; padding: 4px 8px; text-align: center; color: var(--text-1); margin-top: 5px; }
+
+/* DIVISORE VERTICALE */
+.vdiv { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; align-self: stretch; padding: 0 6px; }
+.vdiv-line { width: 1px; flex: 1; background: var(--border); }
+.vdiv-label { font-size: 9px; font-weight: 700; color: var(--text-3); writing-mode: vertical-rl; text-transform: uppercase; letter-spacing: .8px; padding: 10px 0; }
+
+/* FLOW INLINE (step chain) */
+.flow-wrap { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--surface); max-width: 560px; }
+.flow-title { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--text-2); margin-bottom: 10px; }
+.flow-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; flex-wrap: wrap; }
+.flow-row:last-child { margin-bottom: 0; }
+
+/* TECH NOTE — Alessandro */
+.tech-note {
+  border: 1px dashed var(--border); border-radius: 8px;
+  padding: 10px 14px; background: var(--surface); max-width: 580px;
+  font-size: 9px; color: var(--text-3); line-height: 1.8;
+}
+.tech-note strong { color: var(--text-2); }
+.tech-note .tech-title { font-size: 9px; font-weight: 700; color: var(--text-1); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════ -->
+<div class="header">
+  <div class="header-row">
+    <div>
+      <div class="version">GIMME5 — Wireframe</div>
+      <h1>UTENTE ESPERTO — Caso Complesso</h1>
+      <div class="version" style="margin-top:4px;">27 aprile 2026 · Post-call mattina + pomeriggio</div>
+    </div>
+    <div class="changelog">
+      <h3>Decisioni applicate — Call 27 aprile (Fil·Sarah·Alessandro)</h3>
+      <ul>
+        <li><span class="tag-chg">CHG</span> Nav <strong>4 tab</strong>: Home · Obiettivi · [+] · Profilo — Esplora rimossa</li>
+        <li><span class="tag-new">NEW</span> Naming: <strong>Pilota automatico / Trigger / Patto</strong> (tre tipi distinti)</li>
+        <li><span class="tag-new">NEW</span> <strong>Patto del giorno</strong> — hero action in cima alla Home</li>
+        <li><span class="tag-new">NEW</span> <strong>Patti collettivi</strong> — "847 persone" senza identità/importi</li>
+        <li><span class="tag-new">NEW</span> <strong>Progress bar 2 segmenti</strong> — versato (bianco) + mercato (dashed)</li>
+        <li><span class="tag-new">NEW</span> Sezione <strong>RAGGIUNTI</strong> in pagina Obiettivi (solo successi, no tab)</li>
+        <li><span class="tag-new">NEW</span> <strong>Effetto composto</strong> — card live nel dettaglio obiettivo</li>
+        <li><span class="tag-new">NEW</span> TER <strong>costi visibili</strong> nel dettaglio fondo e nel prelievo</li>
+        <li><span class="tag-new">NEW</span> Obiettivo raggiunto: <strong>nessuna CTA prelievo</strong> · riscatto dopo 5gg · silenzio 30gg</li>
+        <li><span class="tag-chg">CHG</span> Prelievo: <strong>flusso unico</strong> con importo libero (no parziale/totale)</li>
+        <li><span class="tag-new">NEW</span> Community: <strong>Storie vere</strong> nel flow creazione obiettivo</li>
+        <li><span class="tag-new">NEW</span> <strong>Elimina obiettivo = chiude contratto</strong> (Alessandro · nuovo paradigma)</li>
+        <li><span class="tag-new">NEW</span> Max <strong>5 obiettivi</strong> · ogni obiettivo = contratto separato (anche stesso fondo)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Tech note Alessandro -->
+<div class="tech-note">
+  <div class="tech-title">Vincoli tecnici confermati da Alessandro Marengoni (call 27/4 pom)</div>
+  <strong>Contratti:</strong> ogni obiettivo = contratto separato, anche se l'utente sceglie lo stesso fondo per due obiettivi diversi. Due obiettivi sullo stesso fondo = due contratti indipendenti. · <strong>Limite:</strong> max 5 obiettivi per utente (possibile espansione a 7) · <strong>Regole:</strong> più regole per obiettivo ✓ · <strong>Fondo senza obiettivo:</strong> tecnicamente possibile = base per il Salvadanaio Generico · <strong>Prelievo:</strong> la chiusura completa richiede prelievo di tutti i fondi + chiusura di ogni contratto prima di chiudere il rapporto. La UI deve semplificare questo senza nascondere la complessità.
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     SEZIONE 1 — HOME ESPERTO
+═══════════════════════════════════════════ -->
+<div class="section-label">1 — HOME ESPERTO · Patto hero + 3 obiettivi + routine attive</div>
+<div class="phones-row" style="align-items:flex-start;">
+
+  <!-- Caso Esperto A — Home con Patto del giorno (primo viewport) -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Esperto A</strong> — Home · Patto del giorno hero</div>
+    <div class="chips-row">
+      <div class="chip on">PILOTA ×3</div>
+      <div class="chip on">TRIGGER</div>
+      <div class="chip on">PATTO</div>
+      <div class="chip on">OBIETTIVI ×3</div>
+    </div>
+    <div class="phone" style="height:540px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+        <!-- Greeting + valore totale sempre visibile -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="greeting-text">
+            <div class="name">Ciao, Filippo</div>
+            <div class="sub">3 obiettivi attivi</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:7px;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;">Totale</div>
+            <div style="font-size:16px;font-weight:700;letter-spacing:-.5px;line-height:1.1;">€18.450</div>
+          </div>
+        </div>
+
+        <!-- Patto del giorno — logica invertita (Sarah) -->
+        <div class="patto-card">
+          <div class="patto-header">
+            <span class="patto-icon">★</span>
+            <span class="patto-name-txt">Non ho fumato</span>
+          </div>
+          <div class="patto-sub">+€5 su Anticipo Casa · automatico ogni giorno</div>
+          <div class="cal-grid">
+            <!-- 18 fatti, 7 futuri al 25 aprile -->
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d fut"></div><div class="cal-d fut"></div><div class="cal-d fut"></div><div class="cal-d fut"></div>
+            <div class="cal-d fut"></div><div class="cal-d fut"></div><div class="cal-d fut"></div>
+          </div>
+          <div class="patto-days">18 giorni questo mese · totale +€90</div>
+          <div class="patto-community"><strong>847 persone</strong> stanno mantenendo lo stesso patto oggi</div>
+          <!-- Logica invertita: default = versamento automatico. Tap solo se hai sgarrato. -->
+          <div style="font-size:7.5px;color:var(--text-2);text-align:center;padding:3px 0 2px;">+€5 versati automaticamente oggi ✓</div>
+          <div class="cta ghost" style="font-size:7.5px;padding:4px;border-color:var(--border);color:var(--text-3);">Ho sgarrato — blocca il versamento di oggi</div>
+        </div>
+
+        <!-- 3 obiettivi — mini cards -->
+        <div class="section-mini-label">I TUOI OBIETTIVI</div>
+
+        <div class="obj-card">
+          <div class="obj-header">
+            <div class="obj-name">Anticipo Casa</div>
+            <div class="obj-pct">58%</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:54%;"></div>
+            <div class="progress-market" style="left:54%;width:4%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="current">€11.600 / €20.000</span><span>dic 2028</span>
+          </div>
+          <div class="obj-tags">
+            <span class="obj-tag">↻ Pilota €300/mese</span>
+            <span class="obj-tag">★ Patto €5/gg</span>
+          </div>
+        </div>
+
+        <div class="obj-card">
+          <div class="obj-header">
+            <div class="obj-name">Vacanza Giappone</div>
+            <div class="obj-pct">85%</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:75%;"></div>
+            <div class="progress-market" style="left:75%;width:10%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="current">€8.500 / €10.000</span><span>giu 2027</span>
+          </div>
+          <div class="obj-tags">
+            <span class="obj-tag">↻ Pilota €200/mese</span>
+            <span class="obj-tag">⚡ Trigger Inter</span>
+          </div>
+        </div>
+
+        <div class="obj-card">
+          <div class="obj-header">
+            <div class="obj-name" style="color:var(--text-2);">Fondo Emergenza</div>
+            <div class="obj-pct" style="color:var(--text-3);">32%</div>
+          </div>
+          <!-- Rendimento negativo: barra corta, no segmento mercato -->
+          <div class="progress-track">
+            <div class="progress-fill" style="width:32%;background:var(--text-2);"></div>
+            <div class="progress-market negative" style="left:30%;width:3%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="current" style="color:var(--text-3);">€3.200 / €10.000 · versato €3.500</span><span>dic 2029</span>
+          </div>
+          <div class="obj-tags">
+            <span class="obj-tag">↻ Pilota €100/mese</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item active"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">Totale sempre in alto a destra — contesto permanente, non nascosto nello scroll</div>
+    <div class="ann hi">Logica Patto invertita (Sarah): versamento automatico. L'utente agisce SOLO se ha sgarrato.</div>
+    <div class="ann">"Ho sgarrato — blocca" è ghost/secondario: ammettere il fallimento è l'azione eccezionale, non quella normale</div>
+    <div class="ann">"stanno mantenendo" — comunità attiva nel presente, non "hanno confermato" che implicava azione volontaria</div>
+    <div class="ann hi">4 tab: Esplora rimossa — nav definitiva</div>
+  </div>
+
+  <!-- Caso Esperto B — Home scroll: routine attive + valore -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Esperto B</strong> — Home scroll · routine + valore</div>
+    <div class="phone" style="height:480px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+        <!-- Totale sempre visibile anche nello scroll -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div class="greeting-text">
+            <div class="name">Ciao, Filippo</div>
+            <div class="sub">3 obiettivi attivi</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:7px;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;">Totale</div>
+            <div style="font-size:16px;font-weight:700;letter-spacing:-.5px;line-height:1.1;">€18.450</div>
+            <div style="font-size:6.5px;color:var(--text-3);">+€300 · 1 apr</div>
+          </div>
+        </div>
+
+        <div class="detail-label" style="margin-bottom:4px;">LE TUE ROUTINE</div>
+
+        <div class="routine-row">
+          <div class="routine-left">
+            <span class="routine-icon">↻</span>
+            <div>
+              <div class="routine-label">Pilota · Anticipo Casa</div>
+              <div class="routine-detail">€300/mese · ogni 1° · prossimo 1 mag</div>
+            </div>
+          </div>
+          <div class="routine-badge active">Attivo</div>
+        </div>
+
+        <div class="routine-row">
+          <div class="routine-left">
+            <span class="routine-icon">↻</span>
+            <div>
+              <div class="routine-label">Pilota · Vacanza Giappone</div>
+              <div class="routine-detail">€200/mese · ogni 1° · prossimo 1 mag</div>
+            </div>
+          </div>
+          <div class="routine-badge active">Attivo</div>
+        </div>
+
+        <div class="routine-row">
+          <div class="routine-left">
+            <span class="routine-icon">↻</span>
+            <div>
+              <div class="routine-label">Pilota · Fondo Emergenza</div>
+              <div class="routine-detail">€100/mese · ogni 1° · prossimo 1 mag</div>
+            </div>
+          </div>
+          <div class="routine-badge active">Attivo</div>
+        </div>
+
+        <div class="routine-row">
+          <div class="routine-left">
+            <span class="routine-icon">⚡</span>
+            <div>
+              <div class="routine-label">Trigger · Vittoria Inter</div>
+              <div class="routine-detail">€10 a vittoria · ultima: 20 apr +€10</div>
+            </div>
+          </div>
+          <div class="routine-badge count">20/4</div>
+        </div>
+
+        <div class="routine-row patto">
+          <div class="routine-left">
+            <span class="routine-icon">★</span>
+            <div>
+              <div class="routine-label">Patto · Non ho fumato</div>
+              <div class="routine-detail">€5/giorno · 18 gg · totale +€90</div>
+            </div>
+          </div>
+          <div class="routine-badge active">18 GG</div>
+        </div>
+
+        <!-- Pillola S — esperto -->
+        <div class="edu-card s salmon">
+          <div class="edu-title">3 obiettivi attivi. Con €600/mese accumuli 3x più veloce.</div>
+          <div class="edu-footer">power by GIMME5</div>
+          <div class="edu-illus">●</div>
+        </div>
+
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item active"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann">Valore totale: ruolo secondario — non è hero metric (secondarizzato rispetto al Patto)</div>
+    <div class="ann">3 Pilota automatico separati — uno per ogni obiettivo/contratto (Alessandro)</div>
+    <div class="ann">Pillola S: utente esperto — minimal, no rumore</div>
+  </div>
+
+  <!-- Flow mappa navigazione aggiornata -->
+  <div style="display:flex;flex-direction:column;gap:12px;flex-shrink:0;width:340px;">
+    <div class="flow-wrap">
+      <div class="flow-title">Mappa navigazione — 4 tab (aggiornata)</div>
+      <div class="flow-row">
+        <div class="flow-label">HOME</div>
+        <div style="font-size:7.5px;color:var(--text-2);flex:1;line-height:1.7;">
+          Tap card obiettivo → Dettaglio<br>
+          Tap [+] → Sheet azioni<br>
+          Tap Obiettivi (nav) → Lista obiettivi<br>
+          Tap pillola → espande
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-label">OBIETTIVI</div>
+        <div style="font-size:7.5px;color:var(--text-2);flex:1;line-height:1.7;">
+          Lista ATTIVI + sezione RAGGIUNTI<br>
+          Tap card attivo → Dettaglio<br>
+          Tap card raggiunto → Riepilogo storico<br>
+          Tap placeholder → Flow A · Crea obiettivo
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-label">[+]</div>
+        <div style="font-size:7.5px;color:var(--text-2);flex:1;line-height:1.7;">
+          Crea obiettivo → Flow A<br>
+          ↻ Pilota automatico → Flow B<br>
+          ⚡ Trigger → Flow B<br>
+          ★ Patto → Flow B<br>
+          Preleva ↓ · Versa ↑
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-label">PROFILO</div>
+        <div style="font-size:7.5px;color:var(--text-2);flex:1;line-height:1.7;">
+          Traguardi (calendario costanza)<br>
+          Referral dashboard<br>
+          Notifiche · Sicurezza · Assistenza
+        </div>
+      </div>
+    </div>
+    <div class="flow-wrap">
+      <div class="flow-title">Flow aggiornati — 27/4</div>
+      <div class="flow-row">
+        <div class="flow-label">A</div>
+        <div class="fs p">Nome</div><div class="fa">→</div><div class="fs">Target</div><div class="fa">→</div><div class="fs">Fondo</div><div class="fa">→</div><div class="fs p">Storie vere</div><div class="fa">→</div><div class="fs">Regola?</div><div class="fa">→</div><div class="fs">✓</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-label">D</div>
+        <span style="font-size:7px;color:var(--text-3);">Preleva (nuovo)</span>
+        <div class="fs p">Importo libero</div><div class="fa">→</div><div class="fs p">Impatto data</div><div class="fa">→</div><div class="fs p">Costi</div><div class="fa">→</div><div class="fs">✓</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-label">E</div>
+        <span style="font-size:7px;color:var(--text-3);">Elimina obiettivo</span>
+        <div class="fs">···</div><div class="fa">→</div><div class="fs p">Avviso contratto</div><div class="fa">→</div><div class="fs p">Digita nome</div><div class="fa">→</div><div class="fs">Contratto chiuso</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-label gray">G</div>
+        <span style="font-size:7px;color:var(--text-3);">Raggiunto 100%</span>
+        <div class="fs">5gg sopra target</div><div class="fa">→</div><div class="fs p">Push riscatto</div><div class="fa">→</div><div class="fs g">Continua 30gg</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end row 1 -->
+
+
+<!-- ═══════════════════════════════════════════
+     SEZIONE 2 — PAGINA OBIETTIVI
+═══════════════════════════════════════════ -->
+<div class="section-label">2 — PAGINA OBIETTIVI · Attivi + Raggiunti (no tab separata)</div>
+<div class="phones-row" style="align-items:flex-start;">
+
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Obiettivi</strong> — 3 attivi · 2 raggiunti · 2 slot liberi</div>
+    <div class="phone" style="height:640px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+
+        <div style="font-size:12px;font-weight:700;margin-bottom:2px;">Obiettivi</div>
+        <div style="font-size:8px;color:var(--text-3);margin-bottom:6px;">3 attivi · max 5 · 2 slot liberi</div>
+
+        <div class="detail-label">ATTIVI</div>
+
+        <div class="obj-card">
+          <div class="obj-header">
+            <div class="obj-name">Anticipo Casa</div>
+            <div class="obj-pct">58%</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:54%;"></div>
+            <div class="progress-market" style="left:54%;width:4%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="current">€11.600 / €20.000</span><span>dic 2028</span>
+          </div>
+          <div class="obj-meta">
+            <div class="obj-routine active">↻ Pilota €300/mese · ★ Patto</div>
+            <div class="market-label pos">+€800</div>
+          </div>
+        </div>
+
+        <div class="obj-card">
+          <div class="obj-header">
+            <div class="obj-name">Vacanza Giappone</div>
+            <div class="obj-pct">85%</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:75%;"></div>
+            <div class="progress-market" style="left:75%;width:10%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="current">€8.500 / €10.000</span><span>giu 2027</span>
+          </div>
+          <div class="obj-meta">
+            <div class="obj-routine active">↻ Pilota €200/mese · ⚡ Trigger</div>
+            <div class="market-label pos">+€1.000</div>
+          </div>
+        </div>
+
+        <div class="obj-card">
+          <div class="obj-header">
+            <div class="obj-name" style="color:var(--text-2);">Fondo Emergenza</div>
+            <div class="obj-pct" style="color:var(--text-3);">32%</div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:32%;background:var(--text-2);"></div>
+            <div class="progress-market negative" style="left:30%;width:3%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="current" style="color:var(--text-3);">€3.200 · versato €3.500</span><span>dic 2029</span>
+          </div>
+          <div class="obj-meta">
+            <div class="obj-routine active">↻ Pilota €100/mese</div>
+            <div class="market-label neg">−€300</div>
+          </div>
+        </div>
+
+        <!-- Placeholder: 2 slot liberi -->
+        <div class="obj-card placeholder">
+          <div class="placeholder-inner">
+            <div class="placeholder-icon">+</div>
+            <div class="placeholder-text">
+              <div class="pt-name">Crea un nuovo obiettivo</div>
+              <div class="pt-sub">Slot libero 4/5</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RAGGIUNTI — non è una tab, è una sezione scroll -->
+        <div class="section-mini-label">RAGGIUNTI</div>
+
+        <div class="raggiunto-card">
+          <div class="raggiunto-check">✓</div>
+          <div>
+            <div class="raggiunto-name">Vacanza in Grecia</div>
+            <div class="raggiunto-date">Completato · luglio 2026</div>
+            <div class="raggiunto-stats">
+              <span class="rstat">14 mesi</span>
+              <span class="rstat">36 versamenti</span>
+              <span class="rstat">+€340 mercato</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="raggiunto-card">
+          <div class="raggiunto-check">✓</div>
+          <div>
+            <div class="raggiunto-name">iPhone 16</div>
+            <div class="raggiunto-date">Completato · marzo 2026</div>
+            <div class="raggiunto-stats">
+              <span class="rstat">5 mesi</span>
+              <span class="rstat">12 versamenti</span>
+              <span class="rstat">+€18 mercato</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item active"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">RAGGIUNTI: solo successi, scroll naturale sotto gli attivi — non tab separata</div>
+    <div class="ann">Limite visibile: "3 attivi · max 5 · 2 slot liberi" — utente sa quanti ne può ancora creare</div>
+    <div class="ann">Fondo Emergenza: barra grigia + dashed neg. = rendimento negativo senza colore rosso</div>
+    <div class="ann">Tap su card raggiunta → riepilogo storico (data, mesi, versamenti, mercato)</div>
+  </div>
+
+</div><!-- end row 2 -->
+
+
+<!-- ═══════════════════════════════════════════
+     SEZIONE 3 — DETTAGLIO OBIETTIVO
+═══════════════════════════════════════════ -->
+<div class="section-label">3 — DETTAGLIO OBIETTIVO · Composizione + costi + effetto composto + movimenti misti</div>
+<div class="phones-row" style="align-items:flex-start;overflow-x:auto;">
+
+  <!-- Detail V4: 1 fondo, Pilota + Patto, TER, effetto composto -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Detail V4</strong> — 1 fondo · Pilota + Patto · TER · composto</div>
+    <div class="chips-row">
+      <div class="chip on">FONDO</div><div class="chip on">PILOTA</div><div class="chip on">PATTO</div>
+    </div>
+    <div class="phone" style="height:700px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+        <!-- Header immagine obiettivo -->
+        <div style="width:calc(100% + 24px);height:80px;background:var(--border);margin:-8px -12px 0 -12px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="position:absolute;top:8px;left:12px;font-size:8px;color:var(--text-2);">← Obiettivi</div>
+          <span style="font-size:7px;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;">Immagine obiettivo</span>
+        </div>
+        <div>
+          <div class="obj-header" style="margin-bottom:2px;">
+            <div style="font-size:11px;font-weight:800;">Anticipo Casa</div>
+            <div style="font-size:12px;font-weight:700;">58%</div>
+          </div>
+          <div class="progress-track" style="height:5px;margin-bottom:4px;">
+            <div class="progress-fill" style="width:54%;"></div>
+            <div class="progress-market" style="left:54%;width:4%;"></div>
+          </div>
+          <div class="detail-hero-val">€11.600</div>
+          <div class="detail-hero-meta">
+            <span>Target €20.000</span><span>dic 2028</span>
+          </div>
+          <!-- Composizione -->
+          <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;">
+            <div style="border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:7.5px;color:var(--text-2);">Versato €10.800</div>
+            <div style="border:1px solid var(--border-active);border-radius:4px;padding:2px 7px;font-size:7.5px;color:var(--text-2);">+€800 mercato</div>
+          </div>
+        </div>
+
+        <!-- Effetto composto — NUOVO -->
+        <div class="composto-card">
+          <div class="composto-label">Se continui così · tra 5 anni</div>
+          <div class="composto-val">€28.400,00</div>
+          <div class="composto-note">↑ aggiornato in tempo reale</div>
+          <div class="composto-sub">di cui €5.400 regalati dal mercato</div>
+        </div>
+
+        <!-- Fondo + TER -->
+        <div class="detail-section">
+          <div class="detail-label">Fondo</div>
+          <div class="fund-card-detail">
+            <div class="fund-card-header">
+              <div class="fund-card-name">AcomeA Bond Globale</div>
+              <div style="font-size:8px;font-weight:700;">€11.600</div>
+            </div>
+            <div class="fund-card-type">Obbligazionario globale misto · EUR · Rischio 3/7</div>
+            <div class="fund-card-stats">
+              <div class="fund-stat pos">+€800 · +7,4%</div>
+              <div class="fund-stat">dall'inizio</div>
+              <div class="fund-stat" style="border:1px solid var(--border-active);color:var(--text-2);">TER 0,90%/anno · €97 quest'anno</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Regole: Pilota + Patto -->
+        <div class="detail-section">
+          <div class="detail-label">Regole attive · 2</div>
+          <div class="routine-row" style="margin-bottom:4px;">
+            <div class="routine-left">
+              <span class="routine-icon">↻</span>
+              <div>
+                <div class="routine-label">Pilota automatico</div>
+                <div class="routine-detail">€300/mese · ogni 1° · prossimo: 1 mag</div>
+              </div>
+            </div>
+            <div class="routine-badge active">Attivo</div>
+          </div>
+          <div class="routine-row patto" style="margin-bottom:4px;">
+            <div class="routine-left">
+              <span class="routine-icon">★</span>
+              <div>
+                <div class="routine-label">Patto · Non ho fumato</div>
+                <div class="routine-detail">€5/giorno · 18 gg · +€90</div>
+              </div>
+            </div>
+            <div class="routine-badge active">18 GG</div>
+          </div>
+          <div style="border:1px dashed var(--border);border-radius:6px;padding:5px 8px;display:flex;align-items:center;gap:6px;color:var(--text-3);">
+            <div style="font-size:14px;line-height:1;">+</div>
+            <div style="font-size:7.5px;">Aggiungi regola</div>
+          </div>
+        </div>
+
+        <!-- Movimenti misti -->
+        <div class="detail-section">
+          <div class="detail-label">Ultimi movimenti</div>
+          <div class="mov-row">
+            <div><div class="mov-tipo">Patto</div><div class="mov-tag">Non ho fumato</div></div>
+            <div><div class="mov-date">25 apr · 08:12</div><div class="mov-val">+€5</div></div>
+          </div>
+          <div class="mov-row">
+            <div><div class="mov-tipo">Effetto mercato</div><div class="mov-tag">AcomeA Bond Globale</div></div>
+            <div><div class="mov-date">24 apr</div><div class="mov-val">+€125</div></div>
+          </div>
+          <div class="mov-row">
+            <div><div class="mov-tipo">Patto</div><div class="mov-tag">Non ho fumato</div></div>
+            <div><div class="mov-date">24 apr · 09:00</div><div class="mov-val">+€5</div></div>
+          </div>
+          <div class="mov-row">
+            <div><div class="mov-tipo">Pilota automatico</div><div class="mov-tag">AcomeA Bond Globale</div></div>
+            <div><div class="mov-date">1 apr · 10:00</div><div class="mov-val">+€300</div></div>
+          </div>
+        </div>
+
+        <div class="detail-cta-row">
+          <div class="cta" style="color:var(--text-3);border-color:var(--border);flex:0.7;">Preleva</div>
+          <div class="cta filled">Versa</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item active"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">TER visibile sempre: "TER 0,90%/anno · €97 quest'anno" — no sorprese al prelievo</div>
+    <div class="ann hi">Effetto composto: card dedicata, live — differenzia da qualsiasi competitor</div>
+    <div class="ann">Movimenti: Patto + Pilota + Effetto mercato — tre tipi distinti nella stessa lista</div>
+  </div>
+
+  <!-- Divisore -->
+  <div class="vdiv"><div class="vdiv-line"></div><div class="vdiv-label">Mercato negativo</div><div class="vdiv-line"></div></div>
+
+  <!-- Detail V5: Fondo Emergenza, rendimento negativo -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Detail V5</strong> — Fondo Emergenza · mercato −</div>
+    <div class="chips-row">
+      <div class="chip on">FONDO</div><div class="chip on">PILOTA</div><div class="chip">PATTO</div>
+    </div>
+    <div class="phone" style="height:580px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+        <div style="width:calc(100% + 24px);height:80px;background:var(--border);margin:-8px -12px 0 -12px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="position:absolute;top:8px;left:12px;font-size:8px;color:var(--text-2);">← Obiettivi</div>
+          <span style="font-size:7px;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;">Immagine obiettivo</span>
+        </div>
+        <div>
+          <div class="obj-header" style="margin-bottom:2px;">
+            <div style="font-size:11px;font-weight:800;">Fondo Emergenza</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text-2);">32%</div>
+          </div>
+          <div class="progress-track" style="height:5px;margin-bottom:4px;">
+            <div class="progress-fill" style="width:32%;background:var(--text-2);"></div>
+            <div class="progress-market negative" style="left:30%;width:3%;"></div>
+          </div>
+          <div class="detail-hero-val" style="color:var(--text-2);">€3.200</div>
+          <div class="detail-hero-meta"><span>Target €10.000</span><span>dic 2029</span></div>
+          <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;">
+            <div style="border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:7.5px;color:var(--text-2);">Versato €3.500</div>
+            <div style="border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:7.5px;color:var(--text-3);">−€300 mercato</div>
+          </div>
+        </div>
+
+        <!-- Info perdita — tono fattuale, mai allarmista -->
+        <div class="popup-card" style="border-color:var(--border);">
+          <div class="popup-title" style="color:var(--text-2);">Il mercato ha impattato il tuo capitale</div>
+          <div class="popup-sub">Versato €3.500 · valore attuale €3.200 · −8,6% dall'inizio. Al ritmo attuale recuperi il versato entro settembre 2026.</div>
+          <div style="font-size:7.5px;color:var(--text-3);margin-top:4px;">La volatilità è normale su orizzonti brevi. Il Pilota continua a versare.</div>
+        </div>
+
+        <!-- Composizione numerica -->
+        <div class="detail-section">
+          <div class="detail-label">Composizione</div>
+          <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--surface);">
+            <div class="comp-row" style="padding:4px 8px;"><span class="comp-label">Versato da te</span><span class="comp-val">€3.500</span></div>
+            <div class="comp-row" style="padding:4px 8px;"><span class="comp-label">Rendimento fondo</span><span class="comp-val neg">−€300</span></div>
+            <div class="comp-row total" style="padding:4px 8px;border-top:1px solid var(--border);"><span>Valore attuale</span><span>€3.200</span></div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-label">Fondo</div>
+          <div class="fund-card-detail">
+            <div class="fund-card-header">
+              <div class="fund-card-name">AcomeA Risparmio</div>
+              <div style="font-size:8px;font-weight:700;color:var(--text-2);">€3.200</div>
+            </div>
+            <div class="fund-card-type">Monetario · EUR · Rischio 1/7</div>
+            <div class="fund-card-stats">
+              <div class="fund-stat">−€300 · −8,6%</div>
+              <div class="fund-stat">dall'inizio</div>
+              <div class="fund-stat">TER 0,65%/anno · €20 quest'anno</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-label">Regole attive · 1</div>
+          <div class="routine-row">
+            <div class="routine-left">
+              <span class="routine-icon">↻</span>
+              <div>
+                <div class="routine-label">Pilota automatico</div>
+                <div class="routine-detail">€100/mese · ogni 1° · prossimo: 1 mag</div>
+              </div>
+            </div>
+            <div class="routine-badge active">Attivo</div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-label">Ultimi movimenti</div>
+          <div class="mov-row">
+            <div><div class="mov-tipo">Effetto mercato</div><div class="mov-tag">AcomeA Risparmio</div></div>
+            <div><div class="mov-date">24 apr</div><div class="mov-val neg">−€150</div></div>
+          </div>
+          <div class="mov-row">
+            <div><div class="mov-tipo">Pilota automatico</div><div class="mov-tag">AcomeA Risparmio</div></div>
+            <div><div class="mov-date">1 apr · 10:00</div><div class="mov-val">+€100</div></div>
+          </div>
+        </div>
+
+        <div class="detail-cta-row">
+          <div class="cta" style="color:var(--text-3);border-color:var(--border);flex:0.7;">Preleva</div>
+          <div class="cta filled">Versa</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item active"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">Tono fattuale: "Al ritmo attuale recuperi entro settembre" — né allarmista né minimizzante</div>
+    <div class="ann">Movimenti negativi: grigio (var(--text-3)), mai rosso</div>
+    <div class="ann">TER visibile anche in perdita: "€20 quest'anno" — chiarezza completa</div>
+  </div>
+
+</div><!-- end row 3 -->
+
+
+<!-- ═══════════════════════════════════════════
+     SEZIONE 4 — OBIETTIVO RAGGIUNTO 100%
+═══════════════════════════════════════════ -->
+<div class="section-label">4 — OBIETTIVO RAGGIUNTO 100% · Celebration + riscatto dopo 5 giorni</div>
+<div class="phones-row" style="align-items:flex-start;">
+
+  <!-- Momento celebrativo -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Raggiunto</strong> — Vacanza Giappone · momento celebrativo</div>
+    <div class="phone" style="height:480px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <!-- Full header scuro celebrativo -->
+      <div class="raggiunto-full">
+        <div class="rf-top" style="padding-bottom:24px;">
+          <div class="rf-circles">
+            <div class="rf-circle" style="width:14px;height:14px;"></div>
+            <div class="rf-circle" style="width:22px;height:22px;"></div>
+            <div class="rf-circle" style="width:30px;height:30px;opacity:.8"></div>
+            <div class="rf-circle" style="width:22px;height:22px;"></div>
+            <div class="rf-circle" style="width:14px;height:14px;"></div>
+          </div>
+          <div class="rf-name">Vacanza in Giappone</div>
+          <div class="rf-pct">100%</div>
+        </div>
+        <div class="screen" style="background:var(--surface);">
+          <div style="font-size:8.5px;color:var(--text-2);text-align:center;line-height:1.9;">
+            Ci hai messo 14 mesi.<br>
+            Hai versato 42 volte.<br>
+            Il mercato ti ha regalato €1.000.
+          </div>
+          <div class="popup-card" style="border-color:var(--border);margin-top:2px;">
+            <div style="font-size:7.5px;color:var(--text-3);line-height:1.5;">
+              Hai versato €7.500 · valore attuale <strong style="color:var(--text-2);">€10.000</strong><br>
+              Il valore può variare. Dopo 5 giorni stabili sopra il target ti proponiamo il riscatto.
+            </div>
+          </div>
+          <div class="cta filled" style="font-size:9px;margin-top:4px;">Il prossimo obiettivo?</div>
+          <div class="cta ghost" style="font-size:8px;padding:5px;margin-top:3px;">Torna alla Home</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item active"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">Nessuna CTA "Preleva" immediata — il riscatto arriva dopo 5 giorni stabili sopra il target</div>
+    <div class="ann">Recap fattuale: mesi, versamenti, €X dal mercato — fatti, non badge</div>
+    <div class="ann">CTA principale: "Il prossimo obiettivo?" — momento ottimale per proporre un secondo goal</div>
+  </div>
+
+  <!-- Proposta riscatto dopo 5 giorni -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Riscatto</strong> — 5 giorni sopra target · proposta push</div>
+    <div class="phone" style="height:420px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+        <div style="font-size:8px;color:var(--text-2);">← Obiettivi</div>
+        <div style="font-size:12px;font-weight:800;">Vacanza Giappone</div>
+        <div style="font-size:10px;color:var(--text-2);">102% · €10.200</div>
+
+        <div class="progress-track" style="height:5px;">
+          <div class="progress-fill" style="width:75%;"></div>
+          <div class="progress-market" style="left:75%;width:25%;"></div>
+        </div>
+        <div class="progress-labels">
+          <span class="current">Versato €7.500 · +€2.200 mercato</span>
+        </div>
+
+        <!-- Proposta riscatto — card bordo pieno -->
+        <div class="popup-card" style="margin-top:4px;">
+          <div class="popup-title">Da 5 giorni sopra il target</div>
+          <div class="popup-sub">
+            Hai versato €7.500, il fondo ha aggiunto €2.200.<br>
+            Vuoi riscattare e bloccare il risultato?
+          </div>
+          <div class="popup-cta">Riscatta €10.200</div>
+          <div class="popup-cta ghost" style="margin-top:3px;">Continua a far crescere</div>
+        </div>
+
+        <div style="font-size:7px;color:var(--text-3);text-align:center;margin-top:4px;">
+          Se continui, non riproponiamo per 30 giorni
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item active"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">Push dopo 5 giorni consecutivi sopra il target — non appena raggiunto</div>
+    <div class="ann">"Se continui, non riproponiamo per 30 giorni" — regola di backoff esplicita nell'UI</div>
+    <div class="ann">102%: il mercato può portare oltre — comportamento atteso, comunicato chiaramente</div>
+  </div>
+
+</div><!-- end row 4 -->
+
+
+<!-- ═══════════════════════════════════════════
+     SEZIONE 5 — AZIONI: [+] SHEET + PRELIEVO
+═══════════════════════════════════════════ -->
+<div class="section-label">5 — AZIONI · [+] Sheet aggiornato + Prelievo flusso unico</div>
+<div class="phones-row" style="align-items:flex-start;">
+
+  <!-- [+] Bottom sheet aggiornato -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Sheet [+]</strong> — 3 tipi regola distinti</div>
+    <div class="phone-wrap" style="width:var(--phone-w);gap:0;flex-direction:column;">
+      <!-- overlay simulato -->
+      <div style="width:var(--phone-w);height:60px;background:var(--surface);border:1px solid var(--border);border-bottom:none;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:7px;color:var(--text-3);">← Home sfumata</span>
+      </div>
+      <!-- Sheet mock -->
+      <div class="sheet-mock" style="border-top:none;border-radius:0;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Cosa vuoi fare?</div>
+
+        <div class="sheet-sec-label">NUOVO</div>
+        <div class="sheet-item primary">✦ Crea un nuovo obiettivo</div>
+
+        <div class="sheet-sec-label">AGGIUNGI REGOLA</div>
+        <div class="sheet-item-row">
+          <span class="sir-icon">↻</span>
+          <div><div class="sir-name">Pilota automatico</div><div class="sir-desc">Versa una cifra fissa ogni mese</div></div>
+        </div>
+        <div class="sheet-item-row">
+          <span class="sir-icon">⚡</span>
+          <div><div class="sir-name">Trigger</div><div class="sir-desc">Versa quando succede qualcosa</div></div>
+        </div>
+        <div class="sheet-item-row patto-row">
+          <span class="sir-icon">★</span>
+          <div><div class="sir-name">Patto con te stesso</div><div class="sir-desc">Versa quando mantieni un impegno</div></div>
+        </div>
+
+        <div class="sheet-sec-label" style="margin-top:6px;">MOVIMENTI</div>
+        <div style="display:flex;gap:4px;">
+          <div class="sheet-item secondary" style="flex:1;font-size:8px;">↓ Preleva</div>
+          <div class="sheet-item secondary" style="flex:1;font-size:8px;">↑ Versa</div>
+        </div>
+      </div>
+      <!-- nav simulata -->
+      <div class="bottom-nav" style="background:var(--surface);border:1px solid var(--border);border-top:1px solid var(--border);border-radius:0 0 10px 10px;width:100%;">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus" style="opacity:.5;"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">3 tipologie con nomi e descrizioni distinte — Pilota / Trigger / Patto</div>
+    <div class="ann">Patto: bordo evidenziato — è il differenziatore, deve risaltare</div>
+    <div class="ann">Crea obiettivo: visual-primary (sfondo bianco) — azione principale del [+]</div>
+  </div>
+
+  <!-- Prelievo: flusso unico -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Prelievo</strong> — Flusso unico · impatto data · costi</div>
+    <div class="phone" style="height:500px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+        <div style="font-size:8px;color:var(--text-2);">← Anticipo Casa</div>
+        <div style="font-size:12px;font-weight:800;margin-bottom:2px;">Preleva</div>
+        <div style="font-size:8px;color:var(--text-3);">Disponibile: €11.600</div>
+
+        <!-- Input importo libero — unico flusso, no scelta parziale/totale -->
+        <div class="input-mock">
+          <div class="input-val">€ 1.500</div>
+          <div class="input-hint">Inserisci qualsiasi importo fino a €11.600</div>
+        </div>
+
+        <!-- Impatto sull'obiettivo -->
+        <div class="info-box impact">
+          <strong>Impatto sul tuo obiettivo</strong><br>
+          Anticipo Casa: dal 58% al 50%<br>
+          Data stimata: dic 2028 → mar 2029 (+3 mesi)<br>
+          <span style="color:var(--text-3);">Il Pilota automatico continua a €300/mese</span>
+        </div>
+
+        <!-- Trasparenza costi -->
+        <div class="info-box" style="margin-top:3px;">
+          <strong>Importo che ricevi: €1.500</strong><br>
+          Nessuna commissione di prelievo.<br>
+          <span style="color:var(--text-3);">Il costo del fondo (TER 0,90%/anno) è già dedotto dalla performance mostrata.</span>
+        </div>
+
+        <div style="font-size:7px;color:var(--text-3);padding:4px 0;line-height:1.5;">
+          Tempi di liquidazione: 3–5 giorni lavorativi. Importo sull'IBAN registrato.
+        </div>
+
+        <div class="cta filled" style="font-size:9px;">Conferma prelievo €1.500</div>
+        <div style="font-size:8px;color:var(--text-3);text-align:center;margin-top:4px;">Annulla</div>
+
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item active"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">Flusso unico: nessuna scelta parziale/totale — l'utente inserisce la cifra (Filippo · call 27/4)</div>
+    <div class="ann hi">Impatto data visibile PRIMA di confermare: "dic 2028 → mar 2029 (+3 mesi)"</div>
+    <div class="ann hi">Costi chiari prima della conferma — no sorprese (Alessandro)</div>
+  </div>
+
+</div><!-- end row 5 -->
+
+
+<!-- ═══════════════════════════════════════════
+     SEZIONE 6 — COMMUNITY LAYER
+═══════════════════════════════════════════ -->
+<div class="section-label">6 — COMMUNITY LAYER · Storie vere nel flow creazione obiettivo</div>
+<div class="phones-row" style="align-items:flex-start;">
+
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Community A</strong> — Storie vere · step dentro Flow A</div>
+    <div class="phone" style="height:460px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen">
+        <div style="font-size:8px;color:var(--text-2);">← Nuovo obiettivo · Casa (3/5)</div>
+        <div style="font-size:11px;font-weight:700;margin-bottom:2px;">Come risparmiano gli altri per una casa</div>
+        <div style="font-size:7.5px;color:var(--text-3);margin-bottom:8px;">Modelli anonimi da obiettivi completati · scegli o configura da zero</div>
+
+        <div class="storia-card">
+          <div class="storia-title">"Anticipo in 3 anni"</div>
+          <div class="storia-data">€20.000 in 36 mesi · completato · AcomeA Bond</div>
+          <div>
+            <span class="storia-tag">↻ Pilota €450/mese</span>
+            <span class="storia-tag">★ Patto "No spese impulsive" €10/gg</span>
+          </div>
+          <div class="storia-cta">Usa come modello →</div>
+        </div>
+
+        <div class="storia-card">
+          <div class="storia-title">"Piano lento e costante"</div>
+          <div class="storia-data">€15.000 in 48 mesi · completato · AcomeA Risparmio</div>
+          <div>
+            <span class="storia-tag">↻ Pilota €250/mese</span>
+            <span class="storia-tag">⚡ Trigger passi 10k €2</span>
+          </div>
+          <div class="storia-cta" style="border-color:var(--border);color:var(--text-2);">Usa come modello →</div>
+        </div>
+
+        <div style="text-align:center;font-size:7.5px;color:var(--text-3);margin-top:8px;">
+          Oppure configura tutto da zero →
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon"></div>Home</div>
+        <div class="nav-item active"><div class="nav-icon"></div>Obiettivi</div>
+        <div class="nav-item plus"><div class="nav-icon"></div></div>
+        <div class="nav-item"><div class="nav-icon"></div>Profilo</div>
+      </div>
+    </div>
+    <div class="ann hi">Community come layer nel flow — non tab separata (call pomeriggio · Sarah)</div>
+    <div class="ann">"Usa come modello" pre-compila obiettivo + Pilota + Patti — riduce friction da 4 step a 1</div>
+    <div class="ann">Dati da obiettivi reali completati, anonimizzati — nessuna redazione, alimentato dall'AI Engine</div>
+    <div class="ann">Appare dopo la scelta "Casa" come template obiettivo, prima della configurazione manuale</div>
+  </div>
+
+  <!-- Patti collettivi — card in Home -->
+  <div class="phone-wrap">
+    <div class="case-label"><strong>Community B</strong> — Patti collettivi · logica invertita</div>
+    <div class="phone" style="height:300px;">
+      <div class="status-bar"><span>10:06</span><span>●●● ▮▮</span></div>
+      <div class="screen" style="gap:5px;">
+        <div style="font-size:7px;color:var(--text-3);">Home → Patto del giorno</div>
+        <div class="patto-card">
+          <div class="patto-header">
+            <span class="patto-icon">★</span>
+            <span class="patto-name-txt">Non ho fumato</span>
+          </div>
+          <div class="patto-sub">+€5 su Anticipo Casa · automatico ogni giorno</div>
+          <div class="cal-grid">
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div>
+            <div class="cal-d fut"></div><div class="cal-d fut"></div><div class="cal-d fut"></div><div class="cal-d fut"></div>
+            <div class="cal-d fut"></div><div class="cal-d fut"></div><div class="cal-d fut"></div>
+          </div>
+          <div class="patto-days">18 giorni questo mese · totale +€90</div>
+          <div class="patto-community"><strong>847 persone</strong> stanno mantenendo lo stesso patto oggi</div>
+          <div style="font-size:7.5px;color:var(--text-2);text-align:center;padding:3px 0 2px;">+€5 versati automaticamente oggi ✓</div>
+          <div class="cta ghost" style="font-size:7.5px;padding:4px;border-color:var(--border);color:var(--text-3);">Ho sgarrato — blocca il versamento di oggi</div>
+        </div>
+      </div>
+    </div>
+    <div class="ann hi">Logica invertita (Sarah): il versamento parte da solo. Il dot si riempie automaticamente a fine giornata.</div>
+    <div class="ann">"Ho sgarrato" = azione eccezionale, di ammissione. Ghost, piccolo, in basso — non è il gesto normale.</div>
+    <div class="ann">"847 persone stanno mantenendo" — presente attivo. Non implica conferma attiva da parte loro.</div>
+    <div class="ann">Calendario: pallini bianchi = giorni rispettati, grigi = giorni bloccati dall'utente (ho sgarrato)</div>
+  </div>
+
+</div><!-- end row 6 -->
+
+
+</body>
+</html>

@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 · Prototipo Navigabile</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Archivo:wght@800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:'Inter',sans-serif;color:#fff;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+/* TOP BAR */
+.topbar{height:44px;background:#0a0a0a;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
+.tb-logo{font-family:'Archivo',sans-serif;font-size:13px;font-weight:900;color:#fff;letter-spacing:-.3px;white-space:nowrap}
+.tb-sep{width:1px;height:18px;background:#222;flex-shrink:0}
+.tb-section{font-size:11px;color:#444;white-space:nowrap}
+.tb-name{font-size:11px;font-weight:700;color:#999;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-hint{font-size:9px;color:#2a2a2a;white-space:nowrap}
+.tb-counter{font-size:11px;color:#444;white-space:nowrap;padding:0 4px}
+.tb-btn{width:26px;height:26px;background:#1a1a1a;border:1px solid #252525;border-radius:6px;color:#777;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;user-select:none}
+.tb-btn:hover{background:#222;color:#ccc}
+
+/* LAYOUT */
+.layout{flex:1;display:flex;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:196px;background:#0c0c0c;border-right:1px solid #1a1a1a;overflow-y:auto;flex-shrink:0;padding:6px 0 16px}
+.sl-grp{padding:10px 12px 3px;font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#282828}
+.sl-item{padding:6px 10px 6px 14px;cursor:pointer;border-left:2px solid transparent}
+.sl-item:hover{background:#131313}
+.sl-item.active{background:#161616;border-left-color:#555}
+.sl-num{font-size:8px;font-weight:800;color:#333;display:block;margin-bottom:1px;letter-spacing:.5px;text-transform:uppercase}
+.sl-title{font-size:10px;font-weight:600;color:#555;line-height:1.3}
+.sl-item.active .sl-title{color:#ccc}
+.sl-item.active .sl-num{color:#666}
+.sl-sub{font-size:9px;color:#282828;margin-top:1px}
+.sl-item.active .sl-sub{color:#444}
+
+/* PHONE AREA */
+.phonewrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.nav-arrow{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;background:#161616;border:1px solid #222;border-radius:50%;color:#555;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;user-select:none}
+.nav-arrow:hover{background:#1e1e1e;color:#ccc}
+.nav-arrow.left{left:12px}
+.nav-arrow.right{right:12px}
+.screens{position:relative}
+.scr{display:none}
+.scr.active{display:block}
+
+/* PHONE FRAME */
+.phone{width:320px;background:#1c1c1e;border-radius:46px;padding:10px;box-shadow:0 32px 80px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.05)}
+.screen{background:#f5f5f5;border-radius:36px;overflow:hidden;display:flex;flex-direction:column;height:650px;position:relative}
+
+/* STATUS BAR */
+.sb{height:26px;padding:7px 14px 0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.sb-t{font-size:11px;font-weight:700;color:#111}
+.sb-icons{display:flex;gap:4px;align-items:center}
+.sb-dot{width:4px;height:4px;border-radius:50%;background:#aaa}
+
+/* HP TOP BAR */
+.hp-bar{padding:3px 14px 4px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.hp-l{display:flex;align-items:center;gap:8px}
+.av{width:26px;height:26px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#ccc;flex-shrink:0}
+.hp-greet{font-size:9px;color:#aaa;line-height:1}
+.hp-name{font-size:12px;font-weight:700;color:#111;line-height:1.1}
+.hp-bell{font-size:14px}
+
+/* INTRO BLOCK */
+.intro-blk{margin:4px 12px 6px;background:#e4e4e4;border-radius:10px;padding:8px 12px;flex-shrink:0;text-align:center}
+.intro-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#888;margin-bottom:2px}
+.intro-text{font-size:11px;font-weight:800;color:#444;line-height:1.2}
+
+/* TOGGLE */
+.toggle{display:flex;background:#e0e0e0;border-radius:20px;padding:2px;margin:4px 12px 5px;flex-shrink:0}
+.tg{flex:1;text-align:center;font-size:9px;font-weight:700;padding:5px 0;border-radius:16px;color:#999;cursor:pointer;user-select:none}
+.tg.on{background:#fff;color:#111;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+/* VALUE */
+.val-row{padding:1px 14px 5px;flex-shrink:0}
+.val-eyebrow{font-size:9px;color:#aaa;margin-bottom:1px}
+.val-n{font-size:26px;font-weight:900;font-family:'Archivo',sans-serif;letter-spacing:-1px;line-height:1;color:#111}
+
+/* BODY */
+.body{flex:1;overflow-y:auto;display:flex;flex-direction:column;padding-bottom:2px}
+
+/* SETUP BAR */
+.setup-bar{margin:0 12px 5px;flex-shrink:0}
+.setup-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.setup-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#aaa}
+.setup-count{font-size:8px;font-weight:700;color:#888}
+.setup-track{height:3px;background:#e0e0e0;border-radius:2px;overflow:hidden}
+.setup-fill{height:100%;background:#888;border-radius:2px}
+
+/* FONDO CARD */
+.fcard{margin:0 12px 6px;border-radius:12px;overflow:hidden;flex-shrink:0;border:1px solid #e4e4e4;background:#fff}
+.fcard-head{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:#ebebeb;border-bottom:1px solid #e0e0e0}
+.fcard-name{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#666}
+.fcard-val{font-size:10px;font-weight:800;color:#333}
+
+/* ACTION ROWS (checklist) */
+.arow{display:flex;align-items:center;gap:9px;padding:8px 12px;border-bottom:1px dashed #ebebeb;flex-shrink:0}
+.arow:last-child{border-bottom:none}
+.arow-text{font-size:10px;color:#333;flex:1;line-height:1.3}
+.arow-btn{width:20px;height:20px;border-radius:50%;border:1.5px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;color:#bbb;flex-shrink:0;cursor:pointer}
+
+/* HIERARCHY ROWS (active users) */
+.hrow{display:flex;align-items:center;gap:9px;padding:7px 12px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
+.hrow:last-child{border-bottom:none}
+.hdot{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;background:#e4e4e4}
+.hl{font-size:10px;font-weight:700;color:#111;flex:1;line-height:1.2}
+.hs{font-size:8px;color:#aaa;margin-top:1px}
+.hprog{height:3px;background:#e4e4e4;border-radius:2px;margin:3px 0 1px;overflow:hidden}
+.hprogb{height:100%;background:#777;border-radius:2px}
+
+/* ALERT */
+.alert{margin:4px 12px 6px;background:#e8e8e8;border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;border:1px solid #d8d8d8}
+.alert-ic{font-size:13px;flex-shrink:0}
+.alert-t{font-size:10px;font-weight:700;color:#333;flex:1;line-height:1.3}
+.alert-arr{font-size:14px;color:#ccc;flex-shrink:0}
+
+/* PILLOLA */
+.pill{margin:0 12px 6px;border-radius:12px;flex-shrink:0;background:#d8d8d8;display:flex;align-items:center;justify-content:center}
+.pill.lg{flex:1;min-height:60px}
+.pill.md{height:56px}
+.pill.sm{height:34px}
+.pill-lbl{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#999;text-align:center}
+.pill-sz{font-size:8px;color:#bbb;margin-top:1px;text-align:center}
+
+/* BOTTOM NAV */
+.bnav{height:52px;border-top:1px solid #e8e8e8;background:#fff;display:flex;align-items:center;justify-content:space-around;flex-shrink:0}
+.bn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;user-select:none}
+.bn-ic{width:16px;height:11px;background:#ddd;border-radius:2px}
+.bn.on .bn-ic{background:#111}
+.bn-l{font-size:7px;font-weight:600;color:#ccc}
+.bn.on .bn-l{color:#111;font-weight:700}
+.bn-plus{width:32px;height:32px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;line-height:1;margin-top:-10px}
+
+/* ─── PORTAFOGLIO VIEW ─── */
+.chart-wrap{margin:0 12px 5px;flex-shrink:0}
+.chart-bg{background:#e8e8e8;border-radius:10px;height:72px;overflow:hidden;position:relative}
+.rend-row{display:flex;justify-content:space-between;align-items:center;padding:3px 2px 0}
+.rend-pos{font-size:10px;font-weight:800;color:#555}
+.rend-lbl{font-size:8px;color:#bbb}
+
+.breakdown{margin:0 12px 6px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0}
+.bd-head{padding:6px 12px;background:#ebebeb;border-bottom:1px solid #e0e0e0;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#666}
+.bd-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid #f5f5f5}
+.bd-row:last-child{border-bottom:none}
+.bd-name{font-size:9px;font-weight:700;color:#333;flex:1;line-height:1.2}
+.bd-track{flex:0 0 48px;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden}
+.bd-fill{height:100%;background:#888;border-radius:2px}
+.bd-pct{font-size:8px;color:#aaa;min-width:28px;text-align:right}
+.bd-val{font-size:9px;font-weight:800;color:#555;min-width:36px;text-align:right}
+
+.movs{margin:0 12px 6px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0}
+.mov-head{padding:6px 12px;background:#ebebeb;border-bottom:1px solid #e0e0e0;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#666}
+.mov-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid #f5f5f5}
+.mov-row:last-child{border-bottom:none}
+.mov-ic{width:20px;height:20px;border-radius:50%;background:#e4e4e4;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.mov-info{flex:1}
+.mov-lbl{font-size:10px;font-weight:600;color:#333}
+.mov-date{font-size:8px;color:#bbb;margin-top:1px}
+.mov-amt{font-size:10px;font-weight:800;color:#555}
+
+/* ─── PAGE HEADER (for non-Home tabs) ─── */
+.page-head{padding:8px 14px 4px;flex-shrink:0}
+.page-title{font-size:17px;font-weight:900;font-family:'Archivo',sans-serif;letter-spacing:-.4px;color:#111;line-height:1}
+
+/* ─── OBIETTIVI TAB ─── */
+.empty-blk{margin:8px 12px;background:#e8e8e8;border-radius:12px;padding:20px 16px;text-align:center;flex-shrink:0}
+.empty-ic{font-size:24px;margin-bottom:6px}
+.empty-title{font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
+.empty-sub{font-size:9px;color:#aaa;line-height:1.5}
+.filled-btn{margin:6px 12px;background:#111;border-radius:12px;padding:11px;text-align:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;cursor:pointer}
+
+.obj-card{margin:0 12px 6px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0}
+.obj-inner{padding:9px 12px}
+.obj-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.obj-icon{font-size:14px;flex-shrink:0}
+.obj-name{font-size:11px;font-weight:700;color:#111;flex:1}
+.obj-curr{font-size:11px;font-weight:800;color:#333}
+.obj-bar{height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden;margin-bottom:4px}
+.obj-fill{height:100%;background:#777;border-radius:2px}
+.obj-meta{font-size:8px;color:#aaa;line-height:1.6}
+.obj-acts{display:flex;gap:6px;padding:7px 12px;border-top:1px solid #f0f0f0}
+.obj-act{flex:1;padding:5px;border:1px solid #e0e0e0;border-radius:8px;text-align:center;font-size:9px;font-weight:700;color:#777;cursor:pointer}
+
+/* ─── [+] SHEET ─── */
+.sheet-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.28);z-index:20;display:flex;flex-direction:column;justify-content:flex-end;border-radius:36px;overflow:hidden}
+.sheet{background:#f5f5f5;border-radius:20px 20px 0 0;padding:0 12px 18px;flex-shrink:0}
+.sheet-handle{width:32px;height:3px;background:#ddd;border-radius:2px;margin:8px auto 6px}
+.sheet-title{font-size:16px;font-weight:900;font-family:'Archivo',sans-serif;letter-spacing:-.3px;color:#111;padding:4px 4px 10px}
+.sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.sheet-tile{background:#fff;border-radius:14px;padding:12px 12px 10px;cursor:pointer;border:1px solid #e8e8e8}
+.sheet-tile-ic{width:34px;height:34px;background:#ebebeb;border-radius:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sheet-tile-lbl{font-size:11px;font-weight:700;color:#111;line-height:1.25}
+.sheet-sep{height:1px;background:#e8e8e8;margin:0 0 6px}
+.sheet-row{display:flex;align-items:center;gap:10px;padding:9px 4px;border-top:1px solid #ebebeb;cursor:pointer}
+.sheet-row:first-of-type{border-top:none}
+.sheet-row-ic{width:26px;height:26px;background:#ebebeb;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.sheet-row-lbl{font-size:11px;font-weight:600;color:#333;flex:1}
+.sheet-row-arr{font-size:14px;color:#ccc}
+
+/* ─── ESPLORA ─── */
+.chips{display:flex;gap:6px;padding:5px 12px 6px;flex-shrink:0;overflow-x:auto}
+.chip{padding:5px 10px;background:#e4e4e4;border-radius:20px;font-size:9px;font-weight:700;color:#666;white-space:nowrap;flex-shrink:0;cursor:pointer}
+.chip.on{background:#222;color:#fff}
+.fund-item{margin:0 12px 5px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0;padding:9px 12px;cursor:pointer}
+.fund-item-top{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.fund-abbr{width:30px;height:30px;background:#ddd;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:900;color:#888;flex-shrink:0}
+.fund-n{font-size:10px;font-weight:700;color:#111;flex:1;line-height:1.2}
+.fund-risk-tag{font-size:8px;background:#f0f0f0;border-radius:4px;padding:2px 6px;color:#888;flex-shrink:0}
+.fund-meta{font-size:8px;color:#bbb;display:flex;justify-content:space-between}
+
+/* Scheda fondo */
+.back-row{display:flex;align-items:center;gap:6px;padding:6px 14px 2px;flex-shrink:0;cursor:pointer}
+.back-ic{font-size:14px;color:#aaa}
+.back-lbl{font-size:11px;color:#888}
+.fund-detail-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column;padding-bottom:2px}
+.fund-d-header{padding:6px 14px 8px;flex-shrink:0;text-align:center}
+.fund-d-abbr{width:44px;height:44px;background:#ddd;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#888;margin:0 auto 6px}
+.fund-d-name{font-size:13px;font-weight:800;font-family:'Archivo',sans-serif;color:#111;margin-bottom:2px}
+.fund-d-risk{font-size:9px;background:#e8e8e8;border-radius:6px;padding:2px 8px;display:inline-block;color:#777}
+.fund-d-stats{display:flex;gap:6px;margin:8px 12px 0;flex-shrink:0}
+.stat-box{flex:1;background:#ebebeb;border-radius:8px;padding:6px;text-align:center}
+.stat-val{font-size:12px;font-weight:800;color:#333}
+.stat-lbl{font-size:7px;color:#aaa;margin-top:1px;text-transform:uppercase;letter-spacing:.4px}
+.fund-d-desc{margin:8px 12px 0;font-size:9px;color:#aaa;line-height:1.6;flex-shrink:0}
+.fund-cta{margin:8px 12px 0;background:#111;border-radius:12px;padding:11px;text-align:center;font-size:11px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
+.fund-pill{margin:6px 12px 0;border-radius:10px;background:#d8d8d8;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ─── PROFILO ─── */
+.profile-head{padding:10px 14px 8px;flex-shrink:0;display:flex;align-items:center;gap:10px}
+.profile-av{width:42px;height:42px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#ccc;flex-shrink:0}
+.profile-name{font-size:13px;font-weight:700;color:#111}
+.profile-email{font-size:9px;color:#aaa;margin-top:1px}
+.profile-sec-lbl{margin:4px 12px 2px;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#aaa;flex-shrink:0}
+.profile-list{margin:0 12px 6px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0}
+.profile-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #f5f5f5;cursor:pointer}
+.profile-row:last-child{border-bottom:none}
+.profile-row-ic{font-size:12px;width:20px;text-align:center;flex-shrink:0}
+.profile-row-lbl{font-size:10px;font-weight:600;color:#333;flex:1}
+.profile-row-arr{font-size:14px;color:#ddd}
+.logout-row{margin:0 12px;background:#fff5f5;border-radius:12px;padding:10px 12px;text-align:center;font-size:10px;font-weight:700;color:#cc4444;cursor:pointer;flex-shrink:0;border:1px solid #ffe0e0}
+
+/* INFO PANEL */
+.infopanel{width:250px;background:#0c0c0c;border-left:1px solid #1a1a1a;overflow-y:auto;flex-shrink:0;padding:16px}
+.ip-case{font-size:8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#333;margin-bottom:5px}
+.ip-title{font-size:13px;font-weight:700;color:#ddd;line-height:1.4;margin-bottom:8px}
+.ip-desc{font-size:10px;color:#484848;line-height:1.7}
+.ip-div{height:1px;background:#181818;margin:12px 0}
+.ip-sec{font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#2a2a2a;margin-bottom:6px}
+.tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;margin-right:3px;margin-bottom:4px}
+.tag.done{background:#141e14;color:#4a7a4a;border:1px solid #1e2e1e}
+.tag.miss{background:#1e1414;color:#7a4a4a;border:1px solid #2e1e1e}
+.ip-cta{font-size:10px;color:#555;line-height:1.8}
+.ip-cta b{color:#777}
+.ip-note{font-size:9px;color:#333;line-height:1.6;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-logo">Gimme5</div>
+  <div class="tb-sep"></div>
+  <div class="tb-section">Prototipo Navigabile</div>
+  <div class="tb-sep"></div>
+  <div class="tb-name" id="tb-name">—</div>
+  <div class="tb-hint">← → per navigare</div>
+  <div class="tb-counter" id="tb-counter">1 / 16</div>
+  <div class="tb-btn" onclick="prev()">‹</div>
+  <div class="tb-btn" onclick="next()">›</div>
+</div>
+
+<div class="layout">
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar">
+
+  <div class="sl-grp">Home · Vista Obiettivi</div>
+  <div class="sl-item active" onclick="goTo(0)">
+    <span class="sl-num">Caso 1A/B</span>
+    <div class="sl-title">Tutto skippato</div>
+    <div class="sl-sub">0/3 · 3 azioni</div>
+  </div>
+  <div class="sl-item" onclick="goTo(1)">
+    <span class="sl-num">Caso 2</span>
+    <div class="sl-title">Fondo + Piano</div>
+    <div class="sl-sub">1/3 · versa + obiettivo</div>
+  </div>
+  <div class="sl-item" onclick="goTo(2)">
+    <span class="sl-num">Caso 3</span>
+    <div class="sl-title">Fondo + Bonifico</div>
+    <div class="sl-sub">1/3 · obiettivo + piano</div>
+  </div>
+  <div class="sl-item" onclick="goTo(3)">
+    <span class="sl-num">Caso 4</span>
+    <div class="sl-title">Fondo + Piano + Bonifico</div>
+    <div class="sl-sub">2/3 · obiettivo manca</div>
+  </div>
+  <div class="sl-item" onclick="goTo(4)">
+    <span class="sl-num">Caso 5</span>
+    <div class="sl-title">Attivo · 1 obiettivo</div>
+    <div class="sl-sub">Piano in corso</div>
+  </div>
+  <div class="sl-item" onclick="goTo(5)">
+    <span class="sl-num">Caso 5B</span>
+    <div class="sl-title">Attivo · 3 obiettivi</div>
+    <div class="sl-sub">Multi-obj · Option C</div>
+  </div>
+  <div class="sl-item" onclick="goTo(6)">
+    <span class="sl-num">Caso 6</span>
+    <div class="sl-title">In pausa</div>
+    <div class="sl-sub">Piano sospeso 60gg</div>
+  </div>
+  <div class="sl-item" onclick="goTo(7)">
+    <span class="sl-num">Caso 7</span>
+    <div class="sl-title">Dormiente</div>
+    <div class="sl-sub">No versamenti 60+ gg</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Home · Vista Portafoglio</div>
+  <div class="sl-item" onclick="goTo(8)">
+    <span class="sl-num">Portafoglio A</span>
+    <div class="sl-title">Fase onboarding (€0)</div>
+    <div class="sl-sub">Nessun dato ancora</div>
+  </div>
+  <div class="sl-item" onclick="goTo(9)">
+    <span class="sl-num">Portafoglio B</span>
+    <div class="sl-title">Utente attivo (€240)</div>
+    <div class="sl-sub">Grafico · breakdown · movs</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Tab Obiettivi</div>
+  <div class="sl-item" onclick="goTo(10)">
+    <span class="sl-num">Obiettivi — vuoto</span>
+    <div class="sl-title">Nessun obiettivo</div>
+    <div class="sl-sub">Empty state + CTA</div>
+  </div>
+  <div class="sl-item" onclick="goTo(11)">
+    <span class="sl-num">Obiettivi — attivi</span>
+    <div class="sl-title">3 obiettivi in corso</div>
+    <div class="sl-sub">Lista + azioni</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Sheet [+]</div>
+  <div class="sl-item" onclick="goTo(12)">
+    <span class="sl-num">Sheet azioni</span>
+    <div class="sl-title">Versa · Preleva · Crea</div>
+    <div class="sl-sub">Overlay da bottom</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Esplora</div>
+  <div class="sl-item" onclick="goTo(13)">
+    <span class="sl-num">Esplora — catalogo</span>
+    <div class="sl-title">Fondi + filtri</div>
+    <div class="sl-sub">Rischio · ESG · Orizzonte</div>
+  </div>
+  <div class="sl-item" onclick="goTo(14)">
+    <span class="sl-num">Esplora — scheda fondo</span>
+    <div class="sl-title">Eurizon Bilanciato</div>
+    <div class="sl-sub">Dettaglio + CTA</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Home · Multi-fondo (2 fondi)</div>
+  <div class="sl-item" onclick="goTo(16)">
+    <span class="sl-num">Multi-fondo — Obiettivi</span>
+    <div class="sl-title">2 fondi · 3 obj · piano libero</div>
+    <div class="sl-sub">Vista Obiettivi toggle</div>
+  </div>
+  <div class="sl-item" onclick="goTo(17)">
+    <span class="sl-num">Multi-fondo — Portafoglio</span>
+    <div class="sl-title">Stacked bar · 2 fondi</div>
+    <div class="sl-sub">Vista Portafoglio toggle</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Home · Scala (10 obj / 10 fondi)</div>
+  <div class="sl-item" onclick="goTo(18)">
+    <span class="sl-num">10 Obiettivi</span>
+    <div class="sl-title">3 fondi × 10 obj totali</div>
+    <div class="sl-sub">Truncation "+ N altri" per fcard</div>
+  </div>
+  <div class="sl-item" onclick="goTo(19)">
+    <span class="sl-num">10 Fondi — Portafoglio</span>
+    <div class="sl-title">Stacked bar 10 segmenti</div>
+    <div class="sl-sub">Lista completa 10 fondi</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Drill-down Fondo</div>
+  <div class="sl-item" onclick="goTo(20)">
+    <span class="sl-num">Scheda Fondo personale</span>
+    <div class="sl-title">Scalata · Obiettivi · Piano</div>
+    <div class="sl-sub">Tap fondo da Portafoglio →</div>
+  </div>
+
+  <div class="sl-grp" style="margin-top:6px">Profilo</div>
+  <div class="sl-item" onclick="goTo(15)">
+    <span class="sl-num">Profilo</span>
+    <div class="sl-title">Account · Sicurezza</div>
+    <div class="sl-sub">Impostazioni + logout</div>
+  </div>
+
+</div>
+
+<!-- ═══ PHONE AREA ═══ -->
+<div class="phonewrap">
+  <div class="nav-arrow left" onclick="prev()">‹</div>
+  <div class="screens">
+
+    <!-- ── 0: Casa 1A/B ── -->
+    <div class="scr active" id="scr-0">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="intro-blk"><div class="intro-lbl">Il tuo piano di risparmio</div><div class="intro-text">Completa il setup per iniziare</div></div>
+        <div class="body">
+          <div class="setup-bar"><div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">0 / 3</span></div><div class="setup-track"><div class="setup-fill" style="width:0%"></div></div></div>
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO ✓</span><span class="fcard-val">0,00€</span></div>
+            <div class="arow"><span class="arow-text">Fai il primo versamento e inizia a risparmiare</span><div class="arow-btn">+</div></div>
+            <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+            <div class="arow"><span class="arow-text">Attiva un piano automatico di versamento</span><div class="arow-btn">+</div></div>
+          </div>
+          <div class="pill lg"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Big / Large</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(10)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 1: Caso 2 ── -->
+    <div class="scr" id="scr-1">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(8)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">0,00€</div></div>
+        <div class="body">
+          <div class="setup-bar"><div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">1 / 3</span></div><div class="setup-track"><div class="setup-fill" style="width:33%"></div></div></div>
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO</span><span class="fcard-val">0,00€</span></div>
+            <div class="arow"><span class="arow-text">Fai il primo versamento per attivare il piano</span><div class="arow-btn">+</div></div>
+            <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+          </div>
+          <div class="pill md"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Medium</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(10)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 2: Caso 3 ── -->
+    <div class="scr" id="scr-2">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(8)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">10,00€</div></div>
+        <div class="body">
+          <div class="setup-bar"><div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">1 / 3</span></div><div class="setup-track"><div class="setup-fill" style="width:33%"></div></div></div>
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO</span><span class="fcard-val">10,00€</span></div>
+            <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+            <div class="arow"><span class="arow-text">Attiva un piano automatico di versamento</span><div class="arow-btn">+</div></div>
+          </div>
+          <div class="pill md"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Medium</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(10)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 3: Caso 4 ── -->
+    <div class="scr" id="scr-3">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(8)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">10,00€</div></div>
+        <div class="body">
+          <div class="setup-bar"><div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">2 / 3</span></div><div class="setup-track"><div class="setup-fill" style="width:66%"></div></div></div>
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO</span><span class="fcard-val">10,00€</span></div>
+            <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+          </div>
+          <div class="pill lg"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Big / Large</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(10)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 4: Caso 5 ── -->
+    <div class="scr" id="scr-4">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(9)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">240,00€</div></div>
+        <div class="body">
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO</span><span class="fcard-val">240,00€</span></div>
+            <div class="hrow">
+              <div class="hdot">🏖</div>
+              <div style="flex:1"><div class="hl">Anticipo per la casa</div><div class="hprog"><div class="hprogb" style="width:24%"></div></div><div class="hs">€240 / €1.000 · 24%</div></div>
+            </div>
+            <div class="hrow">
+              <div class="hdot">📅</div>
+              <div style="flex:1"><div class="hl" style="font-size:9px;color:#aaa;font-weight:600">Piano €100/mese · prossimo 1 mag</div></div>
+            </div>
+          </div>
+          <div class="pill sm"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Small</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 5: Caso 5B Multi-obiettivi ── -->
+    <div class="scr" id="scr-5">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(9)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">3.420,00€</div></div>
+        <div class="body">
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO</span><span style="font-size:8px;color:#888;font-weight:600">3 obiettivi · €230/m</span></div>
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:13px">🏖</div>
+              <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#111">Anticipo casa</div><div style="display:flex;align-items:center;gap:4px;margin-top:3px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:34%;background:#777;border-radius:2px"></div></div><div style="font-size:8px;color:#bbb">34%</div></div></div>
+              <div style="text-align:right"><div style="font-size:10px;font-weight:800;color:#333">€1.200</div><div style="font-size:8px;color:#bbb">€100/m</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:13px">🎓</div>
+              <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#111">Università figlio</div><div style="display:flex;align-items:center;gap:4px;margin-top:3px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:22%;background:#777;border-radius:2px"></div></div><div style="font-size:8px;color:#bbb">22%</div></div></div>
+              <div style="text-align:right"><div style="font-size:10px;font-weight:800;color:#333">€880</div><div style="font-size:8px;color:#bbb">€80/m</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:8px 12px">
+              <div style="font-size:13px">🚨</div>
+              <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#111">Fondo emergenza</div><div style="display:flex;align-items:center;gap:4px;margin-top:3px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:45%;background:#777;border-radius:2px"></div></div><div style="font-size:8px;color:#bbb">45%</div></div></div>
+              <div style="text-align:right"><div style="font-size:10px;font-weight:800;color:#333">€1.340</div><div style="font-size:8px;color:#bbb">€50/m</div></div>
+            </div>
+          </div>
+          <div class="pill sm"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Small</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 6: Caso 6 In pausa ── -->
+    <div class="scr" id="scr-6">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(9)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">240,00€</div></div>
+        <div class="body">
+          <div class="alert"><span class="alert-ic">⏸</span><span class="alert-t">Hai saltato 2 mesi · Riattiva il piano</span><span class="alert-arr">›</span></div>
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO</span><span class="fcard-val">240,00€</span></div>
+            <div class="hrow"><div class="hdot">🏖</div><div style="flex:1"><div class="hl">Anticipo per la casa</div><div class="hprog"><div class="hprogb" style="width:24%"></div></div><div class="hs">€240 / €1.000</div></div></div>
+            <div class="hrow"><div class="hdot" style="background:#e0e0e0">⏸</div><div><div class="hl" style="font-size:9px;color:#bbb;font-weight:600">Piano in pausa · 60 giorni</div></div></div>
+          </div>
+          <div class="pill md"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Medium</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 7: Caso 7 Dormiente ── -->
+    <div class="scr" id="scr-7">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(9)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">240,00€</div></div>
+        <div class="body">
+          <div class="alert"><span class="alert-ic">💤</span><span class="alert-t">Sei ancora qui, Filippo? Da tanto non ti fai vivo.</span><span class="alert-arr">›</span></div>
+          <div class="fcard">
+            <div class="fcard-head"><span class="fcard-name">EURIZON BILANCIATO</span><span class="fcard-val">240,00€</span></div>
+            <div class="hrow"><div class="hdot">🏖</div><div style="flex:1"><div class="hl">Anticipo per la casa</div><div class="hs">€240 / €1.000</div></div></div>
+            <div class="arow"><span class="arow-text">Fai un versamento per ripartire</span><div class="arow-btn">+</div></div>
+          </div>
+          <div class="pill md"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Medium</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 8: Home Portafoglio — Vuoto ── -->
+    <div class="scr" id="scr-8">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg" onclick="goTo(1)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Valore totale</div><div class="val-n">0,00€</div></div>
+        <div class="body">
+          <div style="margin:4px 12px 6px;background:#e8e8e8;border-radius:10px;padding:24px 16px;text-align:center;flex-shrink:0">
+            <div style="font-size:22px;margin-bottom:6px">📊</div>
+            <div style="font-size:11px;font-weight:700;color:#777;margin-bottom:4px">Nessun dato ancora</div>
+            <div style="font-size:9px;color:#aaa;line-height:1.5">Fai il primo versamento per vedere<br>l'andamento del tuo portafoglio</div>
+          </div>
+          <div class="pill lg"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Big / Large</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(10)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 9: Home Portafoglio — Attivo ── -->
+    <div class="scr" id="scr-9">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg" onclick="goTo(4)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Valore totale</div><div class="val-n">240,00€</div></div>
+        <div class="body">
+          <div class="chart-wrap">
+            <div class="chart-bg">
+              <svg width="100%" height="72" viewBox="0 0 296 72" preserveAspectRatio="none">
+                <path d="M0 60 C40 55 80 48 120 40 S200 20 296 12" stroke="#aaa" stroke-width="1.5" fill="none"/>
+                <path d="M0 60 C40 55 80 48 120 40 S200 20 296 12 L296 72 L0 72 Z" fill="#ccc" opacity="0.4"/>
+              </svg>
+            </div>
+            <div class="rend-row">
+              <div class="rend-pos">+€4,20 · +1,8%</div>
+              <div class="rend-lbl">da inizio · 3 mesi</div>
+            </div>
+          </div>
+          <div class="breakdown">
+            <div class="bd-head">Breakdown per fondo</div>
+            <div class="bd-row" onclick="goTo(20)" style="cursor:pointer">
+              <div class="bd-name">Eurizon Bilanciato</div>
+              <div class="bd-track"><div class="bd-fill" style="width:100%"></div></div>
+              <div class="bd-pct">100%</div>
+              <div class="bd-val">€240</div>
+              <div style="font-size:10px;color:#ccc;margin-left:2px">›</div>
+            </div>
+          </div>
+          <div class="movs">
+            <div class="mov-head">Movimenti recenti</div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento</div><div class="mov-date">1 apr 2026</div></div><div class="mov-amt">+€100</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento</div><div class="mov-date">1 mar 2026</div></div><div class="mov-amt">+€100</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento</div><div class="mov-date">1 feb 2026</div></div><div class="mov-amt">+€100</div></div>
+          </div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 10: Tab Obiettivi — Empty ── -->
+    <div class="scr" id="scr-10">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="page-head"><div class="page-title">I tuoi Obiettivi</div></div>
+        <div class="body">
+          <div class="empty-blk">
+            <div class="empty-ic">🎯</div>
+            <div class="empty-title">Nessun obiettivo ancora</div>
+            <div class="empty-sub">Crea il tuo primo obiettivo e collega<br>un fondo e un piano di risparmio.</div>
+          </div>
+          <div class="filled-btn">+ Crea il primo obiettivo</div>
+          <div class="pill lg"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Big / Large</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn" onclick="goTo(0)"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 11: Tab Obiettivi — Con obiettivi ── -->
+    <div class="scr" id="scr-11">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="page-head"><div class="page-title">I tuoi Obiettivi</div></div>
+        <div class="body">
+          <!-- Obj 1 -->
+          <div class="obj-card">
+            <div class="obj-inner">
+              <div class="obj-top"><div class="obj-icon">🏖</div><div class="obj-name">Anticipo per la casa</div><div class="obj-curr">€240</div></div>
+              <div class="obj-bar"><div class="obj-fill" style="width:24%"></div></div>
+              <div class="obj-meta">24% · €240 / €1.000 · arr. set 2027<br>Eurizon Bilanciato · Piano €100/mese · prossimo 1 mag</div>
+            </div>
+            <div class="obj-acts">
+              <div class="obj-act">Modifica</div>
+              <div class="obj-act">Pausa</div>
+              <div class="obj-act">Storico</div>
+            </div>
+          </div>
+          <!-- Obj 2 -->
+          <div class="obj-card">
+            <div class="obj-inner">
+              <div class="obj-top"><div class="obj-icon">🎓</div><div class="obj-name">Università figlio</div><div class="obj-curr">€880</div></div>
+              <div class="obj-bar"><div class="obj-fill" style="width:22%"></div></div>
+              <div class="obj-meta">22% · €880 / €4.000 · arr. dic 2030<br>Eurizon Bilanciato · Piano €80/mese</div>
+            </div>
+            <div class="obj-acts">
+              <div class="obj-act">Modifica</div>
+              <div class="obj-act">Pausa</div>
+              <div class="obj-act">Storico</div>
+            </div>
+          </div>
+          <!-- Obj 3 -->
+          <div class="obj-card">
+            <div class="obj-inner">
+              <div class="obj-top"><div class="obj-icon">🚨</div><div class="obj-name">Fondo emergenza</div><div class="obj-curr">€1.340</div></div>
+              <div class="obj-bar"><div class="obj-fill" style="width:45%"></div></div>
+              <div class="obj-meta">45% · €1.340 / €3.000 · arr. mar 2026<br>Eurizon Bilanciato · Piano €50/mese</div>
+            </div>
+            <div class="obj-acts">
+              <div class="obj-act">Modifica</div>
+              <div class="obj-act">Pausa</div>
+              <div class="obj-act">Storico</div>
+            </div>
+          </div>
+        </div>
+        <div class="bnav">
+          <div class="bn" onclick="goTo(4)"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 12: [+] Sheet ── -->
+    <div class="scr" id="scr-12">
+      <div class="phone"><div class="screen">
+        <!-- Dimmed background (Home attivo) -->
+        <div style="flex:1;opacity:.25;overflow:hidden;display:flex;flex-direction:column;pointer-events:none">
+          <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+          <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+          <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+          <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio</div><div class="val-n">240,00€</div></div>
+        </div>
+        <!-- Sheet Overlay -->
+        <div class="sheet-overlay">
+          <div class="sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title">Investi</div>
+            <div class="sheet-grid">
+              <div class="sheet-tile">
+                <div class="sheet-tile-ic">↓</div>
+                <div class="sheet-tile-lbl">Versa</div>
+              </div>
+              <div class="sheet-tile">
+                <div class="sheet-tile-ic">↑</div>
+                <div class="sheet-tile-lbl">Preleva</div>
+              </div>
+              <div class="sheet-tile">
+                <div class="sheet-tile-ic">🎯</div>
+                <div class="sheet-tile-lbl">Crea obiettivo</div>
+              </div>
+              <div class="sheet-tile">
+                <div class="sheet-tile-ic">📈</div>
+                <div class="sheet-tile-lbl">Nuovo fondo</div>
+              </div>
+            </div>
+            <div class="sheet-row"><div class="sheet-row-ic">📅</div><div class="sheet-row-lbl">Aggiungi piano automatico</div><div class="sheet-row-arr">›</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 13: Esplora — Catalogo ── -->
+    <div class="scr" id="scr-13">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="page-head"><div class="page-title">Esplora Fondi</div></div>
+        <div class="chips">
+          <div class="chip on">Tutti</div>
+          <div class="chip">Rischio basso</div>
+          <div class="chip">Orizzonte lungo</div>
+          <div class="chip">ESG</div>
+        </div>
+        <div class="body">
+          <div class="fund-item" onclick="goTo(14)">
+            <div class="fund-item-top"><div class="fund-abbr">EUR BIL</div><div class="fund-n">Eurizon Bilanciato</div><div class="fund-risk-tag">Medio-Basso</div></div>
+            <div class="fund-meta"><span>Rendimento atteso: 3–5% annuo</span><span>Orizzonte: 5+ anni</span></div>
+          </div>
+          <div class="fund-item">
+            <div class="fund-item-top"><div class="fund-abbr">EUR OBB</div><div class="fund-n">Eurizon Obbligazionario</div><div class="fund-risk-tag">Basso</div></div>
+            <div class="fund-meta"><span>Rendimento atteso: 1–3% annuo</span><span>Orizzonte: 3+ anni</span></div>
+          </div>
+          <div class="fund-item">
+            <div class="fund-item-top"><div class="fund-abbr">EUR AZI</div><div class="fund-n">Eurizon Azionario</div><div class="fund-risk-tag">Alto</div></div>
+            <div class="fund-meta"><span>Rendimento atteso: 6–8% annuo</span><span>Orizzonte: 10+ anni</span></div>
+          </div>
+          <div style="margin:0 12px 5px;background:#ebebeb;border-radius:12px;padding:10px 12px;flex-shrink:0">
+            <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#888;margin-bottom:6px">Collezioni curate</div>
+            <div style="font-size:10px;font-weight:600;color:#444;line-height:1.5">🌱 Fondi ESG · Per chi vuole investire con valori<br>🏠 Per l'anticipo casa · Orizzonte medio</div>
+          </div>
+        </div>
+        <div class="bnav">
+          <div class="bn" onclick="goTo(4)"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 14: Esplora — Scheda fondo ── -->
+    <div class="scr" id="scr-14">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="back-row" onclick="goTo(13)"><span class="back-ic">‹</span><span class="back-lbl">Esplora</span></div>
+        <div class="fund-detail-wrap">
+          <div class="fund-d-header">
+            <div class="fund-d-abbr">EUR BIL</div>
+            <div class="fund-d-name">Eurizon Bilanciato</div>
+            <div class="fund-d-risk">Rischio Medio-Basso</div>
+          </div>
+          <div class="fund-d-stats">
+            <div class="stat-box"><div class="stat-val">3–5%</div><div class="stat-lbl">Rend. atteso</div></div>
+            <div class="stat-box"><div class="stat-val">5+ anni</div><div class="stat-lbl">Orizzonte</div></div>
+            <div class="stat-box"><div class="stat-val">€10</div><div class="stat-lbl">Min. versamento</div></div>
+          </div>
+          <div class="fund-d-desc">Fondo bilanciato che investe in azioni e obbligazioni. Adatto per chi vuole far crescere i risparmi nel medio-lungo periodo con un rischio contenuto.</div>
+          <div class="fund-cta">Usa per un obiettivo</div>
+          <div class="fund-pill"><div style="font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#aaa">Pillola educativa · Small</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn" onclick="goTo(4)"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 15: Profilo ── -->
+    <div class="scr" id="scr-15">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="profile-head">
+          <div class="profile-av">FA</div>
+          <div><div class="profile-name">Filippo Alviano</div><div class="profile-email">filippo@email.com</div></div>
+        </div>
+        <div class="body" style="overflow-y:auto">
+
+          <div class="profile-sec-lbl">Dati personali</div>
+          <div class="profile-list">
+            <div class="profile-row"><div class="profile-row-ic">👤</div><div class="profile-row-lbl">Nome, data e luogo di nascita</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">🪪</div><div class="profile-row-lbl">Codice fiscale</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">🌍</div><div class="profile-row-lbl">Cittadinanza</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">📱</div><div class="profile-row-lbl">Telefono</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">🏠</div><div class="profile-row-lbl">Indirizzo di residenza</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">📋</div><div class="profile-row-lbl">Domicilio fiscale</div><div class="profile-row-arr">›</div></div>
+          </div>
+
+          <div class="profile-sec-lbl">Documento d'identità</div>
+          <div class="profile-list">
+            <div class="profile-row"><div class="profile-row-ic">🪪</div><div class="profile-row-lbl">Tipo documento · stato KYC</div><div class="profile-row-arr">›</div></div>
+          </div>
+
+          <div class="profile-sec-lbl">Profilo investitore</div>
+          <div class="profile-list">
+            <div class="profile-row"><div class="profile-row-ic">📊</div><div class="profile-row-lbl">Profilazione MiFID (obiettivo, rischio, orizzonte)</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">🌱</div><div class="profile-row-lbl">Preferenze ESG / PIR</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">📝</div><div class="profile-row-lbl">Questionario AML</div><div class="profile-row-arr">›</div></div>
+          </div>
+
+          <div class="profile-sec-lbl">Piano & Pagamenti</div>
+          <div class="profile-list">
+            <div class="profile-row"><div class="profile-row-ic">📅</div><div class="profile-row-lbl">Piano automatico (importo · frequenza)</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">🏦</div><div class="profile-row-lbl">Metodo pagamento · IBAN</div><div class="profile-row-arr">›</div></div>
+          </div>
+
+          <div class="profile-sec-lbl">Contratti</div>
+          <div class="profile-list">
+            <div class="profile-row"><div class="profile-row-ic">📄</div><div class="profile-row-lbl">Documenti pre-contratto</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">✍️</div><div class="profile-row-lbl">Contratto firmato</div><div class="profile-row-arr">›</div></div>
+          </div>
+
+          <div class="profile-sec-lbl">Sicurezza & Account</div>
+          <div class="profile-list">
+            <div class="profile-row"><div class="profile-row-ic">📧</div><div class="profile-row-lbl">Email · Password</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">🔐</div><div class="profile-row-lbl">PIN</div><div class="profile-row-arr">›</div></div>
+            <div class="profile-row"><div class="profile-row-ic">👆</div><div class="profile-row-lbl">Biometrico</div><div class="profile-row-arr">›</div></div>
+          </div>
+
+          <div class="profile-sec-lbl">Preferenze</div>
+          <div class="profile-list">
+            <div class="profile-row"><div class="profile-row-ic">🔔</div><div class="profile-row-lbl">Notifiche push</div><div class="profile-row-arr">›</div></div>
+          </div>
+
+          <div class="logout-row">Logout</div>
+          <div style="height:8px;flex-shrink:0"></div>
+        </div>
+        <div class="bnav">
+          <div class="bn" onclick="goTo(4)"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 16: Home Obiettivi — Multi-fondo ── -->
+    <div class="scr" id="scr-16">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(17)">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">3.420,00€</div></div>
+        <div class="body" style="overflow-y:auto">
+
+          <!-- Fondo 1 -->
+          <div class="fcard">
+            <div class="fcard-head">
+              <span class="fcard-name">EURIZON BILANCIATO</span>
+              <span style="font-size:8px;color:#888;font-weight:600">2 obj · €180/m · €2.080</span>
+            </div>
+            <!-- Obj 1 -->
+            <div style="display:flex;align-items:center;gap:9px;padding:7px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:12px">🏖</div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:700;color:#111">Anticipo casa</div>
+                <div style="display:flex;align-items:center;gap:4px;margin-top:3px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:34%;background:#777;border-radius:2px"></div></div><div style="font-size:8px;color:#bbb">34%</div></div>
+              </div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:800;color:#333">€1.200</div><div style="font-size:8px;color:#bbb">€100/m</div></div>
+            </div>
+            <!-- Obj 2 -->
+            <div style="display:flex;align-items:center;gap:9px;padding:7px 12px">
+              <div style="font-size:12px">🎓</div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:700;color:#111">Università figlio</div>
+                <div style="display:flex;align-items:center;gap:4px;margin-top:3px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:22%;background:#777;border-radius:2px"></div></div><div style="font-size:8px;color:#bbb">22%</div></div>
+              </div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:800;color:#333">€880</div><div style="font-size:8px;color:#bbb">€80/m</div></div>
+            </div>
+          </div>
+
+          <!-- Fondo 2 -->
+          <div class="fcard">
+            <div class="fcard-head">
+              <span class="fcard-name">EURIZON OBBLIGAZIONARIO</span>
+              <span style="font-size:8px;color:#888;font-weight:600">1 obj · €70/m · €1.340</span>
+            </div>
+            <!-- Obj 3 -->
+            <div style="display:flex;align-items:center;gap:9px;padding:7px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:12px">🚨</div>
+              <div style="flex:1">
+                <div style="font-size:10px;font-weight:700;color:#111">Fondo emergenza</div>
+                <div style="display:flex;align-items:center;gap:4px;margin-top:3px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:45%;background:#777;border-radius:2px"></div></div><div style="font-size:8px;color:#bbb">45%</div></div>
+              </div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:10px;font-weight:800;color:#333">€1.340</div><div style="font-size:8px;color:#bbb">€50/m</div></div>
+            </div>
+            <!-- Piano libero (nessun obiettivo) -->
+            <div style="display:flex;align-items:center;gap:9px;padding:7px 12px;background:#fafafa">
+              <div style="width:20px;height:20px;border-radius:6px;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0">📅</div>
+              <div style="flex:1">
+                <div style="font-size:9px;font-weight:600;color:#aaa;line-height:1.2">Piano libero · senza obiettivo</div>
+                <div style="font-size:8px;color:#ccc;margin-top:1px">Versamento €20/mese</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9px;color:#bbb">€20/m</div></div>
+            </div>
+          </div>
+
+          <div class="pill sm"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Small</div></div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 17: Home Portafoglio — Multi-fondo ── -->
+    <div class="scr" id="scr-17">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg" onclick="goTo(16)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Valore totale</div><div class="val-n">3.420,00€</div></div>
+        <div class="body">
+          <!-- Stacked bar chart — scala a N fondi -->
+          <div class="chart-wrap" style="margin-bottom:6px">
+            <div style="padding:4px 2px 0">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+                <div style="font-size:12px;font-weight:800;color:#1a1a1a">+€320 · +10,3%</div>
+                <div style="font-size:8px;color:#aaa">da inizio · 18 mesi</div>
+              </div>
+              <!-- barra segmentata -->
+              <div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:8px;gap:1px">
+                <div style="width:34%;background:#1a1a1a"></div>
+                <div style="width:22%;background:#444"></div>
+                <div style="width:18%;background:#777"></div>
+                <div style="width:14%;background:#aaa"></div>
+                <div style="width:12%;background:#ccc"></div>
+              </div>
+              <!-- lista fondi — tappabili → scheda fondo -->
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                  <div style="width:8px;height:8px;background:#1a1a1a;border-radius:2px;flex-shrink:0"></div>
+                  <div style="font-size:8.5px;color:#333;flex:1">Eurizon Bilanciato</div>
+                  <div style="font-size:8px;color:#888;min-width:28px;text-align:right">34%</div>
+                  <div style="font-size:8.5px;font-weight:800;color:#111;min-width:36px;text-align:right">€1.160</div>
+                  <div style="font-size:10px;color:#ccc;margin-left:2px">›</div>
+                </div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                  <div style="width:8px;height:8px;background:#444;border-radius:2px;flex-shrink:0"></div>
+                  <div style="font-size:8.5px;color:#333;flex:1">Eurizon Obbligazionario</div>
+                  <div style="font-size:8px;color:#888;min-width:28px;text-align:right">22%</div>
+                  <div style="font-size:8.5px;font-weight:800;color:#111;min-width:36px;text-align:right">€752</div>
+                  <div style="font-size:10px;color:#ccc;margin-left:2px">›</div>
+                </div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                  <div style="width:8px;height:8px;background:#777;border-radius:2px;flex-shrink:0"></div>
+                  <div style="font-size:8.5px;color:#333;flex:1">Eurizon Azionario Europa</div>
+                  <div style="font-size:8px;color:#888;min-width:28px;text-align:right">18%</div>
+                  <div style="font-size:8.5px;font-weight:800;color:#111;min-width:36px;text-align:right">€614</div>
+                  <div style="font-size:10px;color:#ccc;margin-left:2px">›</div>
+                </div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                  <div style="width:8px;height:8px;background:#aaa;border-radius:2px;flex-shrink:0"></div>
+                  <div style="font-size:8.5px;color:#333;flex:1">Eurizon Liquidità</div>
+                  <div style="font-size:8px;color:#888;min-width:28px;text-align:right">14%</div>
+                  <div style="font-size:8.5px;font-weight:800;color:#111;min-width:36px;text-align:right">€478</div>
+                  <div style="font-size:10px;color:#ccc;margin-left:2px">›</div>
+                </div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                  <div style="width:8px;height:8px;background:#ccc;border-radius:2px;flex-shrink:0"></div>
+                  <div style="font-size:8.5px;color:#333;flex:1">Eurizon ESG Globale</div>
+                  <div style="font-size:8px;color:#888;min-width:28px;text-align:right">12%</div>
+                  <div style="font-size:8.5px;font-weight:800;color:#111;min-width:36px;text-align:right">€416</div>
+                  <div style="font-size:10px;color:#ccc;margin-left:2px">›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="movs">
+            <div class="mov-head">Movimenti recenti</div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento · Eurizon Bil.</div><div class="mov-date">1 apr 2026</div></div><div class="mov-amt">+€180</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento · Eurizon Obb.</div><div class="mov-date">1 apr 2026</div></div><div class="mov-amt">+€70</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento · Eurizon Bil.</div><div class="mov-date">1 mar 2026</div></div><div class="mov-amt">+€180</div></div>
+          </div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 18: Home Obiettivi — 10 obiettivi (3 fondi, truncation) ── -->
+    <div class="scr" id="scr-18">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg" onclick="goTo(19)">Portafoglio</div></div>
+        <div class="body">
+
+          <!-- Fondo 1 — 4 obiettivi, mostra 3 + truncation -->
+          <div class="fcard">
+            <div class="fcard-head">
+              <span class="fcard-name">EURIZON BILANCIATO</span>
+              <span style="font-size:8px;color:#888;font-weight:600">4 obj · €340/m · €4.200</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:6px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:11px">🏖</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:#111">Anticipo casa</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:34%;background:#777;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">34%</div></div></div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€1.200</div><div style="font-size:7.5px;color:#bbb">€100/m</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:6px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:11px">🎓</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:#111">Università figlio</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:22%;background:#777;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">22%</div></div></div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€880</div><div style="font-size:7.5px;color:#bbb">€80/m</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:6px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:11px">🚗</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:#111">Auto nuova</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:60%;background:#777;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">60%</div></div></div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€720</div><div style="font-size:7.5px;color:#bbb">€100/m</div></div>
+            </div>
+            <!-- truncation link — 1 obiettivo nascosto -->
+            <div style="padding:6px 12px;text-align:center;font-size:8.5px;font-weight:700;color:#888;cursor:pointer;border-bottom:1px solid #f0f0f0">+ 1 altro obiettivo</div>
+          </div>
+
+          <!-- Fondo 2 — 3 obiettivi, mostra 2 + truncation -->
+          <div class="fcard">
+            <div class="fcard-head">
+              <span class="fcard-name">EURIZON OBBLIGAZIONARIO</span>
+              <span style="font-size:8px;color:#888;font-weight:600">3 obj · €130/m · €2.100</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:6px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:11px">🚨</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:#111">Fondo emergenza</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:45%;background:#777;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">45%</div></div></div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€900</div><div style="font-size:7.5px;color:#bbb">€50/m</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:6px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:11px">✈️</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:#111">Viaggio Giappone</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:71%;background:#777;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">71%</div></div></div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€710</div><div style="font-size:7.5px;color:#bbb">€50/m</div></div>
+            </div>
+            <!-- truncation link -->
+            <div style="padding:6px 12px;text-align:center;font-size:8.5px;font-weight:700;color:#888;cursor:pointer;border-bottom:1px solid #f0f0f0">+ 1 altro obiettivo</div>
+          </div>
+
+          <!-- Fondo 3 — 3 obiettivi, mostra 2 + truncation -->
+          <div class="fcard">
+            <div class="fcard-head">
+              <span class="fcard-name">EURIZON AZIONARIO EUROPA</span>
+              <span style="font-size:8px;color:#888;font-weight:600">3 obj · €160/m · €1.900</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:6px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:11px">🏔</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:#111">Pensione integrativa</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:12%;background:#777;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">12%</div></div></div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€600</div><div style="font-size:7.5px;color:#bbb">€80/m</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:6px 12px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:11px">🎸</div>
+              <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:#111">Strumento figlio</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:55%;background:#777;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">55%</div></div></div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€550</div><div style="font-size:7.5px;color:#bbb">€50/m</div></div>
+            </div>
+            <!-- truncation link -->
+            <div style="padding:6px 12px;text-align:center;font-size:8.5px;font-weight:700;color:#888;cursor:pointer">+ 1 altro obiettivo</div>
+          </div>
+
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 19: Home Portafoglio — stacked bar 10 fondi ── -->
+    <div class="scr" id="scr-19">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+        <div class="toggle"><div class="tg" onclick="goTo(18)">Obiettivi</div><div class="tg on">Portafoglio</div></div>
+        <div class="val-row"><div class="val-eyebrow">Valore totale</div><div class="val-n">12.640,00€</div></div>
+        <div class="body">
+
+          <!-- Stacked bar — 10 fondi -->
+          <div class="chart-wrap" style="margin-bottom:6px">
+            <div style="padding:4px 2px 0">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+                <div style="font-size:12px;font-weight:800;color:#1a1a1a">+€1.140 · +9,9%</div>
+                <div style="font-size:8px;color:#aaa">da inizio · 24 mesi</div>
+              </div>
+              <!-- barra segmentata 10 fondi -->
+              <div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:8px;gap:1px">
+                <div style="width:22%;background:#111"></div>
+                <div style="width:16%;background:#333"></div>
+                <div style="width:14%;background:#555"></div>
+                <div style="width:12%;background:#666"></div>
+                <div style="width:10%;background:#888"></div>
+                <div style="width:8%;background:#999"></div>
+                <div style="width:7%;background:#aaa"></div>
+                <div style="width:5%;background:#bbb"></div>
+                <div style="width:4%;background:#ccc"></div>
+                <div style="width:2%;background:#ddd"></div>
+              </div>
+              <!-- lista fondi — tappabili → scheda fondo -->
+              <div style="display:flex;flex-direction:column;gap:3px">
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#111;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Bilanciato</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">22%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€2.780</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#333;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Obbligazionario</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">16%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€2.020</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#555;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Azionario Europa</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">14%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€1.770</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#666;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon ESG Globale</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">12%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€1.516</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#888;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Liquidità</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">10%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€1.264</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#999;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Flessibile</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">8%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€1.011</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#aaa;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon PIR Italia</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">7%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€884</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#bbb;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Azionario USA</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">5%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€632</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#ccc;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Mercati Emergenti</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">4%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€505</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+                <div onclick="goTo(20)" style="display:flex;align-items:center;gap:6px;cursor:pointer"><div style="width:7px;height:7px;background:#ddd;border-radius:1px;flex-shrink:0"></div><div style="font-size:8px;color:#333;flex:1">Eurizon Breve Termine</div><div style="font-size:7.5px;color:#888;min-width:22px;text-align:right">2%</div><div style="font-size:8px;font-weight:800;color:#111;min-width:36px;text-align:right">€253</div><div style="font-size:9px;color:#ccc;margin-left:2px">›</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="movs">
+            <div class="mov-head">Movimenti recenti</div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Vers. · Eurizon Bil.</div><div class="mov-date">1 apr 2026</div></div><div class="mov-amt">+€180</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Vers. · Eurizon ESG</div><div class="mov-date">1 apr 2026</div></div><div class="mov-amt">+€60</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Vers. · Eurizon Obb.</div><div class="mov-date">1 apr 2026</div></div><div class="mov-amt">+€80</div></div>
+          </div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ── 20: Scheda Fondo personale — drill-down da Portafoglio ── -->
+    <div class="scr" id="scr-20">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+        <!-- nav bar con back -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px 6px;flex-shrink:0">
+          <div onclick="goTo(17)" style="width:30px;height:30px;border-radius:50%;background:#ebebeb;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0">‹</div>
+          <div style="font-size:13px;font-weight:800;color:#111;flex:1">Eurizon Bilanciato</div>
+          <!-- badge fondo -->
+          <div style="width:32px;height:32px;border-radius:10px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#e0e0e0;font-family:Arial,sans-serif;flex-shrink:0">EBI</div>
+        </div>
+        <div class="body">
+
+          <!-- valore + rendimento -->
+          <div style="padding:2px 14px 8px">
+            <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-0.5px">€2.080,00</div>
+            <div style="font-size:10px;font-weight:700;color:#444;margin-top:2px">+€194 · +10,3% <span style="font-weight:400;color:#bbb">da inizio · 18 mesi</span></div>
+          </div>
+
+          <!-- grafico a scalata + chip periodo -->
+          <div class="chart-wrap" style="margin-bottom:6px">
+            <div class="chart-bg">
+              <svg width="100%" height="72" viewBox="0 0 296 72" preserveAspectRatio="none">
+                <path d="M0 64 C30 60 60 55 90 48 S150 36 180 28 S240 16 296 8" stroke="#555" stroke-width="1.5" fill="none"/>
+                <path d="M0 64 C30 60 60 55 90 48 S150 36 180 28 S240 16 296 8 L296 72 L0 72 Z" fill="#888" opacity="0.15"/>
+              </svg>
+            </div>
+            <div style="display:flex;gap:5px;padding:5px 2px 0">
+              <div style="font-size:8px;font-weight:700;background:#111;color:#fff;border-radius:10px;padding:2px 7px;cursor:pointer">18m</div>
+              <div style="font-size:8px;font-weight:600;color:#aaa;border-radius:10px;padding:2px 7px;cursor:pointer;background:#f0f0f0">1m</div>
+              <div style="font-size:8px;font-weight:600;color:#aaa;border-radius:10px;padding:2px 7px;cursor:pointer;background:#f0f0f0">3m</div>
+              <div style="font-size:8px;font-weight:600;color:#aaa;border-radius:10px;padding:2px 7px;cursor:pointer;background:#f0f0f0">6m</div>
+              <div style="font-size:8px;font-weight:600;color:#aaa;border-radius:10px;padding:2px 7px;cursor:pointer;background:#f0f0f0">YTD</div>
+              <div style="font-size:8px;font-weight:600;color:#aaa;border-radius:10px;padding:2px 7px;cursor:pointer;background:#f0f0f0">3a</div>
+            </div>
+          </div>
+
+          <!-- rendimento per periodo -->
+          <div class="breakdown" style="margin-bottom:6px">
+            <div class="bd-head">Rendimento per periodo</div>
+            <div style="display:flex;padding:8px 12px;gap:0">
+              <div style="flex:1;text-align:center;border-right:1px solid #f0f0f0">
+                <div style="font-size:9px;font-weight:800;color:#333">+1,2%</div>
+                <div style="font-size:7.5px;color:#bbb;margin-top:1px">1 mese</div>
+              </div>
+              <div style="flex:1;text-align:center;border-right:1px solid #f0f0f0">
+                <div style="font-size:9px;font-weight:800;color:#333">+3,8%</div>
+                <div style="font-size:7.5px;color:#bbb;margin-top:1px">6 mesi</div>
+              </div>
+              <div style="flex:1;text-align:center;border-right:1px solid #f0f0f0">
+                <div style="font-size:9px;font-weight:800;color:#333">+6,1%</div>
+                <div style="font-size:7.5px;color:#bbb;margin-top:1px">YTD</div>
+              </div>
+              <div style="flex:1;text-align:center;border-right:1px solid #f0f0f0">
+                <div style="font-size:9px;font-weight:800;color:#333">+10,3%</div>
+                <div style="font-size:7.5px;color:#bbb;margin-top:1px">1 anno</div>
+              </div>
+              <div style="flex:1;text-align:center">
+                <div style="font-size:9px;font-weight:800;color:#333">+28,4%</div>
+                <div style="font-size:7.5px;color:#bbb;margin-top:1px">3 anni</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- azioni rapide -->
+          <div style="display:flex;gap:6px;margin:0 12px 6px">
+            <div onclick="goTo(12)" style="flex:1;background:#111;color:#fff;border-radius:10px;padding:8px 0;text-align:center;font-size:9px;font-weight:800;cursor:pointer">Versa</div>
+            <div onclick="goTo(12)" style="flex:1;background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:8px 0;text-align:center;font-size:9px;font-weight:700;color:#333;cursor:pointer">Preleva</div>
+            <div style="flex:1;background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:8px 0;text-align:center;font-size:9px;font-weight:700;color:#333;cursor:pointer">KID 📄</div>
+          </div>
+
+          <!-- info fondo -->
+          <div class="breakdown" style="margin-bottom:6px">
+            <div class="bd-head">Info fondo</div>
+            <div style="display:flex;flex-wrap:wrap;padding:8px 12px;gap:8px 0">
+              <div style="width:50%;padding-right:8px">
+                <div style="font-size:7.5px;color:#bbb;margin-bottom:1px">Categoria</div>
+                <div style="font-size:9px;font-weight:700;color:#333">Bilanciato moderato</div>
+              </div>
+              <div style="width:50%">
+                <div style="font-size:7.5px;color:#bbb;margin-bottom:1px">Rischio</div>
+                <div style="font-size:9px;font-weight:700;color:#333">Medio-basso · 3/7</div>
+              </div>
+              <div style="width:50%;padding-right:8px">
+                <div style="font-size:7.5px;color:#bbb;margin-bottom:1px">Orizzonte</div>
+                <div style="font-size:9px;font-weight:700;color:#333">5+ anni</div>
+              </div>
+              <div style="width:50%">
+                <div style="font-size:7.5px;color:#bbb;margin-bottom:1px">ISIN</div>
+                <div style="font-size:9px;font-weight:700;color:#333;font-family:monospace">IT0005421112</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- obiettivi collegati — 3 -->
+          <div class="breakdown" style="margin-bottom:6px">
+            <div class="bd-head">Obiettivi collegati · 3</div>
+            <div style="display:flex;align-items:center;gap:9px;padding:7px 12px;border-bottom:1px solid #f0f0f0;cursor:pointer">
+              <div style="font-size:13px">🏖</div>
+              <div style="flex:1">
+                <div style="font-size:9.5px;font-weight:700;color:#111">Anticipo casa</div>
+                <div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:34%;background:#555;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">34%</div></div>
+              </div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€1.200</div><div style="font-size:7.5px;color:#bbb">€100/m</div></div>
+              <div style="font-size:11px;color:#ccc">›</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:7px 12px;border-bottom:1px solid #f0f0f0;cursor:pointer">
+              <div style="font-size:13px">🎓</div>
+              <div style="flex:1">
+                <div style="font-size:9.5px;font-weight:700;color:#111">Università figlio</div>
+                <div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:22%;background:#555;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">22%</div></div>
+              </div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€880</div><div style="font-size:7.5px;color:#bbb">€80/m</div></div>
+              <div style="font-size:11px;color:#ccc">›</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer">
+              <div style="font-size:13px">🚗</div>
+              <div style="flex:1">
+                <div style="font-size:9.5px;font-weight:700;color:#111">Auto nuova</div>
+                <div style="display:flex;align-items:center;gap:4px;margin-top:2px"><div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:60%;background:#555;border-radius:2px"></div></div><div style="font-size:7.5px;color:#bbb">60%</div></div>
+              </div>
+              <div style="text-align:right;flex-shrink:0"><div style="font-size:9.5px;font-weight:800;color:#333">€720 / €1.200</div><div style="font-size:7.5px;color:#bbb">€100/m · 5 mesi</div></div>
+              <div style="font-size:11px;color:#ccc">›</div>
+            </div>
+          </div>
+
+          <!-- piano automatico -->
+          <div class="breakdown" style="margin-bottom:6px">
+            <div class="bd-head">Piano automatico</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #f0f0f0">
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#111">€180 / mese</div>
+                <div style="font-size:8px;color:#aaa;margin-top:1px">Ogni 1° del mese · RID attivo · IBAN •••3421</div>
+              </div>
+              <div style="font-size:9px;font-weight:700;color:#555;background:#ebebeb;border-radius:8px;padding:3px 8px;cursor:pointer">Modifica</div>
+            </div>
+            <div style="padding:6px 12px;font-size:8px;color:#aaa">Prossimo addebito: <b style="color:#555">1 mag 2026</b> · Totale versato: <b style="color:#555">€3.240</b></div>
+          </div>
+
+          <!-- movimenti — varietà -->
+          <div class="movs">
+            <div class="mov-head">Movimenti recenti</div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento piano</div><div class="mov-date">1 apr 2026</div></div><div class="mov-amt">+€180</div></div>
+            <div class="mov-row"><div class="mov-ic" style="font-size:8px">✦</div><div class="mov-info"><div class="mov-lbl">Versamento manuale</div><div class="mov-date">22 mar 2026</div></div><div class="mov-amt">+€500</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento piano</div><div class="mov-date">1 mar 2026</div></div><div class="mov-amt">+€180</div></div>
+            <div class="mov-row"><div class="mov-ic">↓</div><div class="mov-info"><div class="mov-lbl">Prelievo parziale</div><div class="mov-date">10 feb 2026</div></div><div class="mov-amt" style="color:#666">−€200</div></div>
+            <div class="mov-row"><div class="mov-ic">↑</div><div class="mov-info"><div class="mov-lbl">Versamento piano</div><div class="mov-date">1 feb 2026</div></div><div class="mov-amt">+€180</div></div>
+          </div>
+        </div>
+        <div class="bnav">
+          <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+          <div class="bn" onclick="goTo(11)"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+          <div class="bn" onclick="goTo(12)"><div class="bn-plus">+</div></div>
+          <div class="bn" onclick="goTo(13)"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+          <div class="bn" onclick="goTo(15)"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div><!-- .screens -->
+  <div class="nav-arrow right" onclick="next()">›</div>
+</div><!-- .phonewrap -->
+
+<!-- INFO PANEL -->
+<div class="infopanel" id="infopanel"></div>
+
+</div><!-- .layout -->
+
+<script>
+const CASES = [
+  { num:'Caso 1A/B', title:'Tutto skippato', desc:'Ha scelto il fondo ma ha saltato versamento, obiettivo e piano. Home = 3 azioni in checklist dentro la fondo card.', done:['Registrazione','Fondo scelto'], miss:['Versamento','Obiettivo','Piano automatico'], cta:'<b>1.</b> Fai il primo versamento<br><b>2.</b> Crea obiettivo<br><b>3.</b> Attiva piano', note:'Pillola Big/Large — 3 azioni, nessun valore' },
+  { num:'Caso 2', title:'Fondo + Piano', desc:'Ha fondo e piano automatico ma non ha ancora versato né creato un obiettivo.', done:['Registrazione','Fondo','Piano automatico'], miss:['Versamento iniziale','Obiettivo'], cta:'<b>1.</b> Fai il primo versamento<br><b>2.</b> Crea un obiettivo', note:'Pillola Medium — 2 azioni rimaste' },
+  { num:'Caso 3', title:'Fondo + Bonifico', desc:'Ha versato ma ha saltato piano automatico e obiettivo. I soldi ci sono, manca la struttura.', done:['Registrazione','Fondo','Versamento bonifico'], miss:['Obiettivo','Piano automatico'], cta:'<b>1.</b> Crea il tuo primo obiettivo<br><b>2.</b> Attiva piano automatico', note:'Pillola Medium — 2 azioni rimaste' },
+  { num:'Caso 4', title:'Fondo + Piano + Bonifico', desc:'Setup quasi completo — solo l\'obiettivo manca. Il caso più vicino all\'utente attivo.', done:['Registrazione','Fondo','Piano','Versamento'], miss:['Obiettivo'], cta:'<b>1.</b> Crea il tuo primo obiettivo', note:'Pillola Big/Large — 1 sola azione, molto spazio' },
+  { num:'Caso 5', title:'Attivo · 1 obiettivo', desc:'Setup completo. Fondo attivo, obiettivo impostato, piano automatico in corso. Home = stato puro.', done:['Tutto completato'], miss:[], cta:'Nessuna azione — solo stato', note:'Pillola Small — tutto sotto controllo' },
+  { num:'Caso 5B', title:'Attivo · 3 obiettivi', desc:'Utente esperto: 3 obiettivi sullo stesso fondo. Layout Option C — fondo come header, obiettivi come righe compatte con progress + €/mese.', done:['Tutto completato'], miss:[], cta:'Nessuna azione — stato denso senza caos', note:'Pillola Small — pochissimo spazio residuo' },
+  { num:'Caso 6', title:'In pausa', desc:'Piano automatico sospeso. Fondo e obiettivo esistono ma il risparmio si è interrotto.', done:['Fondo attivo','Obiettivo'], miss:['Piano riattivato'], cta:'Alert ⏸ — Hai saltato 2 mesi · Riattiva il piano', note:'Pillola Medium — alert + 1 azione' },
+  { num:'Caso 7', title:'Dormiente', desc:'Nessun versamento da 60+ giorni. Il fondo esiste in silenzio. Serve re-engagement emotivo.', done:['Fondo attivo'], miss:['Versamento','Piano attivo'], cta:'Alert 💤 + Fai un versamento per ripartire', note:'Pillola Medium — alert + 1 azione' },
+  { num:'Home · Portafoglio A', title:'Portafoglio — Vuoto', desc:'Vista Portafoglio per utente in fase onboarding. Nessun dato disponibile — empty state che guida all\'azione.', done:[], miss:[], cta:'Empty state → guida al primo versamento', note:'Pillola Big/Large' },
+  { num:'Home · Portafoglio B', title:'Portafoglio — Attivo', desc:'Vista Portafoglio con dati reali: grafico andamento, rendimento, breakdown per fondo, ultimi 3 movimenti.', done:['Valore totale','Grafico','Breakdown','Movimenti'], miss:[], cta:'Nessuna azione proposta — solo stato', note:'Il toggle Portafoglio è raggiungibile da qualsiasi Home case attivo' },
+  { num:'Tab Obiettivi', title:'Obiettivi — Vuoto', desc:'Tab Obiettivi senza obiettivi impostati. Empty state con CTA diretta per creare il primo goal.', done:[], miss:['Obiettivo'], cta:'+ Crea il primo obiettivo (CTA primaria)', note:'Pillola Big/Large — molto spazio' },
+  { num:'Tab Obiettivi', title:'Obiettivi — Con obiettivi', desc:'Lista di 3 obiettivi attivi. Ogni card mostra: icona, nome, valore corrente, progress bar, fondo + piano associato. Azioni: Modifica · Pausa · Storico.', done:['3 obiettivi attivi'], miss:[], cta:'Modifica · Pausa · Storico per ogni obiettivo', note:'Fondo e piano vivono DENTRO ogni goal' },
+  { num:'Sheet [+]', title:'Sheet azioni', desc:'Bottom sheet per tutte le azioni primarie. Si apre dal tab [+] centrale nella nav bar. Versa/Preleva in evidenza, le altre azioni sotto.', done:[], miss:[], cta:'PRIMARIO: Versa · Preleva<br>Crea obiettivo · Nuovo fondo · Aggiungi piano', note:'[+] = tutto ciò che si crea o muove' },
+  { num:'Esplora', title:'Catalogo Fondi', desc:'Elenco fondi con filtri contestuali (rischio, orizzonte, ESG) e collezioni curate. Discovery senza pressione.', done:[], miss:[], cta:'Tap su fondo → scheda dettaglio', note:'Una pillola/collezione può portare direttamente a un fondo filtrato' },
+  { num:'Esplora — Scheda', title:'Scheda Fondo', desc:'Dettaglio di un fondo: statistiche (rendimento atteso, orizzonte, minimo), descrizione, CTA "Usa per un obiettivo".', done:[], miss:[], cta:'"Usa per un obiettivo" → crea obiettivo con questo fondo', note:'Pillola Small — contestuale alla scheda (es. cosa significa rischio medio-basso)' },
+  { num:'Profilo', title:'Account & Impostazioni', desc:'Tutte le sezioni rispecchiano il dato raccolto in onboarding: dati anagrafici, residenza, domicilio fiscale, KYC, profilazione MiFID, AML, piano e pagamenti, contratti, sicurezza, notifiche.', done:['Dati personali','Indirizzo + domicilio fiscale','Documento identità (KYC)','Profilazione MiFID (obiettivo, rischio, orizzonte)','ESG / PIR','Questionario AML','Piano automatico','Metodo pagamento / IBAN','Contratti firmati','Sicurezza (PIN, biometrico)','Notifiche push'], miss:[], cta:'Nessuna azione proposta — gestione account', note:'La pagina è scrollabile. Bisogno: "Devo gestire qualcosa nel mio account"' },
+  { num:'Home · Multi-fondo A', title:'Obiettivi — 2 fondi', desc:'Utente con 2 fondi attivi: Eurizon Bilanciato (2 obiettivi) e Eurizon Obbligazionario (1 obiettivo + 1 piano libero). Layout Option C — ogni fondo è un header, gli obiettivi sono righe compatte con progress + €/mese.', done:['2 fondi attivi','3 obiettivi','1 piano libero'], miss:[], cta:'Nessuna azione — stato multi-fondo denso', note:'Piano libero = riga grigia senza obiettivo allegato, dentro il fcard del fondo' },
+  { num:'Home · Multi-fondo B', title:'Portafoglio — 2 fondi', desc:'Vista Portafoglio con 2 fondi: stacked bar segmentata + lista fondi con %, movimenti etichettati per fondo.', done:['Stacked bar 2 segmenti','Lista fondi','Movimenti con etichetta fondo'], miss:[], cta:'Nessuna azione — solo stato', note:'Toggle Portafoglio è raggiungibile da scr-16 (vista Obiettivi multi-fondo)' },
+  { num:'Home · 10 obiettivi A', title:'Obiettivi — 3 fondi × 10 obj', desc:'3 fondi con 10 obiettivi totali. Ogni fcard mostra max 2-3 righe, il resto è collassato in "+ N altri obiettivi". Layout denso ma leggibile.', done:['3 fondi attivi','10 obiettivi','Truncation per fcard'], miss:[], cta:'Tap "+ N altri" per espandere il fcard', note:'Truncation: ogni fcard mostra max 3 obiettivi, il quarto è collassato' },
+  { num:'Home · 10 obiettivi B', title:'Portafoglio — 10 fondi', desc:'Stacked bar con 10 segmenti in scala di grigi + lista completa 10 fondi. La barra scala a N senza perdere leggibilità, la lista è compatta a 3px gap.', done:['Stacked bar 10 segmenti','Lista 10 fondi','Movimenti recenti'], miss:[], cta:'Nessuna azione — solo stato', note:'La stacked bar scala linearmente a N fondi senza rompersi' },
+  { num:'Scheda Fondo personale', title:'Drill-down — Eurizon Bilanciato', desc:'Tap su un fondo in Portafoglio → scheda personale: valore + rendimento, grafico a scalata del solo fondo, chip periodo (1m / 3m / 6m / YTD / 18m), obiettivi collegati, piano automatico attivo, movimenti del fondo.', done:['Grafico scalata','Chip periodo','Obiettivi collegati','Piano attivo','Movimenti'], miss:[], cta:'Modifica piano · Tap obiettivo → dettaglio obiettivo', note:'Back → torna a Portafoglio (scr-17). Distinto da Esplora — qui i dati sono personali, non di catalogo.' },
+];
+
+const TOTAL = CASES.length;
+let current = 0;
+
+function goTo(idx) {
+  document.getElementById('scr-' + current).classList.remove('active');
+  document.querySelectorAll('.sl-item')[current].classList.remove('active');
+  current = idx;
+  document.getElementById('scr-' + current).classList.add('active');
+  document.querySelectorAll('.sl-item')[current].classList.add('active');
+  updateMeta();
+}
+
+function next() { goTo((current + 1) % TOTAL); }
+function prev() { goTo((current - 1 + TOTAL) % TOTAL); }
+
+function updateMeta() {
+  const c = CASES[current];
+  document.getElementById('tb-name').textContent = c.num + ' · ' + c.title;
+  document.getElementById('tb-counter').textContent = (current + 1) + ' / ' + TOTAL;
+
+  const done = c.done.map(t => `<span class="tag done">${t}</span>`).join('');
+  const miss = c.miss.map(t => `<span class="tag miss">${t}</span>`).join('');
+
+  document.getElementById('infopanel').innerHTML = `
+    <div class="ip-case">${c.num}</div>
+    <div class="ip-title">${c.title}</div>
+    <div class="ip-desc">${c.desc}</div>
+    ${(done||miss) ? `<div class="ip-div"></div>` : ''}
+    ${done ? `<div class="ip-sec">Completato</div><div style="margin-bottom:8px">${done}</div>` : ''}
+    ${miss ? `<div class="ip-sec">Mancante</div><div style="margin-bottom:8px">${miss}</div>` : ''}
+    <div class="ip-div"></div>
+    <div class="ip-sec">CTA / Azioni</div>
+    <div class="ip-cta" style="margin-bottom:12px">${c.cta}</div>
+    <div class="ip-sec">Note</div>
+    <div class="ip-note">${c.note}</div>
+  `;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prev();
+});
+
+updateMeta();
+</script>
+</body>
+</html>

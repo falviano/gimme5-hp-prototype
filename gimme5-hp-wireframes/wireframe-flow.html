@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIMME5 — User Flow · Tutte le schermate in sequenza</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --phone-w: 200px;
+  --phone-h: 420px;
+  --radius: 12px;
+}
+
+body {
+  background: #f5f5f5;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  color: #222;
+  padding: 32px 40px 80px;
+  min-width: 1400px;
+}
+
+/* ── HEADER ── */
+.doc-title { font-size: 20px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 4px; color: #111; }
+.doc-sub { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 48px; }
+
+/* ── FLOW SECTION ── */
+.flow-section { margin-bottom: 56px; }
+.flow-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 1px solid #d8d8d8;
+}
+.flow-badge {
+  background: #333; color: #fff;
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px;
+  padding: 3px 8px; border-radius: 4px; flex-shrink: 0;
+}
+.flow-title { font-size: 13px; font-weight: 700; color: #111; }
+.flow-desc { font-size: 9px; color: #888; margin-top: 2px; }
+
+/* ── PHONES ROW ── */
+.phones-row {
+  display: flex; align-items: flex-start; gap: 0; flex-wrap: nowrap; overflow-x: auto;
+}
+
+/* ── PHONE UNIT (phone + label + arrow) ── */
+.pu { display: flex; align-items: flex-start; gap: 0; flex-shrink: 0; }
+.pw { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.plabel {
+  font-size: 8px; color: #555; text-align: center;
+  max-width: var(--phone-w); line-height: 1.4;
+}
+.plabel strong { color: #888; }
+
+/* ── ARROW ── */
+.arrow {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 6px; flex-shrink: 0; margin-top: 60px;
+}
+.arrow-line { font-size: 14px; color: #bbb; line-height: 1; }
+.arrow-label { font-size: 7px; color: #aaa; text-align: center; max-width: 52px; line-height: 1.3; margin-top: 2px; }
+
+/* ── WHITE PHONE ── */
+.phone-w {
+  width: var(--phone-w);
+  background: #fff;
+  border-radius: var(--radius);
+  border: 1px solid #bbb;
+  display: flex; flex-direction: column;
+  overflow: hidden; position: relative; flex-shrink: 0;
+}
+.screen-w {
+  flex: 1; padding: 8px 10px 6px;
+  background: #fff; color: #111;
+  display: flex; flex-direction: column; gap: 6px; overflow: hidden;
+}
+.status-w {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 10px 3px; font-size: 7.5px; color: #999; flex-shrink: 0;
+  background: #fff;
+}
+
+/* ── CARD ── */
+.cw { border: 1px solid #e0e0e0; border-radius: 8px; padding: 7px 9px; background: #fff; }
+.cw.strong { border-width: 2px; border-color: #111; }
+.cw.warm { background: #f5f5f5; border-color: #e0e0e0; }
+.cw.patto { border-left: 3px solid #111; border-radius: 0 8px 8px 0; padding-left: 8px; }
+
+/* ── TYPE ── */
+.tw-name { font-size: 10px; font-weight: 800; color: #111; line-height: 1.25; }
+.tw-sub { font-size: 7px; color: #999; line-height: 1.4; }
+.tw-label { font-size: 7px; text-transform: uppercase; letter-spacing: .6px; color: #bbb; font-weight: 700; }
+.tw-value { font-size: 22px; font-weight: 800; color: #111; letter-spacing: -1px; line-height: 1; }
+
+/* ── CTA ── */
+.cta-w {
+  background: #111; color: #fff; border-radius: 6px;
+  padding: 6px 10px; font-size: 8.5px; font-weight: 700; text-align: center;
+}
+.cta-w.outline {
+  background: transparent; color: #111;
+  border: 1.5px solid #111;
+}
+.cta-w.ghost {
+  background: transparent; color: #999;
+  border: 1px solid #e0e0e0; font-weight: 400;
+}
+
+/* ── PROGRESS ── */
+.prog-w { width: 100%; height: 4px; background: #f0f0f0; border-radius: 2px; position: relative; overflow: hidden; }
+.prog-w-f { position: absolute; left: 0; top: 0; height: 100%; background: #111; border-radius: 2px; }
+.prog-w-mkt { position: absolute; top: 0; height: 100%; background: #ccc; border-radius: 0 2px 2px 0; }
+
+/* ── NAV ── */
+.bnav-w {
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 6px 0 8px; background: #111; flex-shrink: 0;
+}
+.ni-w {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 6.5px; color: #666; flex: 1;
+}
+.ni-w.active { color: #fff; }
+.ni-w.plus .ni-ico-w {
+  width: 18px; height: 18px; background: #fff; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #111; line-height: 1;
+}
+.ni-ico-w {
+  width: 14px; height: 14px; border: 1.5px solid currentColor;
+  border-radius: 3px; opacity: .6;
+}
+.ni-w.plus .ni-ico-w { border: none; opacity: 1; }
+
+/* ── ROUTINE ROW ── */
+.rr-w {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 8px; border-bottom: 1px solid #f5f5f5; gap: 4px;
+}
+.rr-w:last-child { border-bottom: none; }
+.rr-w.patto { border-left: 2px solid #111; padding-left: 6px; }
+.rr-label-w { font-size: 7.5px; font-weight: 700; color: #111; }
+.rr-detail-w { font-size: 6.5px; color: #aaa; }
+.rr-badge-w { font-size: 6.5px; color: #111; border: 1px solid #ddd; border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+.rr-badge-w.off { color: #aaa; border-color: #eee; }
+
+/* ── OGGETTI GRID ── */
+.obj-grid-w {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 2px 0;
+}
+.obj-grid-w > div {
+  border: 1px solid #e0e0e0; border-radius: 6px; padding: 6px 4px;
+  font-size: 8px; font-weight: 700; text-align: center; color: #111;
+}
+
+/* ── CALENDAR ── */
+.cal-w { font-size: 8px; color: #ccc; letter-spacing: 1px; line-height: 1.6; }
+.cal-w .done { color: #111; }
+
+/* ── CTA PAIR ── */
+.cta-pair-w { display: flex; gap: 6px; }
+.cta-pair-w .cta-w { flex: 1; }
+
+/* ── ANNOTATIONS ── */
+.ann {
+  font-size: 8px; color: #bbb; max-width: var(--phone-w);
+  padding: 2px 0; line-height: 1.4;
+}
+.ann.hi { color: #888; font-weight: 600; }
+
+/* ── FLOW DIVIDER ── */
+.flow-divider {
+  font-size: 8px; color: #333; text-transform: uppercase; letter-spacing: 1px;
+  margin: 10px 0 6px; padding: 0 4px;
+}
+
+/* ── STEP LABEL (sopra la freccia) ── */
+.step-label {
+  font-size: 7px; color: #444; white-space: nowrap;
+  text-align: center; margin-top: 2px;
+}
+
+/* ── SLIDER MOCK ── */
+.slider-mock { position: relative; height: 14px; margin: 2px 0; }
+.slider-mock .track { height: 3px; background: #e8e8e8; border-radius: 2px; margin-top: 5px; }
+.slider-mock .fill { position: absolute; top: 5px; left: 0; width: 25%; height: 3px; background: #111; border-radius: 2px; }
+.slider-mock .thumb { position: absolute; top: 50%; left: 25%; transform: translate(-50%,-50%); width: 12px; height: 12px; background: #111; border-radius: 50%; }
+
+/* ── NUMPAD ── */
+.numpad { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.numpad > div { padding: 5px; text-align: center; font-size: 11px; font-weight: 600; background: #f8f8f8; border-radius: 4px; }
+
+/* ── SHEET OVERLAY ── */
+.sheet-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: #fff; border-top: 1px solid #e0e0e0;
+  border-radius: 12px 12px 0 0; padding: 8px 10px;
+}
+.handle { width: 24px; height: 3px; background: #ddd; border-radius: 2px; margin: 0 auto 8px; }
+</style>
+</head>
+<body>
+
+<div class="doc-title">GIMME5 — User Flow</div>
+<div class="doc-sub">Tutte le schermate in sequenza · ogni tap è un passo nel flow</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 0 — ONBOARDING                                  -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 0</div>
+    <div>
+      <div class="flow-title">Onboarding — Primo accesso · 5 schermate · 1 minuto</div>
+      <div class="flow-desc">L'utente esce con Pilota <em>schedulato</em> — nessun obiettivo creato (non ancora versato nulla · primo pagamento il 1° del mese successivo)</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- Onb.1 -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Onb.1</strong> — 338% hero</div>
+        <div class="phone-w" style="height:380px;">
+          <div class="status-w"><span>10:06</span><span></span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+              <div style="font-size:20px;color:#e0e0e0;letter-spacing:2px;text-align:center;">◎ ◎</div>
+              <div class="tw-name" style="font-size:13px;line-height:1.3;">Chi risparmia in automatico accumula il 338% in più.</div>
+              <div class="tw-sub">Non è magia. È costanza.</div>
+            </div>
+            <div class="cta-w">Mostrami come →</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap CTA</div></div>
+    </div>
+
+    <!-- Onb.2 -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Onb.2</strong> — Template obiettivo</div>
+        <div class="phone-w" style="height:380px;">
+          <div class="status-w"><span>10:06</span><span></span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-name">Per cosa stai risparmiando?</div>
+              <div class="obj-grid-w" style="margin-top:10px;">
+                <div>Vacanza</div><div>Casa</div>
+                <div style="font-size:7px;">Fondo emerg.</div><div>Tech</div>
+                <div>Regalo</div><div style="border-style:dashed;color:#aaa;">Altro</div>
+              </div>
+            </div>
+            <div class="cta-w">Continua</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap template</div></div>
+    </div>
+
+    <!-- Onb.3 -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Onb.3</strong> — Slider importo</div>
+        <div class="phone-w" style="height:380px;">
+          <div class="status-w"><span>10:06</span><span></span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-name">Quanto vuoi mettere da parte ogni mese?</div>
+              <div style="font-size:24px;font-weight:800;color:#111;text-align:center;margin:12px 0 6px;">€75</div>
+              <div class="slider-mock"><div class="track"></div><div class="fill"></div><div class="thumb"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:7px;color:#bbb;margin-top:2px;"><span>€25</span><span>€500</span></div>
+              <div class="tw-sub" style="text-align:center;margin-top:8px;">Con €75/mese arrivi a €3.000 in 3 anni e 4 mesi.</div>
+            </div>
+            <div class="cta-w">Continua</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Continua</div></div>
+    </div>
+
+    <!-- Onb.4 -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Onb.4</strong> — Pilota automatico</div>
+        <div class="phone-w" style="height:380px;">
+          <div class="status-w"><span>10:06</span><span></span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-name">Attiva il Pilota Automatico</div>
+              <div class="cw" style="margin-top:10px;">
+                <div style="font-size:14px;margin-bottom:4px;">↻</div>
+                <div style="font-size:8.5px;font-weight:700;color:#111;">€75/mese · ogni 1° del mese</div>
+                <div class="tw-sub" style="margin-top:2px;">Prossimo: 1 giugno 2026</div>
+              </div>
+            </div>
+            <div>
+              <div class="cta-w">Attiva · €75/mese</div>
+              <div class="tw-sub" style="text-align:center;margin-top:5px;">Salta per ora</div>
+            </div>
+          </div>
+        </div>
+        <div class="ann hi">Default = attiva</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Attiva</div></div>
+    </div>
+
+    <!-- Onb.5 -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Onb.5</strong> — Fatto.</div>
+        <div class="phone-w" style="height:380px;">
+          <div class="status-w"><span>10:06</span><span></span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;text-align:center;">
+              <div style="font-size:20px;color:#ccc;">◎</div>
+              <div style="font-size:15px;font-weight:800;color:#111;">Fatto.</div>
+              <div class="tw-sub" style="line-height:1.8;">Il tuo primo versamento parte<br>il 1° giugno.<br>Da qui in poi, il Pilota<br>lavora per te.</div>
+            </div>
+            <div class="cta-w">Vai alla Home →</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Home</div></div>
+    </div>
+
+    <!-- Home post-onboarding corretta -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Home post-onboarding</strong> — €0 versati · Pilota schedulato · no obiettivo</div>
+        <div class="phone-w" style="height:380px;">
+          <div class="status-w"><span>10:06</span><span>●●● WiFi</span></div>
+          <div class="screen-w">
+            <div class="tw-name">Benvenuto, Filippo.</div>
+            <div class="tw-sub">Tutto pronto. Il Pilota parte il 1° giugno.</div>
+            <!-- valore €0 — non ancora versato nulla -->
+            <div>
+              <div class="tw-label">Valore totale</div>
+              <div style="font-size:18px;font-weight:800;color:#111;letter-spacing:-1px;">€0,00</div>
+            </div>
+            <!-- pilota schedulato — non "attivo" -->
+            <div class="cw" style="padding:6px 8px;display:flex;align-items:center;gap:6px;">
+              <div style="font-size:12px;">↻</div>
+              <div>
+                <div style="font-size:7.5px;font-weight:700;color:#111;">Pilota automatico schedulato</div>
+                <div class="tw-sub">€75/mese · primo versamento 1 giu 2026</div>
+              </div>
+            </div>
+            <!-- placeholder obiettivo — non ancora creato -->
+            <div class="cw" style="padding:8px;border:1px dashed #ccc;display:flex;align-items:center;gap:6px;">
+              <div style="font-size:14px;color:#bbb;">+</div>
+              <div>
+                <div style="font-size:7.5px;font-weight:700;color:#888;">Crea il tuo primo obiettivo</div>
+                <div class="tw-sub">Dai una direzione ai tuoi risparmi.</div>
+              </div>
+            </div>
+            <!-- pillola -->
+            <div class="cw warm" style="font-size:7.5px;font-weight:700;color:#111;">
+              Da domani il Pilota lavora per te.
+              <div class="tw-sub" style="margin-top:1px;">Puoi aggiungere regole in qualsiasi momento.</div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w active"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+        <div class="ann hi">€0,00 · Pilota schedulato ≠ attivo · nessun obiettivo creato in onboarding</div>
+        <div class="ann">Placeholder obiettivo → tap [+] per creare il primo goal</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 1 — HOME NUOVO → [+] → CREA OBIETTIVO          -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 1</div>
+    <div>
+      <div class="flow-title">Crea obiettivo — utente registrato senza obiettivo · tap [+] o CTA dalla Home</div>
+      <div class="flow-desc">Stato: si è registrato ma ha skippato l'onboarding oppure vuole aggiungere un secondo obiettivo · Nome → Target → Fondo → Regola → Conferma</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- Home nuovo (entry) -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Home</strong> — nuovo utente</div>
+        <div class="phone-w" style="height:360px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-name">Filippo, manca solo una cosa.</div>
+            <div class="tw-value" style="font-size:16px;">€0,00</div>
+            <div class="cw strong" style="padding:6px 8px;">
+              <div style="font-size:8.5px;font-weight:700;color:#111;">338% in più per chi risparmia in automatico.</div>
+            </div>
+            <div class="cta-w">Crea il tuo obiettivo</div>
+            <div class="cw warm"><div style="font-size:8px;font-weight:700;color:#111;">Chi ci vede lungo guadagna di più.</div></div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w active"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap [+]</div></div>
+    </div>
+
+    <!-- [+] Sheet -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>[+] Sheet</strong> — cosa vuoi fare?</div>
+        <div class="phone-w" style="height:360px;position:relative;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="opacity:.25;background:#f8f8f8;"></div>
+          <div class="sheet-overlay" style="height:240px;">
+            <div class="handle"></div>
+            <div class="tw-name" style="margin-bottom:8px;">Cosa vuoi fare?</div>
+            <div class="cw strong" style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+              <div style="font-size:14px;">✦</div>
+              <div>
+                <div style="font-size:8.5px;font-weight:700;color:#111;">Crea un nuovo obiettivo</div>
+                <div class="tw-sub">Scegli nome, target, fondo</div>
+              </div>
+            </div>
+            <div class="tw-label" style="margin-bottom:4px;">Aggiungi una regola</div>
+            <div class="cw" style="padding:0;">
+              <div class="rr-w"><div><div class="rr-label-w">↻ Pilota automatico</div><div class="rr-detail-w">Versa fisso ogni mese</div></div></div>
+              <div class="rr-w"><div><div class="rr-label-w">⚡ Trigger</div><div class="rr-detail-w">Versa quando succede qualcosa</div></div></div>
+              <div class="rr-w patto"><div><div class="rr-label-w">★ Patto con te stesso</div><div class="rr-detail-w">Investi quando mantieni l'impegno</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="ann hi">Crea obiettivo = bordo 2px</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "Crea obiettivo"</div></div>
+    </div>
+
+    <!-- A.2 Nome + immagine -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>1/4</strong> — Nome + immagine</div>
+        <div class="phone-w" style="height:360px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-sub">← Indietro</div>
+              <div class="tw-name">Nuovo obiettivo</div>
+              <div class="tw-sub">Passo 1 di 4</div>
+              <div class="prog-w" style="margin:4px 0;"><div class="prog-w-f" style="width:25%;"></div></div>
+              <div style="font-size:8px;font-weight:700;color:#111;margin-top:8px;">Come si chiama?</div>
+              <div class="cw" style="margin-top:4px;border-color:#111;font-size:9px;font-weight:700;">Vacanza in Grecia</div>
+              <div style="font-size:8px;font-weight:700;color:#111;margin-top:8px;">Scegli un'immagine</div>
+              <div style="display:flex;gap:4px;margin-top:4px;">
+                <div style="width:34px;height:34px;border-radius:6px;background:#111;border:2px solid #111;"></div>
+                <div style="width:34px;height:34px;border-radius:6px;background:#e8e8e8;"></div>
+                <div style="width:34px;height:34px;border-radius:6px;background:#e8e8e8;"></div>
+                <div style="width:34px;height:34px;border-radius:6px;background:#e8e8e8;"></div>
+              </div>
+            </div>
+            <div class="cta-w">Continua</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Continua</div></div>
+    </div>
+
+    <!-- A.3 Target + data -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>2/4</strong> — Target + data</div>
+        <div class="phone-w" style="height:360px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-sub">← Indietro</div>
+              <div class="tw-name">Vacanza in Grecia</div>
+              <div class="tw-sub">Passo 2 di 4</div>
+              <div class="prog-w" style="margin:4px 0;"><div class="prog-w-f" style="width:50%;"></div></div>
+              <div style="font-size:8px;font-weight:700;color:#111;margin-top:8px;">Quanto ti serve?</div>
+              <div class="cw" style="margin-top:4px;border-color:#111;font-size:14px;font-weight:800;">€ 3.000</div>
+              <div style="font-size:8px;font-weight:700;color:#111;margin-top:8px;">Entro quando?</div>
+              <div class="cw" style="margin-top:4px;font-size:9px;color:#aaa;">Luglio 2027</div>
+              <div class="cw warm" style="margin-top:6px;">
+                <div class="tw-sub">Risparmio suggerito</div>
+                <div style="font-size:9px;font-weight:700;color:#111;">€100/mese · 30 mesi</div>
+              </div>
+            </div>
+            <div class="cta-w">Continua</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Continua</div></div>
+    </div>
+
+    <!-- A.4 Seleziona fondo -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>3/4</strong> — Seleziona fondo</div>
+        <div class="phone-w" style="height:360px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-sub">← Indietro</div>
+              <div class="tw-name">Vacanza in Grecia</div>
+              <div class="tw-sub">Passo 3 di 4</div>
+              <div class="prog-w" style="margin:4px 0;"><div class="prog-w-f" style="width:75%;"></div></div>
+              <div style="font-size:8px;font-weight:700;color:#111;margin-top:8px;">Scegli un fondo</div>
+              <div class="tw-sub">Orizzonte 30 mesi · consigliato: rischio basso</div>
+              <div class="cw strong" style="margin-top:6px;">
+                <div style="display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:700;">AcomeA Risparmio</span><span style="font-size:8px;font-weight:700;">+3,8%</span></div>
+                <div class="tw-sub">Obbligazionario · Rischio 2/7 · Consigliato</div>
+              </div>
+              <div class="cw" style="margin-top:4px;">
+                <div style="display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:700;">AcomeA Performance</span><span style="font-size:8px;font-weight:700;">+6,2%</span></div>
+                <div class="tw-sub">Bilanciato · Rischio 4/7</div>
+              </div>
+            </div>
+            <div class="cta-w">Continua</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Continua</div></div>
+    </div>
+
+    <!-- A.5 Attiva regola -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>4/4</strong> — Attiva regola</div>
+        <div class="phone-w" style="height:360px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-sub">← Indietro</div>
+              <div class="tw-name">Come vuoi risparmiare?</div>
+              <div class="tw-sub">Passo 4 di 4</div>
+              <div class="prog-w" style="margin:4px 0;"><div class="prog-w-f" style="width:95%;"></div></div>
+              <div class="cw strong" style="margin-top:8px;">
+                <div class="tw-sub">Consigliata</div>
+                <div style="font-size:8.5px;font-weight:700;color:#111;margin-top:2px;">↻ Pilota automatico</div>
+                <div class="tw-sub">€100/mese · ogni 1° del mese</div>
+              </div>
+              <div class="cw" style="margin-top:4px;"><div style="font-size:8px;font-weight:700;color:#111;">⚡ Trigger</div><div class="tw-sub">Versa ad ogni evento che scegli</div></div>
+              <div class="cw" style="margin-top:4px;"><div style="font-size:8px;font-weight:700;color:#111;">★ Patto con te stesso</div><div class="tw-sub">Investi quando mantieni l'impegno</div></div>
+            </div>
+            <div>
+              <div class="cta-w">Attiva Pilota automatico</div>
+              <div class="tw-sub" style="text-align:center;margin-top:5px;">Salta per ora</div>
+            </div>
+          </div>
+        </div>
+        <div class="ann hi">Gate soft: skip possibile</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Attiva</div></div>
+    </div>
+
+    <!-- A.6 Conferma -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Conferma</strong> — obiettivo creato</div>
+        <div class="phone-w" style="height:360px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="align-items:center;justify-content:center;gap:10px;text-align:center;">
+            <div style="width:34px;height:34px;border-radius:50%;border:2px solid #111;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#111;">✓</div>
+            <div>
+              <div class="tw-name">Vacanza in Grecia creato!</div>
+              <div class="tw-sub" style="margin-top:3px;">↻ Pilota automatico attivo · €100/mese</div>
+            </div>
+            <div class="cw warm" style="width:100%;text-align:center;">
+              <div class="tw-sub">Con questa regola raggiungi il target</div>
+              <div style="font-size:9.5px;font-weight:700;color:#111;margin-top:2px;">in 30 mesi · luglio 2027</div>
+            </div>
+            <div class="cta-w" style="width:100%;">Vai all'obiettivo →</div>
+            <div class="tw-sub">Vuoi fare un bonifico iniziale?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 2 — AGGIUNGI REGOLA SPORT                      -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 2</div>
+    <div>
+      <div class="flow-title">Aggiungi regola — Trigger Sport · da dettaglio obiettivo</div>
+      <div class="flow-desc">Dettaglio → Lista regole → Sport → Squadra → Importo → Conferma</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- Dettaglio obiettivo (entry) -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Dettaglio obiettivo</strong></div>
+        <div class="phone-w" style="height:400px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-sub">← Obiettivi</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <div class="tw-name">Vacanza in Grecia</div>
+              <div style="font-size:12px;font-weight:800;color:#111;">37%</div>
+            </div>
+            <div class="tw-sub">€1.140 / €3.000 · lug 2027</div>
+            <div class="prog-w"><div class="prog-w-f" style="width:37%;"></div><div class="prog-w-mkt" style="left:37%;width:3%;"></div></div>
+            <div class="tw-sub">al netto di utile/perdita</div>
+            <div class="cw warm">
+              <div class="tw-sub">Tra 5 anni</div>
+              <div style="font-size:16px;font-weight:800;color:#111;letter-spacing:-1px;">€4.287</div>
+              <div class="tw-sub">↑ effetto composto live</div>
+            </div>
+            <div class="tw-label">Regole attive</div>
+            <div class="cw" style="padding:0;">
+              <div class="rr-w"><div><div class="rr-label-w">↻ Pilota automatico</div><div class="rr-detail-w">€100/mese · prossimo 1 mag</div></div><div class="rr-badge-w">Attivo</div></div>
+              <div class="rr-w" style="justify-content:center;border-top:1px dashed #f0f0f0;">
+                <div style="font-size:7.5px;color:#aaa;">+ Aggiungi regola</div>
+              </div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w active"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "+ Aggiungi regola"</div></div>
+    </div>
+
+    <!-- B.2 Lista regole -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>B.2</strong> — Lista regole</div>
+        <div class="phone-w" style="height:400px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-sub">← Vacanza in Grecia</div>
+            <div class="tw-name">Le tue regole</div>
+            <div style="font-size:8px;font-weight:700;color:#111;margin-top:4px;">Regole attivabili</div>
+            <div class="cw" style="padding:0;">
+              <div class="rr-w"><div style="font-size:11px;">📅</div><div style="flex:1;margin-left:6px;"><div class="rr-label-w">Date speciali</div><div class="rr-detail-w">Investi nelle date che contano</div></div><div style="font-size:10px;color:#ccc;">›</div></div>
+              <div class="rr-w"><div style="font-size:11px;">⚽</div><div style="flex:1;margin-left:6px;"><div class="rr-label-w">Sport</div><div class="rr-detail-w">Versa ad ogni vittoria</div></div><div style="font-size:10px;color:#ccc;">›</div></div>
+              <div class="rr-w"><div style="font-size:11px;">👟</div><div style="flex:1;margin-left:6px;"><div class="rr-label-w">Passi giornalieri</div><div class="rr-detail-w">Risparmia ad ogni traguardo</div></div><div style="font-size:10px;color:#ccc;">›</div></div>
+              <div class="rr-w patto"><div style="font-size:11px;">★</div><div style="flex:1;margin-left:6px;"><div class="rr-label-w">Patto con te stesso</div><div class="rr-detail-w">Versa quando mantieni l'impegno</div></div><div style="font-size:10px;color:#ccc;">›</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Sport</div></div>
+    </div>
+
+    <!-- B.3 Seleziona sport -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>B.3</strong> — Seleziona sport</div>
+        <div class="phone-w" style="height:400px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-sub">← Regole</div>
+              <div class="tw-name" style="margin-bottom:4px;">Seleziona uno sport</div>
+              <div style="display:flex;gap:2px;margin-bottom:10px;">
+                <div style="flex:1;height:2px;background:#111;border-radius:2px;"></div>
+                <div style="flex:1;height:2px;background:#e0e0e0;border-radius:2px;"></div>
+                <div style="flex:1;height:2px;background:#e0e0e0;border-radius:2px;"></div>
+              </div>
+              <div class="cw strong" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                <div style="display:flex;align-items:center;gap:8px;"><div style="font-size:14px;">⚽</div><div style="font-size:8.5px;font-weight:700;color:#111;">Calcio</div></div>
+                <div style="width:12px;height:12px;border-radius:50%;border:2px solid #111;display:flex;align-items:center;justify-content:center;"><div style="width:5px;height:5px;border-radius:50%;background:#111;"></div></div>
+              </div>
+              <div class="cw" style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:8px;"><div style="font-size:14px;">🏀</div><div style="font-size:8.5px;font-weight:700;color:#111;">Basket</div></div>
+                <div style="width:12px;height:12px;border-radius:50%;border:2px solid #ddd;"></div>
+              </div>
+            </div>
+            <div class="cta-w">Seleziona competizione</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Calcio</div></div>
+    </div>
+
+    <!-- B.4 Cerca squadra -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>B.4</strong> — Cerca squadra</div>
+        <div class="phone-w" style="height:400px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div style="flex:1;display:flex;flex-direction:column;">
+              <div class="tw-sub">← Indietro</div>
+              <div class="tw-name" style="margin-bottom:4px;">Cerca la tua squadra</div>
+              <div style="display:flex;gap:2px;margin-bottom:6px;">
+                <div style="flex:1;height:2px;background:#111;border-radius:2px;"></div>
+                <div style="flex:1;height:2px;background:#111;border-radius:2px;"></div>
+                <div style="flex:1;height:2px;background:#e0e0e0;border-radius:2px;"></div>
+              </div>
+              <div class="cw" style="font-size:7.5px;color:#aaa;margin-bottom:6px;">🔍  Cerca squadra...</div>
+              <div class="cw" style="padding:0;flex:1;">
+                <div class="rr-w"><div style="font-size:7.5px;color:#111;">AC Milan</div><div style="width:10px;height:10px;border-radius:50%;border:1.5px solid #e0e0e0;"></div></div>
+                <div class="rr-w" style="background:#f8f8f8;"><div style="font-size:7.5px;font-weight:700;color:#111;">Inter</div><div style="width:10px;height:10px;border-radius:50%;border:1.5px solid #111;display:flex;align-items:center;justify-content:center;"><div style="width:4px;height:4px;border-radius:50%;background:#111;"></div></div></div>
+                <div class="rr-w"><div style="font-size:7.5px;color:#111;">Juventus</div><div style="width:10px;height:10px;border-radius:50%;border:1.5px solid #e0e0e0;"></div></div>
+                <div class="rr-w"><div style="font-size:7.5px;color:#111;">Napoli</div><div style="width:10px;height:10px;border-radius:50%;border:1.5px solid #e0e0e0;"></div></div>
+              </div>
+            </div>
+            <div class="cta-w" style="margin-top:6px;">Imposta importo</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">seleziona Inter</div></div>
+    </div>
+
+    <!-- B.5 Importo -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>B.5</strong> — Importo per vittoria</div>
+        <div class="phone-w" style="height:400px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-sub">← Indietro</div>
+              <div class="tw-name" style="margin-bottom:4px;">Quanto vuoi versare?</div>
+              <div style="display:flex;gap:2px;margin-bottom:6px;">
+                <div style="flex:1;height:2px;background:#111;border-radius:2px;"></div>
+                <div style="flex:1;height:2px;background:#111;border-radius:2px;"></div>
+                <div style="flex:1;height:2px;background:#111;border-radius:2px;"></div>
+              </div>
+              <div class="tw-sub" style="margin-bottom:8px;">Ad ogni vittoria dell'Inter, questa cifra verrà versata.</div>
+              <div class="cw strong" style="padding:12px 10px;display:flex;align-items:center;gap:4px;margin-bottom:8px;">
+                <div style="font-size:14px;font-weight:700;color:#aaa;">€</div>
+                <div style="font-size:22px;font-weight:800;color:#111;letter-spacing:-1px;">10</div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <div class="cw" style="flex:1;text-align:center;font-size:7.5px;font-weight:700;">€ 5</div>
+                <div class="cw strong" style="flex:1;text-align:center;font-size:7.5px;font-weight:700;">€ 10</div>
+                <div class="cw" style="flex:1;text-align:center;font-size:7.5px;font-weight:700;">€ 20</div>
+                <div class="cw" style="flex:1;text-align:center;font-size:7.5px;font-weight:700;">€ 50</div>
+              </div>
+            </div>
+            <div class="cta-w">Attiva routine</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Attiva</div></div>
+    </div>
+
+    <!-- B.6 Conferma -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>B.6</strong> — Routine attivata</div>
+        <div class="phone-w" style="height:400px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="align-items:center;justify-content:center;gap:10px;text-align:center;">
+            <div style="width:34px;height:34px;border-radius:50%;border:2px solid #111;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#111;">✓</div>
+            <div>
+              <div class="tw-name">Fatto. ⚡ Trigger Sport attivo.</div>
+              <div class="tw-sub" style="margin-top:3px;">Vacanza in Grecia · €10 ad ogni vittoria Inter</div>
+            </div>
+            <div class="tw-sub" style="line-height:1.6;">Quando l'Inter vince, riceverai una notifica.<br>Trovi il Trigger nel dettaglio dell'obiettivo.</div>
+            <div class="cta-w" style="width:100%;">Torna all'obiettivo →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 3 — GIORNATA TIPO: HOME ATTIVO → VERSA         -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 3</div>
+    <div>
+      <div class="flow-title">Giornata tipo — Home attivo · Patto · Dettaglio · Versa</div>
+      <div class="flow-desc">Patto invertito: default = fatto. L'utente apre l'app, vede il patto già confermato.</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- Home attivo E.1 -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>E.1</strong> — Home utente attivo</div>
+        <div class="phone-w" style="height:460px;">
+          <div class="status-w"><span>10:06</span><span>●●● WiFi</span></div>
+          <div class="screen-w">
+            <div class="tw-name">Filippo, buongiorno</div>
+            <div class="tw-sub">Vacanza in Grecia · 37%</div>
+            <div class="cw patto">
+              <div style="font-size:8px;font-weight:700;color:#111;">★ Non ho fumato</div>
+              <div class="tw-sub" style="margin:1px 0 4px;">+€2 su Vacanza in Grecia · <strong style="color:#111;">Fatto.</strong></div>
+              <div class="cal-w"><span class="done">●●●</span>○<span class="done">●●●●●●●●●●</span>○○<br><span style="font-size:6.5px;letter-spacing:0;color:#bbb;">13 giorni questo mese</span></div>
+              <div class="cta-w ghost" style="margin-top:5px;">✕ Non l'ho fatto oggi</div>
+            </div>
+            <div>
+              <div class="tw-label">Vacanza in Grecia</div>
+              <div class="cw" style="padding:6px 8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+                  <div style="font-size:9px;font-weight:700;color:#111;">€1.140 / €3.000</div>
+                  <div style="font-size:8px;font-weight:700;color:#111;">37%</div>
+                </div>
+                <div class="prog-w"><div class="prog-w-f" style="width:37%;"></div><div class="prog-w-mkt" style="left:37%;width:3%;"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:6.5px;color:#bbb;margin-top:2px;"><span>+€3,20 mercato</span><span>lug 2027</span></div>
+              </div>
+            </div>
+            <div>
+              <span class="tw-label">Valore totale</span>
+              <div style="font-size:14px;font-weight:700;color:#111;">€1.140,00</div>
+            </div>
+            <div class="cw" style="padding:0;">
+              <div class="rr-w"><div><div class="rr-label-w">↻ Pilota automatico</div><div class="rr-detail-w">€100/mese · 1 mag</div></div><div class="rr-badge-w">Attivo</div></div>
+              <div class="rr-w"><div><div class="rr-label-w">⚡ Trigger Sport</div><div class="rr-detail-w">€10 a vittoria Inter</div></div></div>
+              <div class="rr-w patto"><div><div class="rr-label-w">★ Non ho fumato</div><div class="rr-detail-w">13 gg · +€26 totale</div></div></div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w active"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+        <div class="ann hi">Patto = default "fatto" · ghost CTA solo per dire "non l'ho fatto"</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap su "Vacanza in Grecia"</div></div>
+    </div>
+
+    <!-- E.8 Dettaglio obiettivo -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>E.8</strong> — Dettaglio obiettivo</div>
+        <div class="phone-w" style="height:460px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="gap:5px;">
+            <div class="tw-sub">← Obiettivi</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <div class="tw-name">Vacanza in Grecia</div>
+              <div style="font-size:12px;font-weight:800;color:#111;">37%</div>
+            </div>
+            <div class="tw-sub">€1.140 / €3.000 · lug 2027</div>
+            <div class="prog-w"><div class="prog-w-f" style="width:37%;"></div><div class="prog-w-mkt" style="left:37%;width:3%;"></div></div>
+            <div class="tw-sub"><em>al netto di utile/perdita — la barra può scendere se il fondo perde</em></div>
+            <div>
+              <span class="tw-label">Se continui così</span>
+              <div class="cw warm" style="padding:7px 9px;">
+                <div class="tw-sub">Tra 5 anni</div>
+                <div style="font-size:17px;font-weight:800;color:#111;letter-spacing:-1px;">€4.287,35</div>
+                <div class="tw-sub">di cui €1.287 dal mercato · ↑ live</div>
+              </div>
+            </div>
+            <div>
+              <span class="tw-label">Fondo</span>
+              <div class="cw">
+                <div style="display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:700;color:#111;">AcomeA Performance</span><span style="font-size:8px;font-weight:700;color:#111;">€1.140</span></div>
+                <div class="tw-sub">Rischio 3/7 · +5,1% dall'inizio</div>
+              </div>
+            </div>
+            <div>
+              <span class="tw-label">Regole attive</span>
+              <div class="cw" style="padding:0;">
+                <div class="rr-w"><div><div class="rr-label-w">↻ Pilota automatico</div><div class="rr-detail-w">€100/mese · 1 mag</div></div><div class="rr-badge-w">Attivo</div></div>
+                <div class="rr-w patto"><div><div class="rr-label-w">★ Non ho fumato</div><div class="rr-detail-w">+€2/gg · 13 gg · +€26</div></div></div>
+              </div>
+            </div>
+            <div class="cta-pair-w">
+              <div class="cta-w outline">Preleva</div>
+              <div class="cta-w">Versa</div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w active"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+        <div class="ann hi">Progress al netto utile/perdita — confermato Alessandro</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "Versa"</div></div>
+    </div>
+
+    <!-- C.2 Importo -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>C.2</strong> — Importo versamento</div>
+        <div class="phone-w" style="height:460px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="padding-bottom:0;">
+            <div class="tw-sub">← Vacanza in Grecia</div>
+            <div class="tw-name" style="margin-bottom:4px;">Quanto vuoi versare?</div>
+            <div style="text-align:center;padding:12px 0 8px;">
+              <div style="font-size:28px;font-weight:800;letter-spacing:-1px;color:#111;">€ 150</div>
+              <div class="tw-sub" style="margin-top:2px;">Vacanza in Grecia</div>
+            </div>
+            <div style="display:flex;gap:3px;justify-content:center;margin-bottom:8px;">
+              <div class="cw" style="padding:3px 7px;font-size:7px;">€ 50</div>
+              <div class="cw" style="padding:3px 7px;font-size:7px;">€ 100</div>
+              <div class="cw strong" style="padding:3px 7px;font-size:7px;font-weight:700;">€ 150</div>
+              <div class="cw" style="padding:3px 7px;font-size:7px;">€ 200</div>
+            </div>
+            <div class="numpad" style="flex:1;">
+              <div>1</div><div>2</div><div>3</div>
+              <div>4</div><div>5</div><div>6</div>
+              <div>7</div><div>8</div><div>9</div>
+              <div>.</div><div>0</div><div style="font-size:9px;">⌫</div>
+            </div>
+            <div style="padding:6px 0 2px;"><div class="cta-w">Avanti</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Avanti</div></div>
+    </div>
+
+    <!-- C.3 IBAN -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>C.3</strong> — Seleziona IBAN</div>
+        <div class="phone-w" style="height:460px;position:relative;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="opacity:.25;background:#f8f8f8;justify-content:center;align-items:center;">
+            <div style="font-size:28px;font-weight:800;color:#111;">€ 150</div>
+          </div>
+          <div class="sheet-overlay" style="height:200px;">
+            <div class="handle"></div>
+            <div class="tw-name" style="margin-bottom:8px;">Da quale conto?</div>
+            <div class="cw strong" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <div>
+                <div style="font-size:7.5px;font-weight:700;color:#111;">Conto principale</div>
+                <div class="tw-sub">IT60 X054 2811 1010 0000 0123 456</div>
+              </div>
+              <div style="width:10px;height:10px;border-radius:50%;border:2px solid #111;display:flex;align-items:center;justify-content:center;"><div style="width:4px;height:4px;border-radius:50%;background:#111;"></div></div>
+            </div>
+            <div class="cw" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div>
+                <div style="font-size:7.5px;font-weight:700;color:#111;">Conto secondario</div>
+                <div class="tw-sub">IT60 X054 2811 2020 0000 0456 789</div>
+              </div>
+              <div style="width:10px;height:10px;border-radius:50%;border:1.5px solid #e0e0e0;"></div>
+            </div>
+            <div class="cta-w">Versa € 150</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "Versa €150"</div></div>
+    </div>
+
+    <!-- C.4 Conferma + social -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>C.4</strong> — Conferma + social moment</div>
+        <div class="phone-w" style="height:460px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="align-items:center;justify-content:center;gap:10px;text-align:center;">
+            <div style="width:34px;height:34px;border-radius:50%;border:2px solid #111;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#111;">✓</div>
+            <div>
+              <div class="tw-name">Versato €150</div>
+              <div class="tw-sub" style="margin-top:2px;">Vacanza in Grecia · +4,3%</div>
+            </div>
+            <div class="cw" style="width:100%;border-color:#ccc;">
+              <div class="tw-sub" style="text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;">Questo mese</div>
+              <div style="font-size:9px;font-weight:700;color:#111;line-height:1.4;">Hai risparmiato più del 68% degli utenti Gimme5.</div>
+              <div class="tw-sub" style="margin-top:2px;">Basato su costanza — non sugli importi.</div>
+            </div>
+            <div class="cta-w" style="width:100%;">Torna alla Home</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 4 — OBIETTIVO RAGGIUNTO                        -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 4</div>
+    <div>
+      <div class="flow-title">Obiettivo raggiunto — Push notification · Celebrazione · Preleva o Lascia</div>
+      <div class="flow-desc">Raggiungimento anche tramite rendimento del fondo (call 27/4 · confermato Alessandro)</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- E.4b Push -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>E.4b</strong> — Push + scelta</div>
+        <div class="phone-w" style="height:430px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="cw strong" style="display:flex;align-items:flex-start;gap:6px;">
+              <div style="font-size:16px;flex-shrink:0;">🎯</div>
+              <div>
+                <div style="font-size:8.5px;font-weight:700;color:#111;">Hai raggiunto il tuo obiettivo!</div>
+                <div class="tw-sub" style="margin-top:2px;">Vacanza in Grecia è al 100%. Cosa vuoi fare?</div>
+              </div>
+            </div>
+            <div class="cw" style="padding:6px 8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+                <div style="font-size:9px;font-weight:700;color:#111;">Vacanza in Grecia</div>
+                <div style="font-size:9px;font-weight:700;color:#111;">100%</div>
+              </div>
+              <div class="prog-w"><div class="prog-w-f" style="width:97%;"></div><div class="prog-w-mkt" style="left:97%;width:3%;"></div></div>
+              <div class="tw-sub" style="margin-top:2px;">€3.000 · +€340 dal mercato</div>
+            </div>
+            <div class="tw-label">Cosa vuoi fare con i tuoi soldi?</div>
+            <div class="cw" style="padding:0;">
+              <div style="padding:8px 9px;border-bottom:1px solid #f0f0f0;">
+                <div style="font-size:8.5px;font-weight:700;color:#111;">↑ Preleva</div>
+                <div class="tw-sub">Trasferisci €3.340 sul tuo conto. Entro 5 giorni.</div>
+              </div>
+              <div style="padding:8px 9px;">
+                <div style="font-size:8.5px;font-weight:700;color:#111;">♻ Lascia investito</div>
+                <div class="tw-sub">Tieni il capitale e crea un nuovo obiettivo.</div>
+              </div>
+            </div>
+            <div class="cta-w">Preleva €3.340</div>
+            <div class="cta-w outline" style="margin-top:4px;">Crea nuovo obiettivo →</div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w active"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+        <div class="ann hi">Raggiungimento via rendimento = push reale · confermato</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "Preleva"<br>oppure<br>→ flow 1 (nuovo)</div></div>
+    </div>
+
+    <!-- E.4a Celebrazione -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>E.4a</strong> — Celebrazione 100%</div>
+        <div class="phone-w" style="height:430px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="align-items:center;text-align:center;justify-content:center;gap:12px;">
+            <div style="font-size:22px;letter-spacing:4px;color:#ccc;">◎ ◎ ◎</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#111;">Vacanza in Grecia</div>
+              <div style="font-size:26px;font-weight:800;color:#111;letter-spacing:-1.5px;line-height:1;">100%</div>
+            </div>
+            <div class="tw-sub" style="line-height:2;">
+              Ci hai messo 14 mesi.<br>
+              Hai versato 36 volte.<br>
+              Il mercato ti ha regalato €340.
+            </div>
+            <div class="cta-w" style="width:100%;">Il prossimo obiettivo?</div>
+            <div class="tw-sub">Torna alla Home</div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w active"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+        <div class="ann hi">Momento più importante dell'app — full screen, linguaggio fattuale</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 5 — DORMIENTE → RIATTIVAZIONE                  -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 5</div>
+    <div>
+      <div class="flow-title">Utente dormiente — 63 giorni assente · FOMO quantificata · Riattiva</div>
+      <div class="flow-desc">"63 giorni. Per essere precisi." · Pilota in pausa · dati reali</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- E.3 Dormiente -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>E.3</strong> — Home dormiente</div>
+        <div class="phone-w" style="height:450px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-name">Ciao Filippo,<br>63 giorni. Per essere precisi.</div>
+            <div class="cw strong">
+              <div class="tw-name" style="font-size:10px;">Il tuo piano ha lavorato per te.</div>
+              <div class="tw-sub" style="margin-top:3px;">Hai messo da parte €90 senza muovere un dito. Sei al 37%.</div>
+              <div class="tw-sub" style="margin-top:2px;">Con €10/mese arrivi al 100% a luglio.</div>
+              <div class="cta-w" style="margin-top:8px;">Continua così</div>
+            </div>
+            <div>
+              <span class="tw-label">Vacanza in Grecia</span>
+              <div class="cw" style="padding:6px 8px;">
+                <div class="prog-w"><div class="prog-w-f" style="width:37%;"></div><div class="prog-w-mkt" style="left:37%;width:3%;"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:6.5px;color:#bbb;margin-top:2px;"><span>€205 / €3.000</span><span>lug 2027</span></div>
+              </div>
+            </div>
+            <div>
+              <span class="tw-label">Il tuo Pilota Automatico</span>
+              <div class="cw" style="padding:6px 8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div><div style="font-size:7.5px;font-weight:700;color:#111;">↻ €100/mese</div><div class="tw-sub">In pausa da 60 giorni</div></div>
+                  <div class="rr-badge-w off">In pausa</div>
+                </div>
+                <div class="cta-w outline" style="margin-top:6px;font-size:8px;">Riattiva</div>
+              </div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w active"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+        <div class="ann hi">"63 giorni. Per essere precisi." — FOMO quantificata</div>
+        <div class="ann">Pop-up bordo 2px · dati reali · CTA Riattiva outline</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "Riattiva"</div></div>
+    </div>
+
+    <!-- Conferma riattivazione -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Conferma</strong> — riattiva Pilota</div>
+        <div class="phone-w" style="height:450px;position:relative;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="opacity:.2;background:#f8f8f8;"></div>
+          <div class="sheet-overlay" style="height:200px;">
+            <div class="handle"></div>
+            <div class="tw-name" style="margin-bottom:4px;">Riattiva il Pilota Automatico</div>
+            <div class="cw" style="margin-bottom:8px;">
+              <div style="font-size:8.5px;font-weight:700;color:#111;">↻ €100/mese · ogni 1° del mese</div>
+              <div class="tw-sub" style="margin-top:2px;">Prossimo versamento: 1 maggio 2026</div>
+            </div>
+            <div class="cta-w" style="margin-bottom:4px;">Riattiva · €100/mese</div>
+            <div class="cta-w ghost">Modifica importo</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Riattiva</div></div>
+    </div>
+
+    <!-- Home attivo (post-riattivazione) -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Home attivo</strong> — Pilota riattivato</div>
+        <div class="phone-w" style="height:450px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-name">Bentornato, Filippo.</div>
+            <div class="tw-sub">Pilota automatico riattivato.</div>
+            <div class="cw patto" style="background:#f8f8f8;">
+              <div style="font-size:8px;font-weight:700;color:#111;">★ Non ho fumato</div>
+              <div class="tw-sub" style="margin-top:2px;"><strong style="color:#111;">Fatto.</strong> · patto ripreso</div>
+            </div>
+            <div>
+              <div class="tw-label">Vacanza in Grecia</div>
+              <div class="cw" style="padding:6px 8px;">
+                <div style="display:flex;justify-content:space-between;"><span style="font-size:9px;font-weight:700;color:#111;">€205 / €3.000</span><span style="font-size:9px;font-weight:700;color:#111;">7%</span></div>
+                <div class="prog-w" style="margin:3px 0;"><div class="prog-w-f" style="width:7%;"></div></div>
+                <div style="font-size:6.5px;color:#bbb;">lug 2027</div>
+              </div>
+            </div>
+            <div>
+              <span class="tw-label">Valore totale</span>
+              <div style="font-size:14px;font-weight:700;color:#111;">€205,00</div>
+            </div>
+            <div class="cw warm" style="font-size:8px;font-weight:700;color:#111;">
+              Una pausa fa bene a te, un po' meno ai tuoi risparmi.
+              <div class="tw-sub" style="margin-top:2px;">powered by GIMME5</div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w active"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 6 — PRELEVA                                    -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 6</div>
+    <div>
+      <div class="flow-title">Preleva — Gate informativo se il prelievo impatta il target</div>
+      <div class="flow-desc">Gate non blocca, mostra le conseguenze e la nuova data stimata</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- D.1 Fonte -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>D.1</strong> — Scegli obiettivo</div>
+        <div class="phone-w" style="height:340px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-sub">← Indietro</div>
+            <div class="tw-name">Da dove prelevi?</div>
+            <div class="cw" style="margin-top:4px;"><div style="font-size:8.5px;font-weight:700;color:#111;">Vacanza in Grecia</div><div class="tw-sub">Disponibile: €1.140</div></div>
+            <div class="cw" style="margin-top:4px;"><div style="font-size:8.5px;font-weight:700;color:#aaa;">Casa al mare</div><div class="tw-sub">Disponibile: €0</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap obiettivo</div></div>
+    </div>
+
+    <!-- D.2 Importo -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>D.2</strong> — Importo</div>
+        <div class="phone-w" style="height:340px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="justify-content:space-between;">
+            <div>
+              <div class="tw-sub">← Vacanza in Grecia</div>
+              <div class="tw-name">Quanto vuoi prelevare?</div>
+              <div class="tw-sub">Disponibile: €1.140</div>
+              <div style="font-size:32px;font-weight:800;text-align:center;margin:12px 0;color:#111;">€ 500</div>
+            </div>
+            <div class="cta-w">Continua</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap Continua</div></div>
+    </div>
+
+    <!-- D.3 Avviso impatto -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>D.3</strong> — Avviso impatto target</div>
+        <div class="phone-w" style="height:340px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-sub">← Indietro</div>
+            <div class="tw-name">Attenzione</div>
+            <div class="cw strong" style="margin-top:4px;">
+              <div style="font-size:8.5px;font-weight:700;color:#111;margin-bottom:4px;">Questo prelievo impatta il tuo obiettivo</div>
+              <div class="tw-sub" style="line-height:1.6;">Dopo il prelievo: €640 rimasti<br>Il target slitterà di circa <strong style="color:#111;">3 mesi</strong>.<br>Nuova data stimata: <strong style="color:#111;">luglio 2027</strong></div>
+            </div>
+            <div class="tw-sub" style="text-align:center;margin-top:4px;">Puoi comunque procedere.</div>
+            <div class="cta-w outline" style="margin-top:6px;border-color:#ccc;color:#aaa;">Preleva comunque €500</div>
+            <div class="cta-w" style="margin-top:4px;">Annulla</div>
+          </div>
+        </div>
+        <div class="ann hi">Gate informativo — non blocca, mostra conseguenze</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 7 — ELIMINA OBIETTIVO                          -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 7</div>
+    <div>
+      <div class="flow-title">Elimina obiettivo — Doppia conferma · Azione irreversibile</div>
+      <div class="flow-desc">Il saldo torna sul conto · le regole vengono disattivate</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- E.1 Menu -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>7.1</strong> — Menu ··· nel detail</div>
+        <div class="phone-w" style="height:320px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div class="tw-sub">← Obiettivi</div>
+              <div style="font-size:12px;color:#aaa;font-weight:700;">···</div>
+            </div>
+            <div class="tw-name">Vacanza in Grecia</div>
+            <div class="cw" style="position:absolute;top:48px;right:10px;width:130px;padding:0;z-index:2;box-shadow:0 4px 12px rgba(0,0,0,.08);">
+              <div class="rr-w" style="justify-content:flex-start;padding:7px 10px;"><div style="font-size:7.5px;color:#111;">Modifica obiettivo</div></div>
+              <div class="rr-w" style="justify-content:flex-start;padding:7px 10px;"><div style="font-size:7.5px;color:#111;">Condividi</div></div>
+              <div class="rr-w" style="justify-content:flex-start;border-bottom:none;padding:7px 10px;"><div style="font-size:7.5px;color:#bbb;">Elimina obiettivo</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "Elimina"</div></div>
+    </div>
+
+    <!-- E.2 Avviso -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>7.2</strong> — Avviso conseguenze</div>
+        <div class="phone-w" style="height:320px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-name">Elimina obiettivo?</div>
+            <div class="cw strong" style="margin-top:6px;">
+              <div style="font-size:8px;font-weight:700;color:#111;margin-bottom:5px;">Cosa succede:</div>
+              <div class="tw-sub" style="line-height:1.8;">· €1.140 tornano sul tuo conto<br>· 2 regole attive vengono disattivate<br>· Cronologia archiviata<br>· <strong style="color:#111;">Non puoi annullare</strong></div>
+            </div>
+            <div class="cta-w ghost" style="margin-top:8px;">Torna all'obiettivo</div>
+            <div class="cta-w outline" style="margin-top:4px;border-color:#ccc;color:#aaa;">Continua con eliminazione</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "Continua"</div></div>
+    </div>
+
+    <!-- E.3 Doppia conferma -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>7.3</strong> — Doppia conferma</div>
+        <div class="phone-w" style="height:320px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-name">Sei sicuro?</div>
+            <div class="tw-sub" style="margin-top:2px;margin-bottom:8px;">Scrivi il nome dell'obiettivo per confermare.</div>
+            <div class="cw strong" style="font-size:9px;font-weight:700;color:#111;">Vacanza in Grecia</div>
+            <div class="tw-sub" style="margin-top:3px;margin-bottom:8px;">Scrivi esattamente: "Vacanza in Grecia"</div>
+            <div class="cta-w outline" style="border-color:#ccc;color:#aaa;">Elimina definitivamente</div>
+            <div class="tw-sub" style="text-align:center;margin-top:8px;">Annulla</div>
+          </div>
+        </div>
+        <div class="ann hi">Pattern standard per azioni irreversibili</div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">digita nome + conferma</div></div>
+    </div>
+
+    <!-- E.4 Eliminato -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>7.4</strong> — Obiettivo eliminato</div>
+        <div class="phone-w" style="height:320px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="align-items:center;justify-content:center;gap:10px;text-align:center;">
+            <div style="width:34px;height:34px;border-radius:50%;border:1.5px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:14px;color:#aaa;">×</div>
+            <div>
+              <div class="tw-name">Obiettivo eliminato</div>
+              <div class="tw-sub" style="margin-top:3px;">€1.140 in rimborso · 2-3 gg lavorativi</div>
+            </div>
+            <div class="cta-w" style="width:100%;">Torna alla Home</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 8 — GESTISCI REGOLA (PAUSA / ELIMINA)          -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 8</div>
+    <div>
+      <div class="flow-title">Gestisci regola — Pausa (reversibile) · Elimina (definitivo)</div>
+      <div class="flow-desc">Eliminare la regola ≠ eliminare l'obiettivo — il saldo rimane intatto</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- F.1 Detail regola -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>F.1</strong> — Detail regola</div>
+        <div class="phone-w" style="height:340px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div class="tw-sub">← Regole</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+              <div style="font-size:14px;">↻</div>
+              <div class="tw-name">Pilota automatico</div>
+            </div>
+            <div class="tw-sub">Vacanza in Grecia · €100/mese · ogni 1°</div>
+            <div class="cw" style="margin-top:6px;padding:6px 8px;">
+              <div style="display:flex;justify-content:space-between;font-size:7.5px;margin-bottom:3px;"><span class="tw-sub">Prossimo versamento</span><span style="font-weight:700;color:#111;">1 maggio</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:7.5px;"><span class="tw-sub">Totale versato con questa regola</span><span style="font-weight:700;color:#111;">€400</span></div>
+            </div>
+            <div class="cta-w outline" style="margin-top:6px;font-size:8px;">Modifica importo</div>
+            <div class="cta-w ghost" style="margin-top:4px;font-size:8px;">Metti in pausa</div>
+            <div class="cta-w ghost" style="margin-top:4px;font-size:8px;color:#ccc;border-color:#f0f0f0;">Elimina regola</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow" style="flex-direction:column;gap:8px;margin-top:30px;">
+        <div style="text-align:center;">
+          <div class="arrow-line">↗</div>
+          <div class="arrow-label">tap "Metti in pausa"</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="arrow-line">↘</div>
+          <div class="arrow-label">tap "Elimina"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Branch: Pausa + Elimina -->
+    <div class="pw" style="display:flex;flex-direction:column;gap:12px;">
+      <!-- F.2 Pausa -->
+      <div>
+        <div class="plabel" style="margin-bottom:6px;"><strong>F.2</strong> — Conferma pausa</div>
+        <div class="phone-w" style="height:200px;">
+          <div class="status-w"><span>10:06</span><span></span></div>
+          <div class="screen-w">
+            <div class="tw-name">Metti in pausa?</div>
+            <div class="tw-sub" style="margin-top:4px;line-height:1.5;">I versamenti si fermano. Puoi riattivare in qualsiasi momento.</div>
+            <div class="cta-w ghost" style="margin-top:8px;font-size:8px;color:#aaa;">Metti in pausa</div>
+            <div class="cta-w" style="margin-top:4px;font-size:8px;">Annulla</div>
+          </div>
+        </div>
+        <div class="ann">Reversibile · nessun dato perso</div>
+      </div>
+      <!-- F.3 Elimina -->
+      <div>
+        <div class="plabel" style="margin-bottom:6px;"><strong>F.3</strong> — Conferma elimina regola</div>
+        <div class="phone-w" style="height:200px;">
+          <div class="status-w"><span>10:06</span><span></span></div>
+          <div class="screen-w">
+            <div class="tw-name">Elimina regola?</div>
+            <div class="cw" style="margin-top:4px;padding:6px 8px;">
+              <div class="tw-sub" style="line-height:1.6;">· Versamenti automatici si fermano<br>· Cronologia regola rimane visibile<br>· Saldo obiettivo intatto</div>
+            </div>
+            <div class="cta-w ghost" style="margin-top:6px;font-size:8px;color:#ccc;border-color:#f0f0f0;">Elimina regola</div>
+            <div class="cta-w" style="margin-top:4px;font-size:8px;">Annulla</div>
+          </div>
+        </div>
+        <div class="ann">Saldo intatto — solo la regola viene rimossa</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- FLOW 9 — PROFILO                                    -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-header">
+    <div class="flow-badge">Flow 9</div>
+    <div>
+      <div class="flow-title">Profilo — Impostazioni · Traguardi · Calendario ● · I tuoi fatti · Referral</div>
+      <div class="flow-desc">Gamification sui comportamenti, mai sugli importi · No leaderboard · No streak numerico</div>
+    </div>
+  </div>
+  <div class="phones-row">
+
+    <!-- Profilo principale -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Profilo</strong> — overview</div>
+        <div class="phone-w" style="height:460px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#e0e0e0;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#999;">FA</div>
+              <div>
+                <div style="font-size:11px;font-weight:800;color:#111;">Filippo Alviano</div>
+                <div class="tw-sub">@filippo.alviano</div>
+              </div>
+            </div>
+            <div class="cw" style="display:flex;align-items:center;justify-content:space-between;border-color:#ccc;">
+              <div>
+                <div style="font-size:8px;font-weight:700;color:#111;">I tuoi traguardi</div>
+                <div class="tw-sub" style="margin-top:1px;">3 fatti completati · 18 giorni di risparmi</div>
+              </div>
+              <div style="font-size:11px;color:#ccc;">›</div>
+            </div>
+            <div class="tw-label" style="margin-top:4px;">Impostazioni</div>
+            <div class="cw" style="padding:0;">
+              <div class="rr-w"><div style="font-size:8px;color:#111;">Dati personali</div><div style="font-size:10px;color:#ccc;">›</div></div>
+              <div class="rr-w"><div style="font-size:8px;color:#111;">Sicurezza (PIN · biometrico)</div><div style="font-size:10px;color:#ccc;">›</div></div>
+              <div class="rr-w"><div style="font-size:8px;color:#111;">Notifiche</div><div style="font-size:10px;color:#ccc;">›</div></div>
+            </div>
+            <div class="tw-label" style="margin-top:4px;">Il tuo conto</div>
+            <div class="cw" style="padding:0;">
+              <div class="rr-w"><div style="font-size:8px;color:#111;">Documenti</div><div style="font-size:10px;color:#ccc;">›</div></div>
+              <div class="rr-w"><div style="font-size:8px;color:#111;">IBAN collegati</div><div style="font-size:10px;color:#ccc;">›</div></div>
+            </div>
+            <div class="tw-label" style="margin-top:4px;">Contattaci</div>
+            <div class="cw" style="padding:0;">
+              <div class="rr-w"><div style="font-size:8px;color:#111;">Assistenza</div><div style="font-size:10px;color:#ccc;">›</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:4px;">
+              <div style="font-size:8px;color:#aaa;font-weight:600;">Disconnetti</div>
+              <div class="tw-sub">Disattiva Account</div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w active"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow"><div class="arrow-line">→</div><div class="arrow-label">tap "I tuoi traguardi"</div></div>
+    </div>
+
+    <!-- Traguardi E.6 -->
+    <div class="pu">
+      <div class="pw">
+        <div class="plabel"><strong>Traguardi E.6</strong> — calendario · fatti · referral</div>
+        <div class="phone-w" style="height:560px;">
+          <div class="status-w"><span>10:06</span><span>●●●</span></div>
+          <div class="screen-w" style="overflow-y:auto;gap:8px;">
+            <div class="tw-sub">← I tuoi traguardi</div>
+            <div style="font-size:10px;font-weight:800;color:#111;">Il tuo ritmo</div>
+            <div class="cw" style="padding:8px 10px;">
+              <div class="tw-sub" style="margin-bottom:5px;">Aprile 2026</div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;font-size:6px;color:#bbb;text-align:center;">
+                <div>L</div><div>M</div><div>M</div><div>G</div><div>V</div><div>S</div><div>D</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:7.5px;">
+                <div>●</div><div>●</div><div>●</div><div style="color:#e0e0e0;">○</div><div>●</div><div style="color:#e0e0e0;">○</div><div style="color:#e0e0e0;">○</div>
+                <div>●</div><div>●</div><div style="color:#e0e0e0;">○</div><div>●</div><div>●</div><div style="color:#e0e0e0;">○</div><div style="color:#e0e0e0;">○</div>
+                <div>●</div><div>●</div><div>●</div><div>●</div><div>●</div><div style="color:#e0e0e0;">○</div><div>●</div>
+                <div>●</div><div>●</div><div>●</div><div style="color:#ccc;">◌</div><div style="color:#ccc;">◌</div><div style="color:#ccc;">◌</div><div style="color:#ccc;">◌</div>
+              </div>
+              <div class="tw-sub" style="margin-top:5px;">19 giorni attivi su 25 · ◌ = futuro</div>
+            </div>
+            <div style="font-size:10px;font-weight:800;color:#111;">I tuoi fatti</div>
+            <div class="cw" style="padding:0;">
+              <div style="padding:5px 9px;border-bottom:1px solid #f5f5f5;"><div style="font-size:7.5px;font-weight:700;color:#111;">Prima routine attivata</div><div class="tw-sub">12 febbraio 2026</div></div>
+              <div style="padding:5px 9px;border-bottom:1px solid #f5f5f5;"><div style="font-size:7.5px;font-weight:700;color:#111;">Primo obiettivo creato</div><div class="tw-sub">10 febbraio 2026</div></div>
+              <div style="padding:5px 9px;border-bottom:1px solid #f5f5f5;"><div style="font-size:7.5px;font-weight:700;color:#111;">30 giorni con routine attiva</div><div class="tw-sub">14 marzo 2026</div></div>
+              <div style="padding:5px 9px;border-bottom:1px solid #f5f5f5;"><div style="font-size:7.5px;font-weight:700;color:#111;">€500 versati in totale</div><div class="tw-sub">2 aprile 2026</div></div>
+              <div style="padding:5px 9px;">
+                <div style="font-size:7.5px;font-weight:700;color:#aaa;">100 giorni su GIMME5</div>
+                <div class="tw-sub" style="margin-bottom:3px;">21 maggio 2026 (tra 26 gg)</div>
+                <div class="prog-w"><div class="prog-w-f" style="width:74%;background:#ccc;"></div></div>
+                <div class="tw-sub" style="margin-top:2px;">74%</div>
+              </div>
+            </div>
+            <div style="font-size:10px;font-weight:800;color:#111;">Invita un amico</div>
+            <div class="cw" style="padding:8px 9px;">
+              <div class="tw-sub" style="margin-bottom:5px;">Hai invitato 2 persone</div>
+              <div style="padding-bottom:4px;margin-bottom:4px;border-bottom:1px solid #f5f5f5;display:flex;justify-content:space-between;align-items:center;">
+                <div style="font-size:7.5px;font-weight:700;color:#111;">Marco</div>
+                <div class="tw-sub">in attesa ⏳</div>
+              </div>
+              <div style="padding-bottom:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+                <div style="font-size:7.5px;font-weight:700;color:#111;">Anna</div>
+                <div style="font-size:6.5px;color:#111;">routine attiva ✓ +€25</div>
+              </div>
+              <div class="cta-w" style="font-size:8px;padding:5px 8px;">Invita qualcuno</div>
+            </div>
+          </div>
+          <div class="bnav-w">
+            <div class="ni-w"><div class="ni-ico-w"></div>Home</div>
+            <div class="ni-w"><div class="ni-ico-w"></div>Obiettivi</div>
+            <div class="ni-w plus"><div class="ni-ico-w">+</div></div>
+            <div class="ni-w active"><div class="ni-ico-w"></div>Profilo</div>
+          </div>
+        </div>
+        <div class="ann hi">● pallini circolari — non quadrati GitHub · restano per sempre</div>
+        <div class="ann">I tuoi fatti = date, non badge/trofei · No streak numerico</div>
+        <div class="ann">Referral con stato: Marco (in attesa) · Anna (routine attiva)</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gimme5 — Wireframe Home · Casistiche</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Archivo:wght@800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#141414;font-family:'Inter',sans-serif;color:#fff;overflow-x:auto}
+.page{min-width:1600px;padding:52px 56px 100px}
+
+/* ─── PAGE HEADER ─── */
+.pg-title{font-family:'Archivo',sans-serif;font-size:20px;font-weight:900;letter-spacing:-.4px;color:#fff;margin-bottom:4px}
+.pg-sub{font-size:12px;color:#555;margin-bottom:48px}
+
+/* ─── SECTION ─── */
+.sec-tag{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:12px}
+.sec{margin-bottom:64px}
+
+/* ─── MATRIX TABLE ─── */
+.matrix{width:100%;max-width:1100px;border-collapse:collapse;font-size:12px}
+.matrix th{background:#1e1e1e;color:#555;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid #2a2a2a}
+.matrix td{padding:11px 14px;border-bottom:1px solid #1e1e1e;background:#181818;vertical-align:top;line-height:1.5;color:#bbb}
+.matrix tr:last-child td{border-bottom:none}
+.matrix .case-n{font-size:10px;font-weight:800;color:#555;white-space:nowrap}
+.matrix .case-name{font-weight:700;color:#ddd}
+.matrix .case-sub{font-size:11px;color:#555;margin-top:2px;line-height:1.5}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;margin-right:4px;margin-bottom:3px}
+.tag.done{background:#1e2a1e;color:#5a8a5a;border:1px solid #2a3a2a}
+.tag.miss{background:#2a1e1e;color:#8a5a5a;border:1px solid #3a2a2a}
+.cta-txt{font-weight:700;color:#888;font-size:12px}
+
+/* ─── PHONES STRIP ─── */
+.phones-strip{display:flex;gap:40px;align-items:flex-start}
+.pu{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.pu-case{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#555}
+.pu-title{font-size:12px;font-weight:700;color:#ccc;line-height:1.35;max-width:220px}
+.pu-dim{font-size:9px;color:#444;margin-top:1px}
+
+/* ─── PHONE FRAME ─── */
+.phone{width:220px;background:#1c1c1e;border-radius:38px;padding:9px;box-shadow:0 24px 64px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);flex-shrink:0}
+/* 220px wide → real iPhone ratio (375:812) → height = 220×(812/375)=476px screen + 18px padding = 494px outer */
+.screen{background:#f5f5f5;border-radius:29px;overflow:hidden;display:flex;flex-direction:column;height:476px}
+
+/* STATUS BAR */
+.sb{height:28px;padding:8px 13px 0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.sb-t{font-size:11px;font-weight:700;color:#111}
+.sb-icons{display:flex;gap:3px;align-items:center}
+.sb-dot{width:4px;height:4px;border-radius:50%;background:#999}
+
+/* HP TOP BAR */
+.hp-bar{padding:3px 13px 5px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.hp-l{display:flex;align-items:center;gap:7px}
+.av{width:24px;height:24px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#bbb;flex-shrink:0}
+.hp-greet{font-size:9px;color:#999;line-height:1}
+.hp-name{font-size:12px;font-weight:700;color:#111;line-height:1.1}
+.hp-bell{font-size:13px;color:#bbb}
+
+/* INTRO BLOCK */
+.intro-blk{margin:4px 10px 6px;background:#e4e4e4;border-radius:9px;padding:7px 11px;flex-shrink:0;text-align:center}
+.intro-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#888;margin-bottom:1px}
+.intro-text{font-size:11px;font-weight:800;color:#444;line-height:1.2}
+
+/* TOGGLE */
+.toggle{display:flex;background:#e0e0e0;border-radius:16px;padding:2px;margin:4px 10px 5px;flex-shrink:0}
+.tg{flex:1;text-align:center;font-size:9px;font-weight:700;padding:4px 0;border-radius:12px;color:#999}
+.tg.on{background:#fff;color:#111;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+
+/* VALUE DISPLAY */
+.val-row{padding:2px 13px 6px;flex-shrink:0}
+.val-eyebrow{font-size:9px;color:#999;margin-bottom:1px}
+.val-n{font-size:22px;font-weight:900;font-family:'Archivo',sans-serif;letter-spacing:-1px;line-height:1;color:#111}
+
+/* SCROLL BODY */
+.body{flex:1;overflow:hidden;display:flex;flex-direction:column;padding-bottom:2px}
+
+/* SETUP PROGRESS BAR */
+.setup-bar{margin:0 10px 5px;flex-shrink:0}
+.setup-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.setup-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#aaa}
+.setup-count{font-size:8px;font-weight:700;color:#888}
+.setup-track{height:3px;background:#e0e0e0;border-radius:2px;overflow:hidden}
+.setup-fill{height:100%;background:#888;border-radius:2px;transition:width .3s}
+
+/* FONDO CARD — checklist style */
+.fcard{margin:0 10px 6px;border-radius:10px;overflow:hidden;flex-shrink:0;border:1px solid #e4e4e4;background:#fff}
+.fcard-head{display:flex;justify-content:space-between;align-items:center;padding:7px 11px;background:#ebebeb;border-bottom:1px solid #e0e0e0}
+.fcard-name{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#666}
+.fcard-val{font-size:10px;font-weight:800;color:#333}
+
+/* Action rows (pending tasks — like Rocket Money setup list) */
+.arow{display:flex;align-items:center;gap:9px;padding:8px 11px;border-bottom:1px dashed #e8e8e8;flex-shrink:0}
+.arow:last-child{border-bottom:none}
+.arow-text{font-size:10px;color:#333;flex:1;line-height:1.3}
+.arow-btn{width:20px;height:20px;border-radius:50%;border:1.5px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1;color:#aaa;flex-shrink:0;font-weight:700}
+
+/* Hierarchy sub-rows (active users) */
+.hrow{display:flex;align-items:center;gap:8px;padding:7px 11px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
+.hrow:last-child{border-bottom:none}
+.hdot{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:900;flex-shrink:0;background:#2a2a2a;color:#bbb}
+.hdot.obj{background:#e4e4e4;color:#666}
+.hdot.plan{background:#e4e4e4;color:#666}
+.hl{font-size:10px;font-weight:700;color:#111;flex:1;line-height:1.2}
+.hs{font-size:8px;color:#999;margin-top:1px}
+.hprog{height:3px;background:#e4e4e4;border-radius:2px;margin:3px 0 1px;overflow:hidden}
+.hprogb{height:100%;background:#777;border-radius:2px}
+
+/* ALERT BAND */
+.alert{margin:4px 10px 6px;background:#e8e8e8;border-radius:9px;padding:8px 11px;display:flex;align-items:center;gap:8px;flex-shrink:0;border:1px solid #d8d8d8}
+.alert-ic{font-size:12px;flex-shrink:0}
+.alert-t{font-size:10px;font-weight:700;color:#333;flex:1;line-height:1.3}
+.alert-arr{font-size:13px;color:#bbb;flex-shrink:0}
+
+/* PILL EDUCATIVA — grey block */
+.pill{margin:0 10px 5px;border-radius:10px;flex-shrink:0;background:#d8d8d8;display:flex;align-items:center;justify-content:center}
+.pill.lg{flex:1;min-height:70px}
+.pill.md{height:58px}
+.pill.sm{height:34px}
+.pill-inner{text-align:center}
+.pill-lbl{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#888}
+.pill-sz{font-size:8px;color:#aaa;margin-top:1px}
+
+/* BOTTOM NAV */
+.bnav{height:50px;border-top:1px solid #e8e8e8;background:#fff;display:flex;align-items:center;justify-content:space-around;flex-shrink:0}
+.bn{display:flex;flex-direction:column;align-items:center;gap:2px}
+.bn-ic{width:14px;height:11px;background:#ddd;border-radius:2px}
+.bn.on .bn-ic{background:#111}
+.bn-l{font-size:7px;font-weight:600;color:#ccc}
+.bn.on .bn-l{color:#111;font-weight:700}
+.bn-plus{width:30px;height:30px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;line-height:1;margin-top:-10px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="pg-title">Gimme5 · Home — Casistiche utente</div>
+<div class="pg-sub">Cosa ha fatto l'utente in onboarding · cosa manca ancora · CTA contestuale</div>
+
+<!-- ═══════════════════════════════════════
+     MATRICE CASISTICHE
+═══════════════════════════════════════ -->
+<div class="sec">
+<div class="sec-tag">Casistiche reali</div>
+<table class="matrix">
+  <thead>
+    <tr>
+      <th style="width:70px">Caso</th>
+      <th style="width:200px">Stato</th>
+      <th>Ha completato</th>
+      <th>Manca ancora</th>
+      <th>CTA / azioni in Home</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="case-n">1A/B</td>
+      <td><div class="case-name">Tutto skippato</div><div class="case-sub">Ha scelto fondo, saltato versamento, obiettivo e piano. Obiettivo dichiarato: risparmiare / guadagnare.</div></td>
+      <td><span class="tag done">Registrazione</span><span class="tag done">Fondo scelto</span></td>
+      <td><span class="tag miss">Versamento</span><span class="tag miss">Obiettivo</span><span class="tag miss">Piano automatico</span></td>
+      <td class="cta-txt">Fai un versamento · Crea obiettivo · Attiva piano<br><span style="color:#555;font-weight:400">Pillola educativa: Big/Large</span></td>
+    </tr>
+    <tr>
+      <td class="case-n">2</td>
+      <td><div class="case-name">Fondo + Piano attivato</div><div class="case-sub">Ha fondo e piano automatico ma non ha ancora versato e non ha obiettivo.</div></td>
+      <td><span class="tag done">Registrazione</span><span class="tag done">Fondo</span><span class="tag done">Piano</span></td>
+      <td><span class="tag miss">Versamento iniziale</span><span class="tag miss">Obiettivo</span></td>
+      <td class="cta-txt">Fai il primo versamento · Crea obiettivo<br><span style="color:#555;font-weight:400">Pillola: Medium</span></td>
+    </tr>
+    <tr>
+      <td class="case-n">3</td>
+      <td><div class="case-name">Fondo + Bonifico</div><div class="case-sub">Ha versato ma saltato piano automatico e obiettivo durante l'onboarding.</div></td>
+      <td><span class="tag done">Registrazione</span><span class="tag done">Fondo</span><span class="tag done">Bonifico</span></td>
+      <td><span class="tag miss">Obiettivo</span><span class="tag miss">Piano automatico</span></td>
+      <td class="cta-txt">Crea obiettivo · Attiva piano<br><span style="color:#555;font-weight:400">Pillola: Medium</span></td>
+    </tr>
+    <tr>
+      <td class="case-n">4</td>
+      <td><div class="case-name">Fondo + Piano + Bonifico</div><div class="case-sub">Fondo, piano e versamento iniziale ok. Solo obiettivo mancante.</div></td>
+      <td><span class="tag done">Registrazione</span><span class="tag done">Fondo</span><span class="tag done">Piano</span><span class="tag done">Bonifico</span></td>
+      <td><span class="tag miss">Obiettivo</span></td>
+      <td class="cta-txt">Crea il tuo primo obiettivo<br><span style="color:#555;font-weight:400">Pillola: Big/Large (molto spazio libero)</span></td>
+    </tr>
+    <tr>
+      <td class="case-n">5</td>
+      <td><div class="case-name">Attivo · tutto ok</div><div class="case-sub">Fondo attivo, piano in corso, obiettivo impostato, versamenti regolari.</div></td>
+      <td><span class="tag done">Tutto completato</span></td>
+      <td style="color:#444">—</td>
+      <td class="cta-txt" style="color:#555">Nessuna azione. Stato solo.<br><span style="font-weight:400">Pillola: Small (banner sottile)</span></td>
+    </tr>
+    <tr>
+      <td class="case-n">6</td>
+      <td><div class="case-name">In pausa</div><div class="case-sub">Piano automatico sospeso. Il fondo esiste, i soldi sono lì ma il risparmio si è fermato.</div></td>
+      <td><span class="tag done">Fondo attivo</span><span class="tag done">Obiettivo</span></td>
+      <td><span class="tag miss">Piano riattivato</span></td>
+      <td class="cta-txt">Riattiva il piano<br><span style="color:#555;font-weight:400">Alert neutro in cima + pillola Medium</span></td>
+    </tr>
+    <tr>
+      <td class="case-n">7</td>
+      <td><div class="case-name">Dormiente</div><div class="case-sub">Nessun versamento da 60+ giorni. Nessun piano. Il fondo esiste in silenzio.</div></td>
+      <td><span class="tag done">Fondo attivo</span></td>
+      <td><span class="tag miss">Versamento</span><span class="tag miss">Piano</span></td>
+      <td class="cta-txt">Sei ancora qui? · Fai un versamento<br><span style="color:#555;font-weight:400">Alert + azione + pillola Medium</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════
+     WIREFRAME PHONES
+═══════════════════════════════════════ -->
+<div class="sec">
+<div class="sec-tag">Wireframe mobile · 7 casistiche · B&W</div>
+<div class="phones-strip">
+
+  <!-- ──────────── CASO 1A/B ──────────── -->
+  <div class="pu">
+    <div class="pu-case">Caso 1A/B</div>
+    <div class="pu-title">Tutto skippato · obiettivo risparmio/guadagnare</div>
+    <div class="pu-dim">375×812</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <!-- Intro block (no toggle — utente ancora a inizio) -->
+      <div class="intro-blk">
+        <div class="intro-lbl">Testo di intro / benvenuto</div>
+        <div class="intro-text">Inizia a risparmiare / guadagnare</div>
+      </div>
+      <div class="body">
+        <!-- Setup progress: 0/3 -->
+        <div class="setup-bar">
+          <div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">0 / 3</span></div>
+          <div class="setup-track"><div class="setup-fill" style="width:0%"></div></div>
+        </div>
+        <!-- Fondo card: tutte le azioni da fare -->
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ✓</span><span class="fcard-val">0,00€</span></div>
+          <div class="arow"><span class="arow-text">Fai un versamento e inizia a risparmiare / guadagnare</span><div class="arow-btn">+</div></div>
+          <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+          <div class="arow"><span class="arow-text">Attiva una regola di risparmio / guadagno automatico</span><div class="arow-btn">+</div></div>
+        </div>
+        <!-- Pillola educativa BIG: spazio disponibile grande -->
+        <div class="pill lg">
+          <div class="pill-inner"><div class="pill-lbl">Pillole educative</div><div class="pill-sz">Big / Large</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ──────────── CASO 2 ──────────── -->
+  <div class="pu">
+    <div class="pu-case">Caso 2</div>
+    <div class="pu-title">Ok Fondo + Regola → Fai versamento + Obiettivo</div>
+    <div class="pu-dim">375×812</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">0,00€</div></div>
+      <div class="body">
+        <div class="setup-bar">
+          <div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">1 / 3</span></div>
+          <div class="setup-track"><div class="setup-fill" style="width:33%"></div></div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ATTIVO</span><span class="fcard-val">0,00€</span></div>
+          <div class="arow"><span class="arow-text">Fai un versamento e inizia a risparmiare / guadagnare</span><div class="arow-btn">+</div></div>
+          <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+        </div>
+        <div class="pill md">
+          <div class="pill-inner"><div class="pill-lbl">Pillole educative</div><div class="pill-sz">Medium</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ──────────── CASO 3 ──────────── -->
+  <div class="pu">
+    <div class="pu-case">Caso 3</div>
+    <div class="pu-title">Ok Fondo + bonifico → Creare obiettivo e Regola</div>
+    <div class="pu-dim">375×812</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">10,00€</div></div>
+      <div class="body">
+        <div class="setup-bar">
+          <div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">1 / 3</span></div>
+          <div class="setup-track"><div class="setup-fill" style="width:33%"></div></div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ATTIVO</span><span class="fcard-val">10,00€</span></div>
+          <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+          <div class="arow"><span class="arow-text">Attiva una regola di risparmio automatico</span><div class="arow-btn">+</div></div>
+        </div>
+        <div class="pill md">
+          <div class="pill-inner"><div class="pill-lbl">Pillole educative</div><div class="pill-sz">Medium</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ──────────── CASO 4 ──────────── -->
+  <div class="pu">
+    <div class="pu-case">Caso 4</div>
+    <div class="pu-title">OK Fondo + Regola + bonifico → Creare obiettivo</div>
+    <div class="pu-dim">375×812</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Benvenuto</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">10,00€</div></div>
+      <div class="body">
+        <div class="setup-bar">
+          <div class="setup-meta"><span class="setup-lbl">Setup in corso</span><span class="setup-count">2 / 3</span></div>
+          <div class="setup-track"><div class="setup-fill" style="width:66%"></div></div>
+        </div>
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ATTIVO</span><span class="fcard-val">10,00€</span></div>
+          <div class="arow"><span class="arow-text">Crea il tuo primo obiettivo</span><div class="arow-btn">+</div></div>
+        </div>
+        <!-- Pillola BIG: solo 1 azione rimasta → molto spazio libero -->
+        <div class="pill lg">
+          <div class="pill-inner"><div class="pill-lbl">Pillole educative</div><div class="pill-sz">Big / Large</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ──────────── CASO 5 ──────────── -->
+  <div class="pu">
+    <div class="pu-case">Caso 5</div>
+    <div class="pu-title">Attivo · tutto ok · obiettivo + piano in corso</div>
+    <div class="pu-dim">375×812</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">240,00€</div></div>
+      <div class="body">
+        <!-- Nessun setup bar: è già tutto fatto -->
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ATTIVO</span><span class="fcard-val">240,00€</span></div>
+          <!-- Obiettivo con progress -->
+          <div class="hrow">
+            <div class="hdot obj">🏖</div>
+            <div style="flex:1">
+              <div class="hl">Anticipo per la casa</div>
+              <div class="hprog"><div class="hprogb" style="width:24%"></div></div>
+              <div class="hs">€240 / €1.000 · 24%</div>
+            </div>
+          </div>
+          <!-- Piano automatico -->
+          <div class="hrow">
+            <div class="hdot plan">📅</div>
+            <div style="flex:1"><div class="hl" style="font-size:9px;color:#888;font-weight:600">Piano €100/mese · prossimo 1 mag</div></div>
+          </div>
+        </div>
+        <!-- Pillola SMALL: poco da dire, tutto sotto controllo -->
+        <div class="pill sm">
+          <div class="pill-inner"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Small</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ──────────── CASO 6 ──────────── -->
+  <div class="pu">
+    <div class="pu-case">Caso 6</div>
+    <div class="pu-title">In pausa · piano sospeso da 60 giorni</div>
+    <div class="pu-dim">375×812</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">240,00€</div></div>
+      <div class="body">
+        <!-- Alert contestuale: piano fermo -->
+        <div class="alert"><span class="alert-ic">⏸</span><span class="alert-t">Hai saltato 2 mesi · Riattiva il piano</span><span class="alert-arr">›</span></div>
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ATTIVO</span><span class="fcard-val">240,00€</span></div>
+          <div class="hrow">
+            <div class="hdot obj">🏖</div>
+            <div style="flex:1">
+              <div class="hl">Anticipo per la casa</div>
+              <div class="hprog"><div class="hprogb" style="width:24%"></div></div>
+              <div class="hs">€240 / €1.000</div>
+            </div>
+          </div>
+          <!-- Piano in pausa -->
+          <div class="hrow">
+            <div class="hdot plan" style="background:#e0e0e0;color:#aaa">⏸</div>
+            <div><div class="hl" style="font-size:9px;color:#aaa;font-weight:600">Piano in pausa · 60 gg</div></div>
+          </div>
+        </div>
+        <div class="pill md">
+          <div class="pill-inner"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Medium</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ──────────── CASO 7 ──────────── -->
+  <div class="pu">
+    <div class="pu-case">Caso 7</div>
+    <div class="pu-title">Dormiente · nessun versamento da 60+ giorni</div>
+    <div class="pu-dim">375×812</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">240,00€</div></div>
+      <div class="body">
+        <!-- Alert re-engagement -->
+        <div class="alert"><span class="alert-ic">💤</span><span class="alert-t">Sei ancora qui, Filippo? Da tanto non ti fai vivo.</span><span class="alert-arr">›</span></div>
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ATTIVO</span><span class="fcard-val">240,00€</span></div>
+          <div class="hrow">
+            <div class="hdot obj">🏖</div>
+            <div style="flex:1"><div class="hl">Anticipo per la casa</div><div class="hs">€240 / €1.000</div></div>
+          </div>
+          <!-- Azione per sbloccare -->
+          <div class="arow"><span class="arow-text">Fai un versamento per ripartire</span><div class="arow-btn">+</div></div>
+        </div>
+        <div class="pill md">
+          <div class="pill-inner"><div class="pill-lbl">Pillola educativa</div><div class="pill-sz">Medium</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+</div><!-- phones-strip -->
+</div><!-- sec -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     IL PROBLEMA: 1 FONDO · 3 OBIETTIVI · 3 PIANI
+     Tre approcci alternativi per gestire la complessità
+═══════════════════════════════════════════════════════════ -->
+<div class="sec">
+<div class="sec-tag" style="color:#c00;letter-spacing:2px">Il problema reale — gerarchia che non scala</div>
+<div style="font-size:13px;color:#888;max-width:700px;line-height:1.7;margin-bottom:32px">
+  L'utente esperto ha <strong style="color:#ccc">1 fondo → 3 obiettivi → ognuno con il suo piano automatico</strong>. La card verticale diventa un muro di righe. Servono approcci alternativi. Tre opzioni a confronto.
+</div>
+
+<div class="phones-strip" style="align-items:flex-start">
+
+  <!-- ── PROBLEMA MOSTRATO: lista verticale grezza (il problema) ── -->
+  <div class="pu">
+    <div class="pu-case" style="color:#c00">Il problema</div>
+    <div class="pu-title">Card verticale · 1 fondo · 3 obiettivi · 3 piani</div>
+    <div class="pu-dim" style="color:#c00">Non scala — illeggibile</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">3.420,00€</div></div>
+      <div class="body">
+        <!-- Fondo card with 3 obj + 3 piani: troppo lungo -->
+        <div class="fcard">
+          <div class="fcard-head"><span class="fcard-name">FONDO ATTIVO</span><span class="fcard-val">3.420,00€</span></div>
+          <!-- Obj 1 -->
+          <div class="hrow"><div class="hdot obj">🏖</div><div style="flex:1"><div class="hl">Anticipo per la casa</div><div class="hprog"><div class="hprogb" style="width:34%"></div></div><div class="hs">€1.200 / €3.500 · 34%</div></div></div>
+          <div class="hrow" style="padding-left:30px"><div class="hdot plan">📅</div><div><div class="hl" style="font-size:8px;color:#aaa;font-weight:600">Piano €100/mese</div></div></div>
+          <!-- Obj 2 -->
+          <div class="hrow"><div class="hdot obj">🎓</div><div style="flex:1"><div class="hl">Università figlio</div><div class="hprog"><div class="hprogb" style="width:22%"></div></div><div class="hs">€880 / €4.000 · 22%</div></div></div>
+          <div class="hrow" style="padding-left:30px"><div class="hdot plan">📅</div><div><div class="hl" style="font-size:8px;color:#aaa;font-weight:600">Piano €80/mese</div></div></div>
+          <!-- Obj 3 -->
+          <div class="hrow"><div class="hdot obj">🚨</div><div style="flex:1"><div class="hl">Fondo emergenza</div><div class="hprog"><div class="hprogb" style="width:45%"></div></div><div class="hs">€1.340 / €3.000 · 45%</div></div></div>
+          <div class="hrow" style="padding-left:30px"><div class="hdot plan">📅</div><div><div class="hl" style="font-size:8px;color:#aaa;font-weight:600">Piano €50/mese</div></div></div>
+        </div>
+        <!-- Pillola quasi invisibile: non c'è più spazio -->
+        <div style="margin:0 10px;background:#e4e4e4;border-radius:6px;padding:5px 10px;flex-shrink:0"><div style="font-size:8px;color:#aaa;text-align:center">Pillola — non c'è spazio 😬</div></div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- SEPARATORE -->
+  <div style="width:1px;background:#2a2a2a;height:560px;margin-top:70px;flex-shrink:0"></div>
+
+  <!-- ── OPZIONE A: Card obiettivo collassabile (accordion) ── -->
+  <div class="pu">
+    <div class="pu-case" style="color:#888">Opzione A</div>
+    <div class="pu-title">Accordion — obiettivo collassato. Piano visibile solo se espanso.</div>
+    <div class="pu-dim">Il piano sparisce dal primo livello</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">3.420,00€</div></div>
+      <div class="body">
+        <div style="margin:0 10px 4px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#aaa;flex-shrink:0">Eurizon Bilanciato · 3.420€</div>
+        <!-- Ogni obj = riga compatta con progress inline. Tap espande. -->
+        <div class="fcard" style="margin-bottom:0px">
+          <!-- Obj 1: espanso -->
+          <div style="padding:8px 11px;border-bottom:1px solid #f0f0f0">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+              <div class="hdot obj">🏖</div>
+              <div style="flex:1"><div class="hl">Anticipo per la casa</div></div>
+              <div style="font-size:9px;font-weight:700;color:#555">34%</div>
+              <div style="font-size:10px;color:#bbb">▲</div>
+            </div>
+            <div class="hprog" style="margin:0 0 4px"><div class="hprogb" style="width:34%"></div></div>
+            <!-- Piano visibile perché espanso -->
+            <div style="display:flex;align-items:center;gap:6px;background:#f5f5f5;border-radius:6px;padding:5px 8px">
+              <div class="hdot plan" style="width:14px;height:14px;font-size:6px">📅</div>
+              <div style="font-size:9px;color:#888">Piano €100/mese · prossimo 1 mag</div>
+            </div>
+          </div>
+          <!-- Obj 2: collassato -->
+          <div style="display:flex;align-items:center;gap:7px;padding:8px 11px;border-bottom:1px solid #f0f0f0">
+            <div class="hdot obj">🎓</div>
+            <div style="flex:1">
+              <div class="hl">Università figlio</div>
+              <div class="hprog" style="margin-top:3px"><div class="hprogb" style="width:22%"></div></div>
+            </div>
+            <div style="font-size:9px;font-weight:700;color:#888">22%</div>
+            <div style="font-size:10px;color:#ddd">▼</div>
+          </div>
+          <!-- Obj 3: collassato -->
+          <div style="display:flex;align-items:center;gap:7px;padding:8px 11px">
+            <div class="hdot obj">🚨</div>
+            <div style="flex:1">
+              <div class="hl">Fondo emergenza</div>
+              <div class="hprog" style="margin-top:3px"><div class="hprogb" style="width:45%"></div></div>
+            </div>
+            <div style="font-size:9px;font-weight:700;color:#888">45%</div>
+            <div style="font-size:10px;color:#ddd">▼</div>
+          </div>
+        </div>
+        <!-- Spazio per pillola -->
+        <div class="pill sm" style="margin-top:6px">
+          <div class="pill-inner"><div class="pill-lbl">Pillola · Small</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+    <div style="font-size:10px;color:#555;max-width:220px;line-height:1.5;margin-top:4px">
+      Pro: il piano non intasa la vista principale.<br>
+      Contro: l'utente non vede subito quando scade il piano.
+    </div>
+  </div>
+
+  <!-- ── OPZIONE B: Obiettivi come card separate (fondo come label) ── -->
+  <div class="pu">
+    <div class="pu-case" style="color:#888">Opzione B</div>
+    <div class="pu-title">Card per obiettivo — il fondo diventa etichetta, non contenitore.</div>
+    <div class="pu-dim">Gerarchia invertita visivamente</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">3.420,00€</div></div>
+      <div class="body">
+        <!-- Card 1: obiettivo come unità principale -->
+        <div style="margin:0 10px 5px;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0">
+          <div style="padding:8px 11px">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
+              <div class="hdot obj">🏖</div>
+              <div style="flex:1"><div class="hl">Anticipo per la casa</div></div>
+              <div style="font-size:10px;font-weight:800;color:#333">€1.200</div>
+            </div>
+            <div class="hprog"><div class="hprogb" style="width:34%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px">
+              <div class="hs">34% · arr. set 2027</div>
+              <!-- Fondo come chip sotto -->
+              <div style="font-size:8px;background:#e8e8e8;border-radius:4px;padding:1px 6px;color:#777;font-weight:700">Eurizon Bil. · €100/m</div>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div style="margin:0 10px 5px;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0">
+          <div style="padding:8px 11px">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
+              <div class="hdot obj">🎓</div>
+              <div style="flex:1"><div class="hl">Università figlio</div></div>
+              <div style="font-size:10px;font-weight:800;color:#333">€880</div>
+            </div>
+            <div class="hprog"><div class="hprogb" style="width:22%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px">
+              <div class="hs">22% · arr. dic 2030</div>
+              <div style="font-size:8px;background:#e8e8e8;border-radius:4px;padding:1px 6px;color:#777;font-weight:700">Eurizon Bil. · €80/m</div>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div style="margin:0 10px 5px;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e4e4e4;flex-shrink:0">
+          <div style="padding:8px 11px">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
+              <div class="hdot obj">🚨</div>
+              <div style="flex:1"><div class="hl">Fondo emergenza</div></div>
+              <div style="font-size:10px;font-weight:800;color:#333">€1.340</div>
+            </div>
+            <div class="hprog"><div class="hprogb" style="width:45%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px">
+              <div class="hs">45% · arr. mar 2026</div>
+              <div style="font-size:8px;background:#e8e8e8;border-radius:4px;padding:1px 6px;color:#777;font-weight:700">Eurizon Bil. · €50/m</div>
+            </div>
+          </div>
+        </div>
+        <div class="pill sm">
+          <div class="pill-inner"><div class="pill-lbl">Pillola · Small</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+    <div style="font-size:10px;color:#555;max-width:220px;line-height:1.5;margin-top:4px">
+      Pro: ogni obiettivo respira, scalabile.<br>
+      Contro: il fondo sparisce come unità — l'utente non percepisce che tutto gira sullo stesso strumento.
+    </div>
+  </div>
+
+  <!-- ── OPZIONE C: Header fondo + lista obiettivi compatta (summary row) ── -->
+  <div class="pu">
+    <div class="pu-case" style="color:#888">Opzione C</div>
+    <div class="pu-title">Summary row — fondo in testa, obiettivi come righe compatte con dot progress.</div>
+    <div class="pu-dim">Massima densità senza caos</div>
+    <div class="phone"><div class="screen">
+      <div class="sb"><span class="sb-t">10:06</span><div class="sb-icons"><div class="sb-dot"></div><div class="sb-dot"></div><div class="sb-dot"></div></div></div>
+      <div class="hp-bar"><div class="hp-l"><div class="av">FA</div><div><div class="hp-greet">Bentornato</div><div class="hp-name">Filippo</div></div></div><div class="hp-bell">🔔</div></div>
+      <div class="toggle"><div class="tg on">Obiettivi</div><div class="tg">Portafoglio</div></div>
+      <div class="val-row"><div class="val-eyebrow">Il tuo portafoglio 👁</div><div class="val-n">3.420,00€</div></div>
+      <div class="body">
+        <div class="fcard">
+          <!-- Fondo header con count -->
+          <div class="fcard-head">
+            <span class="fcard-name">EURIZON BILANCIATO</span>
+            <span style="font-size:8px;color:#888;font-weight:600">3 obiettivi · €230/mese</span>
+          </div>
+          <!-- Obj 1: summary row -->
+          <div style="display:flex;align-items:center;gap:8px;padding:7px 11px;border-bottom:1px solid #f0f0f0">
+            <div style="font-size:14px;flex-shrink:0">🏖</div>
+            <div style="flex:1">
+              <div style="font-size:10px;font-weight:700;color:#111;line-height:1.1">Anticipo casa</div>
+              <div style="display:flex;align-items:center;gap:4px;margin-top:3px">
+                <div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:34%;background:#666;border-radius:2px"></div></div>
+                <div style="font-size:8px;color:#aaa;white-space:nowrap">34%</div>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:10px;font-weight:800;color:#333">€1.200</div>
+              <div style="font-size:8px;color:#bbb">€100/m</div>
+            </div>
+          </div>
+          <!-- Obj 2 -->
+          <div style="display:flex;align-items:center;gap:8px;padding:7px 11px;border-bottom:1px solid #f0f0f0">
+            <div style="font-size:14px;flex-shrink:0">🎓</div>
+            <div style="flex:1">
+              <div style="font-size:10px;font-weight:700;color:#111;line-height:1.1">Università figlio</div>
+              <div style="display:flex;align-items:center;gap:4px;margin-top:3px">
+                <div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:22%;background:#666;border-radius:2px"></div></div>
+                <div style="font-size:8px;color:#aaa;white-space:nowrap">22%</div>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:10px;font-weight:800;color:#333">€880</div>
+              <div style="font-size:8px;color:#bbb">€80/m</div>
+            </div>
+          </div>
+          <!-- Obj 3 -->
+          <div style="display:flex;align-items:center;gap:8px;padding:7px 11px">
+            <div style="font-size:14px;flex-shrink:0">🚨</div>
+            <div style="flex:1">
+              <div style="font-size:10px;font-weight:700;color:#111;line-height:1.1">Fondo emergenza</div>
+              <div style="display:flex;align-items:center;gap:4px;margin-top:3px">
+                <div style="flex:1;height:3px;background:#e4e4e4;border-radius:2px;overflow:hidden"><div style="height:100%;width:45%;background:#666;border-radius:2px"></div></div>
+                <div style="font-size:8px;color:#aaa;white-space:nowrap">45%</div>
+              </div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:10px;font-weight:800;color:#333">€1.340</div>
+              <div style="font-size:8px;color:#bbb">€50/m</div>
+            </div>
+          </div>
+        </div>
+        <div class="pill sm">
+          <div class="pill-inner"><div class="pill-lbl">Pillola · Small</div></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="bn on"><div class="bn-ic"></div><div class="bn-l">Home</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Obiettivi</div></div>
+        <div class="bn"><div class="bn-plus">+</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Esplora</div></div>
+        <div class="bn"><div class="bn-ic"></div><div class="bn-l">Profilo</div></div>
+      </div>
+    </div></div>
+    <div style="font-size:10px;color:#555;max-width:220px;line-height:1.5;margin-top:4px">
+      Pro: fondo resta visibile come ancora, piano sintetizzato come €/mese accanto.<br>
+      Contro: tap sull'obiettivo deve portare a una scheda di dettaglio per il piano completo.
+    </div>
+  </div>
+
+</div><!-- phones-strip -->
+
+<div style="margin-top:32px;max-width:900px;background:#1a1a1a;border-radius:10px;padding:20px 24px">
+  <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#555;margin-bottom:12px">Tensione da risolvere</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#bbb;margin-bottom:4px">Home = stato</div>
+      <div style="font-size:11px;color:#555;line-height:1.6">La Home non è il posto per gestire i piani. Deve mostrare <em>cosa sta succedendo</em>, non <em>tutti i dettagli</em>. Il piano (€/mese, data) è un dettaglio → va nella scheda obiettivo.</div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#bbb;margin-bottom:4px">Opzione C vince in densità</div>
+      <div style="font-size:11px;color:#555;line-height:1.6">Il fondo resta visibile come contenitore reale. Gli obiettivi sono righe compatte con progress inline. Il piano è sintetizzato come €/mese — abbastanza da capire che esiste, tap per dettaglio.</div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#bbb;margin-bottom:4px">Regola non associata a obiettivo</div>
+      <div style="font-size:11px;color:#555;line-height:1.6">Se l'utente ha un piano senza obiettivo, compare come riga "Piano libero" dentro la card fondo, sotto gli obiettivi. Stesso peso visivo, nessuna gerarchia spezzata.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div style="font-size:10px;color:#2a2a2a;border-top:1px solid #1e1e1e;padding-top:16px">
+  Gimme5 · Wireframe HP · Apr 2026 · 7 casistiche + problema gerarchia · B&W
+</div>
+
+</div>
+</body>
+</html>
