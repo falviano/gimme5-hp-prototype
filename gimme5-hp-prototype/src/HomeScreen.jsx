@@ -254,7 +254,7 @@ function CardCrea({ style, isAbsolute, onClick, handlers = {} }) {
 
 /* ─── Card Salvadanaio ───────────────────────────────────────────────────── */
 
-function CardSalvadanaio({ hidden, style, isAbsolute, onClick, handlers = {} }) {
+function CardSalvadanaio({ hidden, amount = '200€', style, isAbsolute, onClick, handlers = {} }) {
   return (
     <div onClick={onClick} {...handlers} style={{
       width: CW, height: CH, borderRadius: 32,
@@ -287,7 +287,7 @@ function CardSalvadanaio({ hidden, style, isAbsolute, onClick, handlers = {} }) 
 
       {/* Amount */}
       <div style={{ fontFamily: 'Archivo, sans-serif', fontWeight: 700, fontSize: 24, lineHeight: '28px', color: '#000', position: 'relative', marginTop: 24 }}>
-        <Amount value="200€" hidden={hidden} />
+        <Amount value={amount} hidden={hidden} />
       </div>
     </div>
   )
@@ -435,15 +435,18 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
   }, [])
 
   // ── Cards array ───────────────────────────────────────────────────────────
+  const TOTAL = 200, OBJ_AMOUNT = 100
+  const salvAmount = hasObiettivi ? `${TOTAL - OBJ_AMOUNT}€` : `${TOTAL}€`
+
   const cards = hasObiettivi
     ? [
         <CardObiettivo key="ob" hidden={hidden} />,
-        <CardSalvadanaio key="sv" hidden={hidden} />,
+        <CardSalvadanaio key="sv" hidden={hidden} amount={salvAmount} />,
         <CardCrea key="cr" />,
       ]
     : [
         <CardCrea key="cr" />,
-        <CardSalvadanaio key="sv" hidden={hidden} />,
+        <CardSalvadanaio key="sv" hidden={hidden} amount={salvAmount} />,
       ]
 
   // ── Gallery drag (shared tutti i casi) ───────────────────────────────────
