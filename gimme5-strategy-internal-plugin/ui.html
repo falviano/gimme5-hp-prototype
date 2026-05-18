@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; padding: 20px; color: #111; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .dot { width: 28px; height: 28px; background: #1a1a2e; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 11px; }
+    h3 { font-size: 14px; font-weight: 700; color: #111; }
+    p { font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 16px; }
+    .sections { background: #f5f5f5; border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 11px; color: #555; line-height: 1.8; }
+    button { width: 100%; padding: 12px; background: #1a1a2e; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    button:hover { background: #2d2d4e; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    #status { margin-top: 10px; font-size: 11px; color: #888; text-align: center; min-height: 16px; }
+    #status.ok { color: #16A34A; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <div class="dot">INT</div>
+    <h3>Strategia Interna — Team</h3>
+  </div>
+  <p>Board tecnico completo per il team. Non per il cliente.</p>
+  <div class="sections">
+    👤 Chi è l'utente reale (8 stat)<br>
+    👥 5 Segmenti con segnali onboarding<br>
+    ⚡ Scoring dinamico — 3 assi<br>
+    🏠 Homepage — 6 stati dettagliati<br>
+    📖 Sistema pillole — 4 formati<br>
+    🔔 Trigger map — 6 trigger<br>
+    📚 Repository Gimme5 vs Finanz<br>
+    📌 Regole d'oro + vincoli normativi<br>
+    🗺️ Mappa casistiche — 35+ casi
+  </div>
+  <button id="btn" onclick="generate()">Genera Board Interno →</button>
+  <div id="status"></div>
+  <script>
+    function generate() {
+      var btn = document.getElementById('btn')
+      var status = document.getElementById('status')
+      btn.disabled = true
+      btn.textContent = 'Generazione...'
+      status.className = ''
+      status.textContent = '⏳ Caricamento...'
+      parent.postMessage({ pluginMessage: { type: 'generate' } }, '*')
+    }
+    window.onmessage = function(e) {
+      var msg = e.data.pluginMessage
+      if (!msg) return
+      var btn = document.getElementById('btn')
+      var status = document.getElementById('status')
+      if (msg.type === 'progress') status.textContent = '⏳ ' + msg.text
+      if (msg.type === 'done') {
+        status.className = 'ok'
+        status.textContent = '✅ ' + msg.sections + ' sezioni create!'
+        btn.disabled = false
+        btn.textContent = 'Rigenera →'
+      }
+      if (msg.type === 'error') {
+        status.textContent = '⚠️ ' + msg.text
+        btn.disabled = false
+        btn.textContent = 'Riprova →'
+      }
+    }
+  </script>
+</body>
+</html>

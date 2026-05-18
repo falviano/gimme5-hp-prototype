@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import cardObiettivoOverlay from './assets/card-obiettivo-overlay.jpg'
 // FlickCardStack non più usato — logica replicata inline in CardsSection
 
 /* ─── Icons ──────────────────────────────────────────────────────────────── */
@@ -53,7 +54,7 @@ const XIcon = () => (
   </svg>
 )
 
-const ICON_CHAT        = 'https://www.figma.com/api/mcp/asset/d388ac5c-39ff-4e64-b427-8e02467ad309'
+const ICON_CHAT = 'https://www.figma.com/api/mcp/asset/9eb48eb5-e937-4be8-9c10-00752469629e'
 const IMG_HELP_ILLUS   = 'https://www.figma.com/api/mcp/asset/58628b07-55f9-4d2f-ad42-a47fa86f8b80'
 const IMG_PARTNER_LOGO = 'https://www.figma.com/api/mcp/asset/ccf16c01-58ca-495e-8782-5cb02f57433d'
 
@@ -105,17 +106,52 @@ const Gimme5Logo = ({ size = 28 }) => (
   </svg>
 )
 
-/* ─── Amount blur ────────────────────────────────────────────────────────── */
+/* ─── Amount mask (Wise-style, zero layout shift) ────────────────────────── */
+const FADE_EASE = 'opacity 220ms cubic-bezier(0.25, 0.1, 0.25, 1)'
+
+// Offset pseudo-random per stagger organico
+const CHAR_OFFSETS  = [0, 15, 5, 25, 10, 20, 8, 18]
+const SPRING_EASE   = 'cubic-bezier(0.34, 1.56, 0.64, 1)'  // overshoot leggero
+
 function Amount({ value, hidden, style = {} }) {
+  const chars = value.split('')
+  const totalDigits = chars.filter(ch => /\d/.test(ch)).length
+  let digitIdx = 0
+
   return (
-    <span style={{
-      display: 'inline-block',
-      filter: hidden ? 'blur(5.5px)' : 'none',
-      transition: 'filter 0.2s ease',
-      userSelect: hidden ? 'none' : 'auto',
-      ...style,
-    }}>
-      {value}
+    <span style={{ display: 'inline-flex', verticalAlign: 'baseline', fontVariantNumeric: 'tabular-nums', ...style }}>
+      {chars.map((ch, i) => {
+        if (!/\d/.test(ch)) {
+          return <span key={i} style={{ display: 'inline-block' }}>{ch}</span>
+        }
+
+        const di   = digitIdx++
+        // Nascondere: onda sx→dx | Rivelare: onda dx→sx
+        const dIdx  = hidden ? di : (totalDigits - 1 - di)
+        const dExit = dIdx * 70
+        const dEntr = dExit + 20
+
+        return (
+          <span key={i} style={{ display: 'inline-grid' }}>
+            <span style={{
+              gridArea: '1/1',
+              opacity:         hidden ? 0 : 1,
+              filter:          hidden ? 'blur(2px)' : 'blur(0px)',
+              transform:       hidden ? 'scale(0.45)' : 'scale(1)',
+              transformOrigin: 'top center',
+              transition: `opacity 150ms ease-in ${dExit}ms, filter 150ms ease-in ${dExit}ms, transform 150ms ease-in ${dExit}ms`,
+            }}>{ch}</span>
+            <span style={{
+              gridArea: '1/1',
+              opacity:         hidden ? 1 : 0,
+              filter:          hidden ? 'blur(0px)' : 'blur(2px)',
+              transform:       hidden ? 'scale(1)' : 'scale(0.45)',
+              transformOrigin: 'top center',
+              transition: `opacity 160ms ease-out ${dEntr}ms, filter 160ms ease-out ${dEntr}ms, transform 260ms ${SPRING_EASE} ${dEntr}ms`,
+            }}>*</span>
+          </span>
+        )
+      })}
     </span>
   )
 }
@@ -169,8 +205,7 @@ const CARD_BORDER_PATH = squircleBorderPath(CW, CH, 32, 0.75)
 
 /* ─── Figma asset URLs ───────────────────────────────────────────────────── */
 const IMG_PIGGY    = 'https://www.figma.com/api/mcp/asset/920a3603-19b6-4013-87fe-a7571823023d'
-const IMG_OBJ_BG   = '/house-bg.jpg'
-const IMG_OBJ_OVL  = 'https://www.figma.com/api/mcp/asset/84b3ebb0-6fd6-40fc-bf80-8a6540264f64'
+const IMG_OBJ_OVL  = cardObiettivoOverlay
 const IMG_AVATAR   = 'https://www.figma.com/api/mcp/asset/d6f02170-136a-4a10-af2f-905d6f9a8162'
 
 /* ─── Shared + button ────────────────────────────────────────────────────── */
@@ -179,7 +214,7 @@ function PlusBtn() {
     <div style={{
       width: 48, height: 48, borderRadius: 99, flexShrink: 0,
       background: '#fff', border: '1px solid #b4b4b4',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'default',
     }}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -274,7 +309,6 @@ function CardObiettivo({ hidden, style, isAbsolute, onClick, handlers = {} }) {
       ...style,
     }}>
       {/* Full-bleed photo — absolute behind */}
-      <img draggable={false} src={IMG_OBJ_BG} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
       <img draggable={false} src={IMG_OBJ_OVL} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} />
 
       {/* Top row: Casa chip + avatars — h:28px */}
@@ -370,19 +404,17 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
     if (Math.abs(dx) > 60 || Math.abs(vel) > 0.4) setFront2(f => 1 - f)
   }, [])
 
-  // ── Stack drag: 3-card flick ──────────────────────────────────────────────
-  const [activeCard, setActiveCard]   = useState(0)
-  const [stackDrag, setStackDrag]     = useState(0)
+  // ── Stack drag: multi-card (champions4good style) ─────────────────────────
+  const [activeCard, setActiveCard]       = useState(0)
+  const [stackDrag, setStackDrag]         = useState(0)
   const [stackDragging, setStackDragging] = useState(false)
+  const [swipeOutState, setSwipeOutState] = useState(null) // { flyDir: -1|1 }
   const sX = useRef(null), sT = useRef(null), sLX = useRef(0)
 
-  const advanceStack = useCallback((dir, total) => {
-    setActiveCard(a => (a + dir + total) % total)
-  }, [])
-
   const onStackStart = useCallback((clientX) => {
+    if (swipeOutState) return
     sX.current = clientX; sT.current = Date.now(); sLX.current = clientX; setStackDragging(true)
-  }, [])
+  }, [swipeOutState])
   const onStackMove = useCallback((clientX) => {
     if (sX.current === null) return
     sLX.current = clientX; setStackDrag(clientX - sX.current)
@@ -392,8 +424,15 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
     const dx = sLX.current - sX.current
     const vel = dx / Math.max(1, Date.now() - sT.current)
     sX.current = null; setStackDragging(false); setStackDrag(0)
-    if (Math.abs(dx) > FLICK_PX || Math.abs(vel) > FLICK_VEL) advanceStack(dx < 0 ? 1 : -1, total)
-  }, [advanceStack])
+    if (Math.abs(dx) > FLICK_PX || Math.abs(vel) > FLICK_VEL) {
+      const flyDir = dx < 0 ? -1 : 1
+      setSwipeOutState({ flyDir })
+      setTimeout(() => {
+        setActiveCard(a => (a + (dx < 0 ? 1 : -1) + total) % total)
+        setSwipeOutState(null)
+      }, 320)
+    }
+  }, [])
 
   // ── Cards array ───────────────────────────────────────────────────────────
   const cards = hasObiettivi
@@ -522,13 +561,13 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
       onPointerCancel={galleryMode ? onGalUp : undefined}
     >
       {cards.map((card, i) => {
-        let tx, ty, rot, zIdx, isDraggingThis = false
+        let tx, ty, rot, zIdx, isDraggingThis = false, cardTransition = null
 
         if (galleryMode) {
           // ── Gallery: tutte le card in linea orizzontale ──
           tx = GPAD + i * (CW + GGAP) - galPan; ty = 0; rot = 0; zIdx = 1
         } else if (isMulti) {
-          // ── Stack 3+ card: SLOTS fan layout ──
+          // ── Stack 3+ card: SLOTS fan layout + fly-out su swipe ──
           let rel = i - activeCard
           const n = cards.length
           if (rel >  n / 2) rel -= n
@@ -536,14 +575,24 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
           const clamped = Math.max(-2, Math.min(2, rel))
           const slot = SLOTS[String(clamped)]
           if (!slot) return null
-          const isActive = rel === 0
-          const liveDx  = isActive && stackDragging ? stackDrag       : 0
-          const liveRot = isActive && stackDragging ? stackDrag * 0.04 : 0
-          tx   = centerX + slot.dx + liveDx
-          ty   = slot.dy
-          rot  = slot.rot + liveRot
-          zIdx = isActive && stackDragging ? 10 : slot.z
-          isDraggingThis = isActive && stackDragging
+          const isActiveCard = rel === 0
+          if (swipeOutState && isActiveCard) {
+            // Fly-out: la card attiva vola nella direzione dello swipe
+            tx  = centerX + slot.dx + swipeOutState.flyDir * 480
+            ty  = slot.dy
+            rot = slot.rot + swipeOutState.flyDir * 20
+            cardTransition = 'transform 0.28s cubic-bezier(0.4, 0, 1, 1)'
+          } else if (isActiveCard && stackDragging) {
+            tx  = centerX + slot.dx + stackDrag
+            ty  = slot.dy
+            rot = slot.rot + stackDrag * 0.04
+            isDraggingThis = true
+          } else {
+            tx   = centerX + slot.dx
+            ty   = slot.dy
+            rot  = slot.rot
+          }
+          zIdx = isActiveCard && stackDragging ? 10 : slot.z
         } else {
           // ── Stack 2 card: flip layout ──
           const isFront = i === front2
@@ -560,16 +609,22 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
         let pointerHandlers = {}
         if (!galleryMode) {
           if (isMulti) {
-            let rel = i - activeCard
             const n = cards.length
-            if (rel >  n / 2) rel -= n
-            if (rel < -n / 2) rel += n
-            const isActive = rel === 0
+            const absRel = (i - activeCard + n) % n
+            const isActive = absRel === 0
             pointerHandlers = {
               onPointerDown: isActive ? (e) => {
                 e.currentTarget.setPointerCapture(e.pointerId)
                 onStackStart(e.clientX)
-              } : (e) => { e.stopPropagation(); advanceStack(rel, cards.length) },
+              } : (e) => {
+                e.stopPropagation()
+                if (!swipeOutState) {
+                  const rel2 = (i - activeCard + n) % n > n / 2
+                    ? (i - activeCard + n) % n - n
+                    : (i - activeCard + n) % n
+                  setActiveCard(a => (a + rel2 + n) % n)
+                }
+              },
               onPointerMove: isActive ? (e) => { if (stackDragging) onStackMove(e.clientX) } : undefined,
               onPointerUp: isActive ? () => onStackEnd(cards.length) : undefined,
               onPointerCancel: isActive ? () => onStackEnd(cards.length) : undefined,
@@ -596,7 +651,7 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
               transform: `translateX(${tx}px) translateY(${ty}px) rotate(${rot}deg)`,
               transformOrigin: 'center bottom',
               zIndex: zIdx,
-              transition: isDraggingThis ? 'none' : 'transform 0.45s cubic-bezier(0.34,1.35,0.64,1)',
+              transition: isDraggingThis ? 'none' : (cardTransition || 'transform 0.45s cubic-bezier(0.34,1.35,0.64,1)'),
               cursor: !galleryMode ? (isDraggingThis ? 'grabbing' : 'grab') : 'default',
               userSelect: 'none', WebkitUserSelect: 'none',
             }}
@@ -706,7 +761,7 @@ function NavTab({ icon, label, active, gap = 2 }) {
   return (
     <div style={{
       width: 62, flexShrink: 0, display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'flex-end', gap, cursor: 'pointer',
+      alignItems: 'center', justifyContent: 'flex-end', gap, cursor: 'default',
     }}>
       <div style={{ color: active ? '#F55A27' : '#5C5C5C' }}>{icon}</div>
       <span style={{
@@ -755,7 +810,7 @@ export default function HomeScreen() {
           </div>
           <button
             aria-label="Supporto"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 0, flexShrink: 0 }}
+            style={{ background: 'none', border: 'none', cursor: 'default', padding: 0, lineHeight: 0, flexShrink: 0 }}
           >
             <ChatIcon />
           </button>
@@ -771,9 +826,9 @@ export default function HomeScreen() {
               fontFamily: 'Archivo, sans-serif', fontWeight: 700,
               fontSize: 36, lineHeight: '40px', color: '#000', whiteSpace: 'nowrap',
             }}>
-              <Amount value="200,00€" hidden={hidden} />
+              <Amount value="200,00" hidden={hidden} style={{ verticalAlign: 'top' }} />€
             </div>
-            <div style={{ display: 'flex', gap: 12, marginLeft: 16 }}>
+            <div style={{ display: 'flex', gap: 12, marginLeft: 14 }}>
               <button
                 className="btn-icon"
                 onClick={() => setHidden(h => !h)}
@@ -818,7 +873,7 @@ export default function HomeScreen() {
             </button>
             <button style={{
               width: 32, height: 32, background: 'none', border: 'none',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'default', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }} aria-label="Vai agli obiettivi">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"/>

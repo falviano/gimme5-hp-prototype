@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Gimme5 — Schema Navigazione</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    background: #111;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: auto;
+  }
+  .page {
+    min-width: 1400px;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── TOP NODES ── */
+  .top-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0;
+  }
+  .node-onboarding {
+    background: #222;
+    border: 1.5px solid #383838;
+    border-radius: 12px;
+    padding: 12px 36px;
+    color: #bbb;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+  .connector-v {
+    width: 2px;
+    height: 40px;
+    background: #333;
+    position: relative;
+  }
+  .connector-v::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: -4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #444;
+  }
+  .connector-v.orange { background: #f55a27; }
+  .connector-v.orange::after { border-top-color: #f55a27; }
+
+  .node-gimme5 {
+    background: #f55a27;
+    border-radius: 14px;
+    padding: 14px 52px;
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+
+  /* ── BRANCH ── */
+  .branch-container {
+    position: relative;
+    margin-top: 0;
+  }
+  .branch-line-wrap {
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    position: relative;
+  }
+  .branch-line-wrap svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  /* ── TABS ROW ── */
+  .tabs-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  /* ── TAB COLUMN ── */
+  .tab-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .user-need {
+    font-size: 12px;
+    font-style: italic;
+    color: #555;
+    text-align: center;
+    padding: 0 8px 10px;
+    line-height: 1.5;
+    letter-spacing: 0.1px;
+  }
+  .user-need span {
+    display: block;
+    font-size: 16px;
+    font-style: normal;
+    margin-bottom: 4px;
+  }
+
+  .tab-header {
+    width: 100%;
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-align: center;
+    position: relative;
+  }
+  .tab-header .tab-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #b94018;
+    margin-bottom: 4px;
+  }
+  .tab-header .tab-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111;
+    letter-spacing: -0.3px;
+  }
+  .tab-header .tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+  .tab-header .tab-icon svg {
+    display: block;
+  }
+  .tab-header.regular { background: #fde8df; }
+  .tab-header.plus-tab {
+    background: #f55a27;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 0 0 6px #f55a2722, 0 0 0 14px #f55a2211;
+  }
+  .tab-header.plus-tab .tab-name { font-size: 64px; font-weight: 200; color: white; line-height: 1; margin-top: -4px; }
+
+  /* ── SUB-ITEMS ── */
+  .sub-item {
+    width: 100%;
+    background: #202020;
+    border: 1px solid #303030;
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .sub-item.highlight {
+    background: #1e0e06;
+    border-color: #f55a2766;
+  }
+  .sub-item .sub-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #888;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+  .sub-item .sub-label.orange { color: #f55a27; }
+  .sub-item .sub-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #aaa;
+    line-height: 1.5;
+  }
+  .sub-item-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+  .sub-item-row svg { flex-shrink: 0; opacity: 0.55; }
+  .sub-item .sub-text.orange { color: #f8a080; }
+
+  .sub-connector {
+    width: 2px;
+    height: 20px;
+    background: #2a2a2a;
+    margin: 0 auto;
+    position: relative;
+  }
+  .sub-connector::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: -4px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #333;
+  }
+  .sub-connector.orange { background: #f55a2766; }
+  .sub-connector.orange::after { border-top-color: #f55a27; }
+
+  /* ── TOGGLE DETAIL ── */
+  .toggle-box {
+    width: 100%;
+    background: #1c1c1c;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .toggle-row {
+    display: flex;
+    border-bottom: 1px solid #242424;
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-side {
+    flex: 1;
+    padding: 10px 8px;
+    text-align: center;
+    border-right: 1px solid #242424;
+  }
+  .toggle-side:last-child { border-right: none; }
+  .toggle-side .toggle-title {
+    font-size: 10px;
+    font-weight: 800;
+    color: #f55a27;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .toggle-side .toggle-item {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  /* ── PILLOLE BANNER ── */
+  .pillole-banner {
+    margin-top: 40px;
+    background: #1a1a1a;
+    border: 1px solid #f55a2722;
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .pillole-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .pillole-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #f55a27;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .pillole-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+  }
+  .pillole-examples {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .pillole-chip {
+    background: #222;
+    border: 1px solid #2e2e2e;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: #555;
+  }
+
+  /* ── LOGIC FOOTER ── */
+  .logic-row {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .logic-box {
+    background: #1a1a1a;
+    border: 1px solid #252525;
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+  .logic-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 10px;
+  }
+  .logic-item {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+  }
+  .logic-item span { color: #888; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ TOP ═══ -->
+  <div class="top-section">
+    <div class="node-onboarding">Onboarding</div>
+    <div class="connector-v"></div>
+    <div class="node-gimme5">Gimme5</div>
+  </div>
+
+  <!-- ═══ BRANCH SVG ═══ -->
+  <div style="position:relative; height:64px; margin-top:0;">
+    <svg width="100%" height="64" preserveAspectRatio="none" viewBox="0 0 1400 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#444" transform="rotate(-90,4,4)"/>
+        </marker>
+        <marker id="ao" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#f55a27" transform="rotate(-90,4,4)"/>
+        </marker>
+      </defs>
+      <!-- NAV BAR label -->
+      <text x="700" y="13" text-anchor="middle" fill="#3a3a3a" font-size="9" letter-spacing="2.5" font-family="-apple-system,sans-serif">NAV BAR</text>
+      <!-- vertical from Gimme5 -->
+      <line x1="700" y1="18" x2="700" y2="34" stroke="#444" stroke-width="2"/>
+      <!-- horizontal bar -->
+      <line x1="140" y1="34" x2="1260" y2="34" stroke="#444" stroke-width="2"/>
+      <!-- verticals to tabs -->
+      <line x1="140"  y1="34" x2="140"  y2="58" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="420"  y1="34" x2="420"  y2="58" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="700"  y1="34" x2="700"  y2="52" stroke="#f55a27" stroke-width="2.5" marker-end="url(#ao)"/>
+      <line x1="980"  y1="34" x2="980"  y2="58" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+      <line x1="1260" y1="34" x2="1260" y2="58" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+    </svg>
+  </div>
+
+  <!-- ═══ TABS ROW ═══ -->
+  <div class="tabs-row">
+
+    <!-- ── TAB 1: HOME ── -->
+    <div class="tab-col">
+      <div class="user-need"><span>🔍</span>"Come stanno andando i miei risparmi?"</div>
+      <div class="tab-header regular" style="width:100%">
+        <div class="tab-num">TAB 1</div>
+        <div class="tab-icon">
+          <!-- Portafoglio / andamento -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b94018" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="tab-name">Home</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-item-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f55a27" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="16" cy="12" r="3" fill="#f55a27" stroke="none"/></svg>
+          <div class="sub-label orange" style="margin:0">Toggle in cima</div>
+        </div>
+        <div class="sub-text" style="color:#f55a2788; font-size:12px; margin-top:4px">Obiettivi &nbsp;·&nbsp; Portafoglio</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="toggle-box">
+        <div class="toggle-row">
+          <div class="toggle-side">
+            <div class="toggle-title">Vista Obiettivi</div>
+            <div class="toggle-item">Card per ogni goal</div>
+            <div class="toggle-item">Progress bar %</div>
+            <div class="toggle-item">Prossimo versamento</div>
+          </div>
+          <div class="toggle-side">
+            <div class="toggle-title">Vista Portafoglio</div>
+            <div class="toggle-item">Valore totale</div>
+            <div class="toggle-item">Grafico + rendimento</div>
+            <div class="toggle-item">Breakdown per fondo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-item-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <div class="sub-text">Movimenti recenti (ultimi 3)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 2: OBIETTIVI ── -->
+    <div class="tab-col">
+      <div class="user-need"><span>🎯</span>"Sto avanzando verso i miei goal?"</div>
+      <div class="tab-header regular" style="width:100%">
+        <div class="tab-num">TAB 2</div>
+        <div class="tab-icon">
+          <!-- Flag / traguardo finanziario -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b94018" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+            <line x1="4" y1="22" x2="4" y2="15"/>
+          </svg>
+        </div>
+        <div class="tab-name">Obiettivi</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-text">Lista goal attivi con stato</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-label">Dettaglio goal</div>
+        <div class="sub-text">Fondo associato + piano</div>
+        <div class="sub-text">Barra progresso + target</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-text">Storico versamenti per goal</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-text">Modifica piano · Pausa · Cancella</div>
+      </div>
+    </div>
+
+    <!-- ── TAB 3: [+] ── -->
+    <div class="tab-col">
+      <div class="user-need"><span>⚡️</span>"Voglio fare qualcosa adesso"</div>
+      <div style="display:flex; justify-content:center; width:100%">
+        <div class="tab-header plus-tab">
+          <div class="tab-name">+</div>
+        </div>
+      </div>
+
+      <div class="sub-connector orange" style="margin-top:4px"></div>
+      <div class="sub-item highlight" style="width:100%">
+        <div class="sub-label orange">Primario</div>
+        <div class="sub-item-row" style="justify-content:center; margin-top:4px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f8a080" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          <span class="sub-text orange" style="font-size:15px; font-weight:700">Versa</span>
+        </div>
+      </div>
+
+      <div class="sub-connector orange"></div>
+      <div class="sub-item" style="width:100%; border-color:#f55a2733">
+        <div class="sub-item-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f8a080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <div class="sub-text orange">Crea obiettivo</div>
+        </div>
+      </div>
+
+      <div class="sub-connector orange"></div>
+      <div class="sub-item" style="width:100%; border-color:#f55a2733">
+        <div class="sub-item-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f8a080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <div class="sub-text orange">Nuovo fondo</div>
+        </div>
+      </div>
+
+      <div class="sub-connector orange"></div>
+      <div class="sub-item" style="width:100%; border-color:#f55a2733">
+        <div class="sub-item-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f8a080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div class="sub-text orange">Aggiungi piano automatico</div>
+        </div>
+      </div>
+
+      <div class="sub-connector orange"></div>
+      <div class="sub-item" style="width:100%; border-color:#f55a2733">
+        <div class="sub-item-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f8a080" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+          <div class="sub-text orange">Preleva</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 4: ESPLORA ── -->
+    <div class="tab-col">
+      <div class="user-need"><span>💡</span>"Cosa esiste? Cosa potrei fare in più?"</div>
+      <div class="tab-header regular" style="width:100%">
+        <div class="tab-num">TAB 4</div>
+        <div class="tab-icon">
+          <!-- Bussola / discovery -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b94018" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+          </svg>
+        </div>
+        <div class="tab-name">Esplora</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-item-row" style="margin-bottom:4px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <div class="sub-label" style="margin:0">Catalogo fondi</div>
+        </div>
+        <div class="sub-item-row">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          <div class="sub-text">Filtri: rischio · orizzonte · ESG</div>
+        </div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-item-row" style="margin-bottom:4px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          <div class="sub-label" style="margin:0">Collezioni curate</div>
+        </div>
+        <div class="sub-text">"Per chi inizia" · "Lungo termine"</div>
+        <div class="sub-text">"ESG" · "Alto rendimento"</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-item-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>
+          <div class="sub-text">Scheda fondo + CTA "Usa per un obiettivo"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 5: PROFILO ── -->
+    <div class="tab-col">
+      <div class="user-need"><span>⚙️</span>"Devo gestire qualcosa nel mio account"</div>
+      <div class="tab-header regular" style="width:100%">
+        <div class="tab-num">TAB 5</div>
+        <div class="tab-icon">
+          <!-- Conto / sicurezza investitore -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b94018" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+            <circle cx="12" cy="12" r="2"/>
+            <path d="M6 12h.01M18 12h.01"/>
+          </svg>
+        </div>
+        <div class="tab-name">Profilo</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-text">Dati personali + documenti</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-text">Sicurezza (PIN · biometrico)</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-text">Impostazioni + notifiche</div>
+      </div>
+
+      <div class="sub-connector"></div>
+      <div class="sub-item" style="width:100%">
+        <div class="sub-text">Logout</div>
+      </div>
+    </div>
+
+  </div><!-- /tabs-row -->
+
+  <!-- ═══ PILLOLE BANNER ═══ -->
+  <div class="pillole-banner">
+    <div class="pillole-icon">💡</div>
+    <div>
+      <div class="pillole-title">Pillole educative — Layer contestuale</div>
+      <div class="pillole-desc">Non hanno una sezione fissa. Appaiono in ogni parte dell'app in base al contesto: dove si trova l'utente, cosa sta facendo, cosa è appena successo nel mercato.</div>
+      <div class="pillole-examples">
+        <div class="pillole-chip">Home dopo variazione mercato → "I mercati oscillano, è normale"</div>
+        <div class="pillole-chip">Scheda fondo → "Cosa significa rischio medio-basso?"</div>
+        <div class="pillole-chip">Crea obiettivo → "Perché l'orizzonte temporale conta"</div>
+        <div class="pillole-chip">Primo versamento → "Hai iniziato. Ecco cosa succede ora"</div>
+      </div>
+      <div style="margin-top:12px; padding-top:12px; border-top:1px solid #222;">
+        <div style="font-size:11px; color:#444; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:6px;">Stesso sistema → Collezioni curate</div>
+        <div style="font-size:13px; color:#4a4a4a; line-height:1.6;">Le collezioni curate in Esplora seguono la stessa logica editoriale delle pillole. Una pillola contestuale può portare direttamente a un fondo consigliato già filtrato — senza bisogno di una sezione separata.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ LOGICA ═══ -->
+  <div class="logic-row">
+    <div class="logic-box">
+      <div class="logic-title">Principi di navigazione</div>
+      <div class="logic-item"><span>Home</span> = specchio dello stato — solo legge, non propone azioni</div>
+      <div class="logic-item"><span>Obiettivi</span> = unità centrale — fondo e piano vivono DENTRO ogni goal</div>
+      <div class="logic-item"><span>[+]</span> = tutto ciò che si CREA o MUOVE — centrato, sempre visibile</div>
+      <div class="logic-item"><span>Esplora</span> = discovery senza pressione — l'utente guarda, non decide</div>
+    </div>
+    <div class="logic-box">
+      <div class="logic-title">Cosa sparisce dalla Home</div>
+      <div class="logic-item">"Crea nuovo obiettivo" → va nel <span>[+]</span></div>
+      <div class="logic-item">"Esplora i tuoi fondi" → va nel tab <span>Esplora</span></div>
+      <div class="logic-item">"Verifica identità" → alert contestuale, non card fissa</div>
+      <div class="logic-item">"Regola attiva" → rinominata <span>Piano automatico</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
