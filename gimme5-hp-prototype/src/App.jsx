@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import HomeScreen from './HomeScreen.jsx'
+import HomeScreenShadcn from './HomeScreenShadcn.jsx'
 
 const PASSWORD = 'playnew'
 const STORAGE_KEY = 'hp_proto_unlocked'
@@ -106,6 +107,7 @@ function DynamicIslandStatusBar() {
 
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => localStorage.getItem(STORAGE_KEY) === '1')
+  const [useShadcn, setUseShadcn] = useState(false)
 
   if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />
 
@@ -116,10 +118,23 @@ export default function App() {
       padding: '20px 0 40px', background: '#1a1a1a',
     }}>
       <div style={{
-        color: '#3a3a3a', fontSize: 12, marginBottom: 12,
-        fontFamily: 'Inter, sans-serif', fontWeight: 600,
+        display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12,
       }}>
-        Gimme5 · HP Prototype
+        <span style={{ color: '#3a3a3a', fontSize: 12, fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>
+          Gimme5 · HP Prototype
+        </span>
+        <button
+          onClick={() => setUseShadcn(s => !s)}
+          style={{
+            padding: '3px 10px', borderRadius: 99, fontSize: 10, cursor: 'pointer',
+            fontFamily: 'Inter, sans-serif', fontWeight: 600, lineHeight: 1,
+            background: useShadcn ? '#f55a27' : '#2a2a2a',
+            border: '1px solid ' + (useShadcn ? '#f55a27' : '#3a3a3a'),
+            color: useShadcn ? '#000' : '#666',
+          }}
+        >
+          {useShadcn ? 'shadcn' : 'original'}
+        </button>
       </div>
 
       {/* Phone frame */}
@@ -132,7 +147,7 @@ export default function App() {
       }}>
         <DynamicIslandStatusBar />
         <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-          <HomeScreen />
+          {useShadcn ? <HomeScreenShadcn /> : <HomeScreen />}
         </div>
       </div>
     </div>

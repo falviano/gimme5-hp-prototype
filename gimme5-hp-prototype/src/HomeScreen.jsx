@@ -164,7 +164,7 @@ const CH = 300
 // Slot geometry — base allineata (dy uguale per tutte le card)
 // transformOrigin:center bottom → le card ruotano attorno alla stessa base
 const SLOTS = {
-  '-2': { dx: -20, dy:  0, rot: +8, z: 1 },
+  '-2': { dx: -20, dy:  0, rot: +8, z: 0 },
   '-1': { dx:   2, dy: -1, rot:  -8, z: 1 },
    '0': { dx:   0, dy: 13, rot:   0, z: 3 },
    '1': { dx:  -3, dy: -2, rot:  +9, z: 2, origin: 'right bottom' },
@@ -428,7 +428,7 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
       const flyDir = dx < 0 ? -1 : 1
       setSwipeOutState({ flyDir })
       setTimeout(() => {
-        setActiveCard(a => (a + (dx < 0 ? 1 : -1) + total) % total)
+        setActiveCard(a => (a + 1) % total)
         setSwipeOutState(null)
       }, 320)
     }
@@ -568,7 +568,7 @@ function CardsSection({ obiettivi, galleryMode, hidden }) {
 
         if (galleryMode) {
           // ── Gallery: tutte le card in linea orizzontale ──
-          tx = GPAD + i * (CW + GGAP) - galPan; ty = 0; rot = 0; zIdx = 1
+          tx = GPAD + i * (CW + GGAP) - galPan; ty = 0; rot = 0; zIdx = cards.length - i
         } else if (isMulti) {
           // ── Stack 3+ card: SLOTS fan layout + fly-out su swipe ──
           let rel = i - activeCard
