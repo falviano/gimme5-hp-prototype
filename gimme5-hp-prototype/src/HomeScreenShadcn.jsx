@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import cardObiettivoOverlay from './assets/card-obiettivo-overlay.jpg'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Progress, ProgressTrack, ProgressIndicator } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
@@ -108,6 +107,18 @@ function Amount({ value, hidden, style = {} }) {
 /* ─── Card dimensions ────────────────────────────────────────────────────── */
 const CW = 253
 const CH = 300
+const centerX = (375 - CW) / 2  // 61px
+
+/* ─── Stack geometry ─────────────────────────────────────────────────────── */
+const SLOTS = {
+  '-2': { dx: -20, dy:  0, rot: +8, z: 0 },
+  '-1': { dx:   2, dy: -1, rot:  -8, z: 1 },
+   '0': { dx:   0, dy: 13, rot:   0, z: 3 },
+   '1': { dx:  -3, dy: -2, rot:  +9, z: 2 },
+   '2': { dx: -20, dy:  0, rot:  -4, z: 1 },
+}
+const FLICK_PX  = 72
+const FLICK_VEL = 0.4
 
 /* ─── Figma asset URLs ───────────────────────────────────────────────────── */
 const IMG_PIGGY  = 'https://www.figma.com/api/mcp/asset/920a3603-19b6-4013-87fe-a7571823023d'
@@ -195,17 +206,17 @@ function CardObiettivo({ hidden, onClick, handlers = {} }) {
     <Card
       onClick={onClick}
       {...handlers}
-      className="relative flex-shrink-0 rounded-[32px] shadow-none ring-0 border-0 p-3 gap-0 justify-between"
-      style={{ width: CW, height: CH }}
+      className="relative flex-shrink-0 rounded-[32px] shadow-none ring-0 border-0 gap-0 justify-between"
+      style={{ width: CW, height: CH, padding: 12 }}
     >
       {/* Full-bleed photo */}
       <img draggable={false} src={IMG_OBJ_OVL} alt=""
         className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
 
-      {/* Top row */}
-      <div className="relative flex h-7 items-center justify-between w-full flex-shrink-0">
+      {/* Top row — 12px dal bordo (via padding card) */}
+      <div className="relative flex items-center justify-between w-full flex-shrink-0">
         <Badge
-          className="bg-[#FFEB69] text-black border-0 rounded-full px-3 py-1.5 h-auto gap-1 font-[Archivo,sans-serif] font-medium text-xs"
+          className="bg-[#FFEB69] text-black border-0 rounded-full px-3 py-1.5 h-auto gap-0.5 font-[Archivo,sans-serif] font-medium text-xs"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -213,11 +224,11 @@ function CardObiettivo({ hidden, onClick, handlers = {} }) {
           </svg>
           Casa
         </Badge>
-        <AvatarGroup className="gap-0">
-          <Avatar className="size-7 ring-0 after:hidden border-0">
+        <AvatarGroup className="gap-0 [&>*[data-slot=avatar]]:ring-0 [&>*[data-slot=avatar]]:ring-transparent">
+          <Avatar className="size-7 ring-0 after:hidden">
             <AvatarImage src={IMG_AVATAR} />
           </Avatar>
-          <Avatar className="size-7 ring-0 after:hidden border-0" style={{ background: 'linear-gradient(180deg, #942a07 0%, #d03f00 50%, #f8835d 98%)' }}>
+          <Avatar className="size-7 ring-0 after:hidden" style={{ background: 'linear-gradient(180deg, #942a07 0%, #d03f00 50%, #f8835d 98%)' }}>
             <AvatarFallback className="bg-transparent text-[rgba(255,255,255,0.6)] font-[Archivo,sans-serif] font-semibold text-xs">
               MA
             </AvatarFallback>
@@ -243,7 +254,7 @@ function CardObiettivo({ hidden, onClick, handlers = {} }) {
             <span className="font-[Archivo,sans-serif] font-semibold text-base leading-5 text-black whitespace-nowrap">{progressPct}%</span>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between overflow-hidden">
               <span className="font-[Archivo,sans-serif] font-semibold text-base leading-5 text-black whitespace-nowrap">
                 <Amount value="100€" hidden={hidden} />
@@ -252,15 +263,13 @@ function CardObiettivo({ hidden, onClick, handlers = {} }) {
                 su <Amount value="5.000€" hidden={hidden} />
               </span>
             </div>
-            <Progress value={progressPct} className="gap-0">
-              <ProgressTrack className="h-1 bg-[#EBEBEB] rounded-full">
-                <ProgressIndicator className="bg-[#F55A27] rounded-full" />
-              </ProgressTrack>
-            </Progress>
+            <div style={{ background: '#EBEBEB', borderRadius: 100, height: 4, width: '100%' }}>
+              <div style={{ background: '#F55A27', borderRadius: 100, height: 4, width: `${progressPct}%`, minWidth: 4 }} />
+            </div>
           </div>
 
           <Badge
-            className="bg-[#FFEB69] text-black border-0 rounded-full px-2 py-1 h-auto gap-2 font-[Archivo,sans-serif] font-medium text-[11px] self-start"
+            className="bg-[#FFEB69] text-black border-0 rounded-full px-2 py-1 h-auto gap-1 font-[Archivo,sans-serif] font-medium text-[11px] self-start"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>
@@ -274,25 +283,262 @@ function CardObiettivo({ hidden, onClick, handlers = {} }) {
 }
 
 /* ─── Cards Section ──────────────────────────────────────────────────────── */
-function CardsSection({ obiettivi, hidden }) {
-  const hasObiettivi = obiettivi > 0
-  const TOTAL = 200, OBJ_AMOUNT = 100
-  const salvAmount = hasObiettivi ? `${TOTAL - OBJ_AMOUNT}€` : `${TOTAL}€`
+function CardsSection({ hasObiettivi, galleryMode, hidden }) {
+  // ── 2-card flip drag ────────────────────────────────────────────────────
+  const [front2, setFront2]       = useState(0)
+  const [drag2, setDrag2]         = useState(0)
+  const [dragging2, setDragging2] = useState(false)
+  const startX2 = useRef(null), startT2 = useRef(null), lastX2 = useRef(0)
 
+  const onDrag2Start = useCallback((clientX) => {
+    startX2.current = clientX; startT2.current = Date.now(); lastX2.current = clientX; setDragging2(true)
+  }, [])
+  const onDrag2Move = useCallback((clientX) => {
+    if (startX2.current === null) return
+    lastX2.current = clientX; setDrag2(clientX - startX2.current)
+  }, [])
+  const onDrag2End = useCallback(() => {
+    if (startX2.current === null) return
+    const dx = lastX2.current - startX2.current
+    const vel = dx / Math.max(1, Date.now() - startT2.current)
+    startX2.current = null; setDragging2(false); setDrag2(0)
+    if (Math.abs(dx) > 60 || Math.abs(vel) > 0.4) setFront2(f => 1 - f)
+  }, [])
+
+  // ── Multi-card fan drag ──────────────────────────────────────────────────
+  const [activeCard, setActiveCard]       = useState(0)
+  const [stackDrag, setStackDrag]         = useState(0)
+  const [stackDragging, setStackDragging] = useState(false)
+  const [swipeOutState, setSwipeOutState] = useState(null)
+  const sX = useRef(null), sT = useRef(null), sLX = useRef(0)
+
+  const onStackStart = useCallback((clientX) => {
+    if (swipeOutState) return
+    sX.current = clientX; sT.current = Date.now(); sLX.current = clientX; setStackDragging(true)
+  }, [swipeOutState])
+  const onStackMove = useCallback((clientX) => {
+    if (sX.current === null) return
+    sLX.current = clientX; setStackDrag(clientX - sX.current)
+  }, [])
+  const onStackEnd = useCallback((total) => {
+    if (sX.current === null) return
+    const dx = sLX.current - sX.current
+    const vel = dx / Math.max(1, Date.now() - sT.current)
+    sX.current = null; setStackDragging(false); setStackDrag(0)
+    if (Math.abs(dx) > FLICK_PX || Math.abs(vel) > FLICK_VEL) {
+      const flyDir = dx < 0 ? -1 : 1
+      setSwipeOutState({ flyDir })
+      setTimeout(() => { setActiveCard(a => (a + 1) % total); setSwipeOutState(null) }, 320)
+    }
+  }, [])
+
+  // ── Cards array ──────────────────────────────────────────────────────────
+  const cards = hasObiettivi
+    ? [
+        <CardObiettivo key="ob" hidden={hidden} />,
+        <CardSalvadanaio key="sv" hidden={hidden} amount="100€" />,
+        <CardCrea key="cr" />,
+      ]
+    : [
+        <CardCrea key="cr" />,
+        <CardSalvadanaio key="sv" hidden={hidden} amount="200€" />,
+      ]
+
+  // ── Gallery drag ─────────────────────────────────────────────────────────
+  const GPAD = 16, GGAP = 12
+  const galPanRef    = useRef(0)
+  const [galPan, setGalPan] = useState(0)
+  const galDX = useRef(null), galDP = useRef(0), galVel = useRef(0)
+  const galLX = useRef(0), galLT = useRef(0)
+  const galRaf = useRef(null), galContRef = useRef(null), galCardRefs = useRef([])
+  const MAX_PAN = (cards.length - 1) * (CW + GGAP)
+
+  useEffect(() => {
+    if (!galleryMode) { galPanRef.current = 0; setGalPan(0) }
+  }, [galleryMode])
+
+  const prevGalleryModeRef = useRef(galleryMode)
+  if (prevGalleryModeRef.current !== galleryMode) {
+    prevGalleryModeRef.current = galleryMode
+    if (galRaf.current) cancelAnimationFrame(galRaf.current)
+    galCardRefs.current.forEach(el => {
+      if (el) el.style.transition = 'transform 0.45s cubic-bezier(0.34,1.35,0.64,1)'
+    })
+  }
+
+  const rubberBand = useCallback((pan) => {
+    if (pan < 0)       return pan * 0.25
+    if (pan > MAX_PAN) return MAX_PAN + (pan - MAX_PAN) * 0.25
+    return pan
+  }, [MAX_PAN])
+
+  const applyGalPan = useCallback((raw) => {
+    const pan = rubberBand(raw)
+    galPanRef.current = raw
+    galCardRefs.current.forEach((el, i) => {
+      if (!el) return
+      el.style.transition = 'none'
+      el.style.transform  = `translateX(${GPAD + i * (CW + GGAP) - pan}px) translateY(0px) rotate(0deg)`
+    })
+  }, [rubberBand])
+
+  const springTo = useCallback((targetRaw) => {
+    let cur = rubberBand(galPanRef.current)
+    const target = rubberBand(targetRaw)
+    const run = () => {
+      cur += (target - cur) * 0.18
+      if (Math.abs(target - cur) < 0.2) {
+        galPanRef.current = targetRaw
+        galCardRefs.current.forEach((el, i) => {
+          if (!el) return
+          el.style.transform  = `translateX(${GPAD + i * (CW + GGAP) - target}px) translateY(0px) rotate(0deg)`
+          el.style.transition = 'transform 0.45s cubic-bezier(0.34,1.35,0.64,1)'
+        })
+        setGalPan(targetRaw); return
+      }
+      galCardRefs.current.forEach((el, i) => {
+        if (!el) return
+        el.style.transition = 'none'
+        el.style.transform  = `translateX(${GPAD + i * (CW + GGAP) - cur}px) translateY(0px) rotate(0deg)`
+      })
+      galRaf.current = requestAnimationFrame(run)
+    }
+    galRaf.current = requestAnimationFrame(run)
+  }, [rubberBand])
+
+  const onGalDown = useCallback((e) => {
+    if (galRaf.current) cancelAnimationFrame(galRaf.current)
+    galDX.current = e.clientX; galDP.current = galPanRef.current
+    galVel.current = 0; galLX.current = e.clientX; galLT.current = Date.now()
+    e.currentTarget.setPointerCapture(e.pointerId)
+    galCardRefs.current.forEach(el => { if (el) el.style.transition = 'none' })
+  }, [])
+  const onGalMove = useCallback((e) => {
+    if (galDX.current === null) return
+    const now = Date.now(), dt = Math.max(1, now - galLT.current)
+    galVel.current = (galLX.current - e.clientX) / dt
+    galLX.current = e.clientX; galLT.current = now
+    applyGalPan(galDP.current + (galDX.current - e.clientX))
+  }, [applyGalPan])
+  const onGalUp = useCallback(() => {
+    if (galDX.current === null) return
+    galCardRefs.current.forEach(el => { if (el) el.style.transition = 'transform 0.45s cubic-bezier(0.34,1.35,0.64,1)' })
+    galDX.current = null
+    const step = CW + GGAP, n = cards.length
+    const predicted = galPanRef.current + galVel.current * 80
+    const idx = Math.max(0, Math.min(n - 1, Math.round(predicted / step)))
+    springTo(idx * step)
+  }, [springTo, cards.length])
+
+  // ── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col gap-3 px-4">
-      {hasObiettivi ? (
-        <>
-          <CardObiettivo hidden={hidden} />
-          <CardSalvadanaio hidden={hidden} amount={salvAmount} />
-          <CardCrea />
-        </>
-      ) : (
-        <>
-          <CardCrea />
-          <CardSalvadanaio hidden={hidden} amount={salvAmount} />
-        </>
-      )}
+    <div
+      ref={galContRef}
+      style={{
+        position: 'relative',
+        height: galleryMode ? CH : (hasObiettivi ? CH + 51 : CH + 30),
+        overflow: galleryMode ? 'hidden' : 'visible',
+        touchAction: 'pan-y',
+        transition: 'height 0.45s cubic-bezier(0.34,1.35,0.64,1)',
+      }}
+      onPointerDown={galleryMode ? onGalDown : undefined}
+      onPointerMove={galleryMode ? onGalMove : undefined}
+      onPointerUp={galleryMode ? onGalUp : undefined}
+      onPointerCancel={galleryMode ? onGalUp : undefined}
+    >
+      {cards.map((card, i) => {
+        let tx, ty, rot, zIdx, isDraggingThis = false, cardTransition = null
+
+        if (galleryMode) {
+          tx = GPAD + i * (CW + GGAP) - galPan; ty = 0; rot = 0; zIdx = cards.length - i
+        } else if (hasObiettivi) {
+          // fan stack: 3 card
+          let rel = i - activeCard
+          const n = cards.length
+          if (rel >  n / 2) rel -= n
+          if (rel < -n / 2) rel += n
+          const clamped = Math.max(-2, Math.min(2, rel))
+          const slot = SLOTS[String(clamped)]
+          if (!slot) return null
+          const isActiveCard = rel === 0
+          if (swipeOutState && isActiveCard) {
+            tx  = centerX + slot.dx + swipeOutState.flyDir * 480
+            ty  = slot.dy; rot = slot.rot + swipeOutState.flyDir * 20
+            cardTransition = 'transform 0.28s cubic-bezier(0.4, 0, 1, 1)'
+          } else if (isActiveCard && stackDragging) {
+            tx  = centerX + slot.dx + stackDrag; ty = slot.dy; rot = slot.rot + stackDrag * 0.04
+            isDraggingThis = true
+          } else {
+            tx = centerX + slot.dx; ty = slot.dy; rot = slot.rot
+          }
+          zIdx = isActiveCard && stackDragging ? 10 : slot.z
+        } else {
+          // 2-card flip
+          const isFront = i === front2
+          const liveDx  = isFront && dragging2 ? drag2       : 0
+          const liveRot = isFront && dragging2 ? drag2 * 0.04 : 0
+          tx   = (isFront ? centerX : centerX + 18) + liveDx
+          ty   = isFront ? 0 : 12
+          rot  = (isFront ? -9 : 5) + liveRot
+          zIdx = isFront ? (dragging2 ? 10 : 2) : 1
+          isDraggingThis = isFront && dragging2
+        }
+
+        // Pointer handlers
+        let pointerHandlers = {}
+        if (!galleryMode) {
+          if (hasObiettivi) {
+            const n = cards.length
+            const absRel = (i - activeCard + n) % n
+            const isActive = absRel === 0
+            pointerHandlers = {
+              onPointerDown: isActive
+                ? (e) => { e.currentTarget.setPointerCapture(e.pointerId); onStackStart(e.clientX) }
+                : (e) => {
+                    e.stopPropagation()
+                    if (!swipeOutState) {
+                      const rel2 = (i - activeCard + n) % n > n / 2
+                        ? (i - activeCard + n) % n - n
+                        : (i - activeCard + n) % n
+                      setActiveCard(a => (a + rel2 + n) % n)
+                    }
+                  },
+              onPointerMove: isActive ? (e) => { if (stackDragging) onStackMove(e.clientX) } : undefined,
+              onPointerUp:     isActive ? () => onStackEnd(cards.length) : undefined,
+              onPointerCancel: isActive ? () => onStackEnd(cards.length) : undefined,
+            }
+          } else {
+            const isFront = i === front2
+            pointerHandlers = {
+              onPointerDown: isFront
+                ? (e) => { e.currentTarget.setPointerCapture(e.pointerId); onDrag2Start(e.clientX) }
+                : (e) => { e.stopPropagation(); setFront2(f => 1 - f) },
+              onPointerMove:   isFront ? (e) => { if (dragging2) onDrag2Move(e.clientX) } : undefined,
+              onPointerUp:     isFront ? onDrag2End : undefined,
+              onPointerCancel: isFront ? onDrag2End : undefined,
+            }
+          }
+        }
+
+        return (
+          <div
+            key={i}
+            ref={el => { galCardRefs.current[i] = el }}
+            style={{
+              position: 'absolute', left: 0, top: 0,
+              transform: `translateX(${tx}px) translateY(${ty}px) rotate(${rot}deg)`,
+              transformOrigin: 'center bottom',
+              zIndex: zIdx,
+              transition: isDraggingThis ? 'none' : (cardTransition || 'transform 0.45s cubic-bezier(0.34,1.35,0.64,1)'),
+              cursor: isDraggingThis ? 'grabbing' : 'grab',
+              userSelect: 'none', WebkitUserSelect: 'none',
+            }}
+            {...pointerHandlers}
+          >
+            {card}
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -382,12 +628,27 @@ function NavBar() {
 }
 
 /* ─── Home Screen ─────────────────────────────────────────────────────────── */
-export default function HomeScreenShadcn() {
-  const [obiettivi, setObiettivi] = useState(0)
+const GalleryHorizontalIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1.333 2V14M14.667 2V14M5.333 2H10.667C11.403 2 12 2.597 12 3.333V12.667C12 13.403 11.403 14 10.667 14H5.333C4.597 14 4 13.403 4 12.667V3.333C4 2.597 4.597 2 5.333 2Z"/>
+  </svg>
+)
+
+const GalleryVerticalEndIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 2h10"/><path d="M5 6h14"/><rect x="3" y="10" width="18" height="12" rx="2"/>
+  </svg>
+)
+
+// mode: 'new' | 'obiettivo' | 'dev'
+export default function HomeScreenShadcn({ mode = 'obiettivo' }) {
+  const [devObiettivi, setDevObiettivi] = useState(0)
   const [hidden, setHidden] = useState(false)
+  const [galleryMode, setGalleryMode] = useState(false)
   const [helpDismissed, setHelpDismissed] = useState(false)
 
-  const hasObiettivi = obiettivi > 0
+  const hasObiettivi = mode === 'obiettivo' || (mode === 'dev' && devObiettivi > 0)
+  const obiettiviCount = mode === 'obiettivo' ? 1 : mode === 'dev' ? devObiettivi : 0
 
   return (
     <div className="h-full flex flex-col bg-[#F6F6F6] relative">
@@ -427,35 +688,42 @@ export default function HomeScreenShadcn() {
               </IconBtn>
               <IconBtn aria-label="Grafico rendimento"><ChartIcon /></IconBtn>
             </div>
-            <button
-              onClick={() => setObiettivi(o => o === 0 ? 1 : 0)}
-              className="ml-auto px-2.5 py-1 rounded-full border-[1.5px] border-[#e0e0e0] bg-transparent text-[10px] cursor-pointer font-[Inter,sans-serif] text-[#999] leading-none flex-shrink-0"
-            >
-              {obiettivi === 0 ? '+ obiettivo' : 'resetta'}
-            </button>
+            {mode === 'dev' && (
+              <button
+                onClick={() => setDevObiettivi(o => o === 0 ? 1 : 0)}
+                className="ml-auto px-2.5 py-1 rounded-full border-[1.5px] border-[#e0e0e0] bg-transparent text-[10px] cursor-pointer font-[Inter,sans-serif] text-[#999] leading-none flex-shrink-0"
+              >
+                {devObiettivi === 0 ? '+ obiettivo' : 'resetta'}
+              </button>
+            )}
           </div>
         </div>
 
         {/* Section header */}
         <div className="flex justify-between items-center px-4 pt-6">
           <p className="font-[Archivo,sans-serif] font-semibold text-base leading-5 text-black">
-            I tuoi Obiettivi ({obiettivi})
+            I tuoi Obiettivi ({obiettiviCount})
           </p>
-          <Button variant="ghost" size="icon" className="size-8 bg-transparent hover:bg-transparent" aria-label="Vai agli obiettivi">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </Button>
+          <div className="flex gap-3 items-center">
+            <IconBtn onClick={() => { setGalleryMode(m => !m) }} aria-label={galleryMode ? 'Vista stack' : 'Vista gallery'}>
+              {galleryMode ? <GalleryVerticalEndIcon /> : <GalleryHorizontalIcon />}
+            </IconBtn>
+            <Button variant="ghost" size="icon" className="size-8 bg-transparent hover:bg-transparent" aria-label="Vai agli obiettivi">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </Button>
+          </div>
         </div>
 
         {/* Cards */}
-        <div className="pt-4">
-          <CardsSection obiettivi={obiettivi} hidden={hidden} />
+        <div className="pt-6">
+          <CardsSection hasObiettivi={hasObiettivi} galleryMode={galleryMode} hidden={hidden} />
         </div>
 
         {/* Help pill */}
         {!helpDismissed && (
-          <div className="px-4 mt-6">
+          <div className="px-4" style={{ marginTop: galleryMode ? 24 : (hasObiettivi ? -14 : 6) }}>
             <p className="font-[Archivo,sans-serif] font-semibold text-base leading-5 text-black mb-3">
               Bisogno di aiuto?
             </p>
