@@ -33,7 +33,7 @@
 <script>
 (function(){
   var KEY = 'hp_proto_unlocked';
-  if (localStorage.getItem(KEY) === '1') return;
+  if (localStorage.getItem(KEY) === '1' || new URLSearchParams(location.search).get('open') === '1') return;
   document.addEventListener('DOMContentLoaded', function() {
     var gate = document.getElementById('pw-gate');
     if (!gate) return;
